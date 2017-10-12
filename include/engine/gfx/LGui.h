@@ -1,0 +1,18 @@
+#pragma once
+
+#include "gui\_Component.h"
+#include "gui\Button.h"
+#include "gui\Console.h"
+#include "gui\Container.h"
+#include "gui\ContainerPanel.h"
+#include "gui\Counter.h"
+#include "gui\DropDown.h"
+#include "gui\List.h"
+#include "gui\NumberField.h"
+#include "gui\Panel.h"
+#include "gui\Slider.h"
+#include "gui\TabBar.h"
+#include "gui\Text.h"
+#include "gui\TextField.h"
+#include "gui\Tileset.h"
+#include "gui\Toolbar.h"
