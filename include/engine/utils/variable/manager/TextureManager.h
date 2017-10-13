@@ -1,11 +1,10 @@
 #pragma once
-
-#include "..\datatype\Texture.h"
 #include "Manager.h"
+#include "engine\utils\variable\datatype\Texture.h"
 
-class MTexture : public Manager<Texture>
-{
+class MTexture {
+private:
+	static ManagerMap<std::string, Texture*> m_manager;
 public:
-	Texture& findUnit(std::string p_unitName);
-	Uint32 findUnitID(std::string p_unitName);
+	static Texture* getTexture(std::string p_filePath);
 };

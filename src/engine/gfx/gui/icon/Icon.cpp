@@ -10,7 +10,7 @@ void CIcon::render()
 {
 	glPushMatrix();
 	{
-		glBindTexture(GL_TEXTURE_2D, m_texture);
+		glBindTexture(GL_TEXTURE_2D, MTexture::getTexture(m_texture)->getId());
 		glTranslatef(m_pos.x, m_pos.y, 0);
 		glColor3f(1, 1, 1);
 		glBegin(GL_QUADS);

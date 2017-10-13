@@ -264,7 +264,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /*   FreeType uses the HarfBuzz library to improve auto-hinting of       */
   /*   OpenType fonts.  If available, many glyphs not directly addressable */
-  /*   by a font's character map will be hinted also.                      */
+  /*   by a font's actor map will be hinted also.                      */
   /*                                                                       */
   /*   Define this macro if you want to enable this `feature'.             */
   /*                                                                       */
@@ -765,7 +765,7 @@ FT_BEGIN_HEADER
   /* T1_MAX_CHARSTRING_OPERANDS is the charstring stack's capacity.  A     */
   /* minimum of 16 is required.                                            */
   /*                                                                       */
-  /* The Chinese font MingTiEG-Medium (CNS 11643 character set) needs 256. */
+  /* The Chinese font MingTiEG-Medium (CNS 11643 actor set) needs 256. */
   /*                                                                       */
 #define T1_MAX_CHARSTRINGS_OPERANDS  256
 

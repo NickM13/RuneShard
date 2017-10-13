@@ -12,7 +12,7 @@ struct WorldData {
 	std::vector<Chunk*>** m_chunkData;
 
 	void addChunk(Vector2<Sint32> p_chunk);
-	void setVoxel(Vector3<Sint32> p_pos, Voxel p_voxel);
+	void setVoxel(Vector3<Sint32> p_pos, Uint32 p_voxel);
 	Voxel getVoxel(Vector3<Sint32> p_pos);
 	Uint16 getVoxelId(Vector3<Sint32> p_pos);
 	bool castRay(Vector3<GLfloat> p_start, Vector3<GLfloat> p_direction, GLdouble &p_near, GLdouble &p_far, Sint8 &p_face); // Make sure p_near = 0 if starting fresh

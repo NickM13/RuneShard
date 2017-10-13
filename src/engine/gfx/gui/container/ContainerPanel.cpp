@@ -212,14 +212,14 @@ void ContainerPanel::update(GLfloat p_updateTime) {
 void ContainerPanel::render() {
 	if(m_visible) {
 		m_panel->render();
-		MScissor::getInstance().push(Rect(GLfloat(m_pos.x + 1), GLfloat(m_pos.y), GLfloat(m_size.x - 2), GLfloat(m_size.y - 1)));
+		MScissor::push(Rect(GLfloat(m_pos.x + 1), GLfloat(m_pos.y), GLfloat(m_size.x - 2), GLfloat(m_size.y - 1)));
 		glPushMatrix();
 		{
 			glTranslatef(-GLfloat(m_scroll.x), -GLfloat(m_scroll.y), 0);
 			Container::render();
 		}
 		glPopMatrix();
-		MScissor::getInstance().pop();
+		MScissor::pop();
 		glPushMatrix();
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);

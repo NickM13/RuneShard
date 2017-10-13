@@ -78,21 +78,6 @@ public:
 		return "0";
 	}
 
-	template<class T>
-	static std::string stringToNum(T s) {
-		std::string save = "";
-		std::ostringstream convert;
-		convert.str(std::string());
-		try {
-			convert << s;
-			save = convert.str();
-			return save;
-		}
-		catch(std::exception e) {
-			return std::string("Incorrect Variable Type!");
-		}
-	}
-
 	static std::string subchar(char* chararray, Uint32 start, Uint32 end) {
 		std::string subbed;
 		for(Uint32 i = start; i < end + 1; i++) {

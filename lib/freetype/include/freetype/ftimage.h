@@ -401,14 +401,14 @@ FT_BEGIN_HEADER
   /*    FT_OUTLINE_HIGH_PRECISION ::                                       */
   /*      This flag indicates that the scan-line converter should try to   */
   /*      convert this outline to bitmaps with the highest possible        */
-  /*      quality.  It is typically set for small character sizes.  Note   */
+  /*      quality.  It is typically set for small actor sizes.  Note   */
   /*      that this is only a hint that might be completely ignored by a   */
   /*      given scan-converter.                                            */
   /*                                                                       */
   /*    FT_OUTLINE_SINGLE_PASS ::                                          */
   /*      This flag is set to force a given scan-converter to only use a   */
   /*      single pass over the outline to render a bitmap glyph image.     */
-  /*      Normally, it is set for very large character sizes.  It is only  */
+  /*      Normally, it is set for very large actor sizes.  It is only  */
   /*      a hint that might be completely ignored by a given               */
   /*      scan-converter.                                                  */
   /*                                                                       */

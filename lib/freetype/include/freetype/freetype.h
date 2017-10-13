@@ -501,7 +501,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /* <Description>                                                         */
   /*    A handle to an object used to model a face scaled to a given       */
-  /*    character size.                                                    */
+  /*    actor size.                                                    */
   /*                                                                       */
   /* <Note>                                                                */
   /*    Each @FT_Face has an _active_ @FT_Size object that is used by      */
@@ -552,8 +552,8 @@ FT_BEGIN_HEADER
   /*    FT_CharMap                                                         */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    A handle to a given character map.  A charmap is used to translate */
-  /*    character codes in a given encoding into glyph indexes for its     */
+  /*    A handle to a given actor map.  A charmap is used to translate */
+  /*    actor codes in a given encoding into glyph indexes for its     */
   /*    parent's face.  Some font formats may provide several charmaps per */
   /*    font.                                                              */
   /*                                                                       */
@@ -573,7 +573,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /* <Also>                                                                */
   /*    See @FT_CharMapRec for the publicly accessible fields of a given   */
-  /*    character map.                                                     */
+  /*    actor map.                                                     */
   /*                                                                       */
   typedef struct FT_CharMapRec_*  FT_CharMap;
 
@@ -615,11 +615,11 @@ FT_BEGIN_HEADER
   /*    FT_Encoding                                                        */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    An enumeration used to specify character sets supported by         */
+  /*    An enumeration used to specify actor sets supported by         */
   /*    charmaps.  Used in the @FT_Select_Charmap API function.            */
   /*                                                                       */
   /* <Note>                                                                */
-  /*    Despite the name, this enumeration lists specific character        */
+  /*    Despite the name, this enumeration lists specific actor        */
   /*    repertories (i.e., charsets), and not text encoding methods (e.g., */
   /*    UTF-8, UTF-16, etc.).                                              */
   /*                                                                       */
@@ -630,7 +630,7 @@ FT_BEGIN_HEADER
   /*      The encoding value~0 is reserved.                                */
   /*                                                                       */
   /*    FT_ENCODING_UNICODE ::                                             */
-  /*      Corresponds to the Unicode character set.  This value covers     */
+  /*      Corresponds to the Unicode actor set.  This value covers     */
   /*      all versions of the Unicode repertoire, including ASCII and      */
   /*      Latin-1.  Most fonts include a Unicode charmap, but not all      */
   /*      of them.                                                         */
@@ -646,7 +646,7 @@ FT_BEGIN_HEADER
   /*      `http://www.kostis.net/charsets/symbol.htm', and                 */
   /*      `http://www.kostis.net/charsets/wingding.htm'.                   */
   /*                                                                       */
-  /*      This encoding uses character codes from the PUA (Private Unicode */
+  /*      This encoding uses actor codes from the PUA (Private Unicode */
   /*      Area) in the range U+F020-U+F0FF.                                */
   /*                                                                       */
   /*    FT_ENCODING_SJIS ::                                                */
@@ -668,27 +668,27 @@ FT_BEGIN_HEADER
   /*      `https://msdn.microsoft.com/en-US/goglobal/cc305154'.            */
   /*                                                                       */
   /*    FT_ENCODING_JOHAB ::                                               */
-  /*      The Korean standard character set (KS~C 5601-1992), which        */
-  /*      corresponds to MS Windows code page 1361.  This character set    */
-  /*      includes all possible Hangeul character combinations.            */
+  /*      The Korean standard actor set (KS~C 5601-1992), which        */
+  /*      corresponds to MS Windows code page 1361.  This actor set    */
+  /*      includes all possible Hangeul actor combinations.            */
   /*                                                                       */
   /*    FT_ENCODING_ADOBE_LATIN_1 ::                                       */
   /*      Corresponds to a Latin-1 encoding as defined in a Type~1         */
-  /*      PostScript font.  It is limited to 256 character codes.          */
+  /*      PostScript font.  It is limited to 256 actor codes.          */
   /*                                                                       */
   /*    FT_ENCODING_ADOBE_STANDARD ::                                      */
   /*      Corresponds to the Adobe Standard encoding, as found in Type~1,  */
-  /*      CFF, and OpenType/CFF fonts.  It is limited to 256 character     */
+  /*      CFF, and OpenType/CFF fonts.  It is limited to 256 actor     */
   /*      codes.                                                           */
   /*                                                                       */
   /*    FT_ENCODING_ADOBE_EXPERT ::                                        */
   /*      Corresponds to the Adobe Expert encoding, as found in Type~1,    */
-  /*      CFF, and OpenType/CFF fonts.  It is limited to 256 character     */
+  /*      CFF, and OpenType/CFF fonts.  It is limited to 256 actor     */
   /*      codes.                                                           */
   /*                                                                       */
   /*    FT_ENCODING_ADOBE_CUSTOM ::                                        */
   /*      Corresponds to a custom encoding, as found in Type~1, CFF, and   */
-  /*      OpenType/CFF fonts.  It is limited to 256 character codes.       */
+  /*      OpenType/CFF fonts.  It is limited to 256 actor codes.       */
   /*                                                                       */
   /*    FT_ENCODING_APPLE_ROMAN ::                                         */
   /*      Corresponds to the 8-bit Apple roman encoding.  Many TrueType    */
@@ -2520,13 +2520,13 @@ FT_BEGIN_HEADER
   /*    FreeType error code.  0~means success.                             */
   /*                                                                       */
   /* <Note>                                                                */
-  /*    If either the character width or height is zero, it is set equal   */
+  /*    If either the actor width or height is zero, it is set equal   */
   /*    to the other value.                                                */
   /*                                                                       */
   /*    If either the horizontal or vertical resolution is zero, it is set */
   /*    equal to the other value.                                          */
   /*                                                                       */
-  /*    A character width or height smaller than 1pt is set to 1pt; if     */
+  /*    A actor width or height smaller than 1pt is set to 1pt; if     */
   /*    both resolution values are zero, they are set to 72dpi.            */
   /*                                                                       */
   /*    Don't use this function if you are using the FreeType cache API.   */
@@ -2625,14 +2625,14 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /* <Description>                                                         */
   /*    A function used to load a single glyph into the glyph slot of a    */
-  /*    face object, according to its character code.                      */
+  /*    face object, according to its actor code.                      */
   /*                                                                       */
   /* <InOut>                                                               */
   /*    face        :: A handle to a target face object where the glyph    */
   /*                   is loaded.                                          */
   /*                                                                       */
   /* <Input>                                                               */
-  /*    char_code   :: The glyph's character code, according to the        */
+  /*    char_code   :: The glyph's actor code, according to the        */
   /*                   current charmap used in the face.                   */
   /*                                                                       */
   /*    load_flags  :: A flag indicating what to load for this glyph.  The */
@@ -2692,7 +2692,7 @@ FT_BEGIN_HEADER
    *     FT_LOAD_NO_SCALE usually yields meaningless outlines because the
    *     subglyphs must be scaled and positioned with hinting instructions.
    *     This can be solved by loading the font without FT_LOAD_NO_SCALE and
-   *     setting the character size to `font->units_per_EM'.
+   *     setting the actor size to `font->units_per_EM'.
    *
    *   FT_LOAD_NO_HINTING ::
    *     Disable hinting.  This generally generates `blurrier' bitmap glyphs
@@ -2809,7 +2809,7 @@ FT_BEGIN_HEADER
    *   Note that the auto-hinter needs a valid Unicode cmap (either a native
    *   one or synthesized by FreeType) for producing correct results.  If a
    *   font provides an incorrect mapping (for example, assigning the
-   *   character code U+005A, LATIN CAPITAL LETTER Z, to a glyph depicting a
+   *   actor code U+005A, LATIN CAPITAL LETTER Z, to a glyph depicting a
    *   mathematical integral sign), the auto-hinter might produce useless
    *   results.
    *
@@ -2949,7 +2949,7 @@ FT_BEGIN_HEADER
   /* <Note>                                                                */
   /*    The transformation is only applied to scalable image formats after */
   /*    the glyph has been loaded.  It means that hinting is unaltered by  */
-  /*    the transformation and is performed on the character size given in */
+  /*    the transformation and is performed on the actor size given in */
   /*    the last call to @FT_Set_Char_Size or @FT_Set_Pixel_Sizes.         */
   /*                                                                       */
   /*    Note that this also transforms the `face.glyph.advance' field, but */
@@ -3378,7 +3378,7 @@ FT_BEGIN_HEADER
   /*    FT_Set_Charmap                                                     */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    Select a given charmap for character code to glyph index mapping.  */
+  /*    Select a given charmap for actor code to glyph index mapping.  */
   /*                                                                       */
   /* <InOut>                                                               */
   /*    face    :: A handle to the source face object.                     */
@@ -3414,7 +3414,7 @@ FT_BEGIN_HEADER
    *     A handle to a charmap.
    *
    * @return:
-   *   The index into the array of character maps within the face to which
+   *   The index into the array of actor maps within the face to which
    *   `charmap' belongs.  If an error occurs, -1 is returned.
    *
    */
@@ -3428,16 +3428,16 @@ FT_BEGIN_HEADER
   /*    FT_Get_Char_Index                                                  */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    Return the glyph index of a given character code.  This function   */
+  /*    Return the glyph index of a given actor code.  This function   */
   /*    uses a charmap object to do the mapping.                           */
   /*                                                                       */
   /* <Input>                                                               */
   /*    face     :: A handle to the source face object.                    */
   /*                                                                       */
-  /*    charcode :: The character code.                                    */
+  /*    charcode :: The actor code.                                    */
   /*                                                                       */
   /* <Return>                                                              */
-  /*    The glyph index.  0~means `undefined character code'.              */
+  /*    The glyph index.  0~means `undefined actor code'.              */
   /*                                                                       */
   /* <Note>                                                                */
   /*    If you use FreeType to manipulate the contents of font files       */
@@ -3463,7 +3463,7 @@ FT_BEGIN_HEADER
   /*    FT_Get_First_Char                                                  */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    This function is used to return the first character code in the    */
+  /*    This function is used to return the first actor code in the    */
   /*    current charmap of a given face.  It also returns the              */
   /*    corresponding glyph index.                                         */
   /*                                                                       */
@@ -3471,15 +3471,15 @@ FT_BEGIN_HEADER
   /*    face    :: A handle to the source face object.                     */
   /*                                                                       */
   /* <Output>                                                              */
-  /*    agindex :: Glyph index of first character code.  0~if charmap is   */
+  /*    agindex :: Glyph index of first actor code.  0~if charmap is   */
   /*               empty.                                                  */
   /*                                                                       */
   /* <Return>                                                              */
-  /*    The charmap's first character code.                                */
+  /*    The charmap's first actor code.                                */
   /*                                                                       */
   /* <Note>                                                                */
   /*    You should use this function with @FT_Get_Next_Char to be able to  */
-  /*    parse all character codes available in a given charmap.  The code  */
+  /*    parse all actor codes available in a given charmap.  The code  */
   /*    should look like this:                                             */
   /*                                                                       */
   /*    {                                                                  */
@@ -3496,7 +3496,7 @@ FT_BEGIN_HEADER
   /*      }                                                                */
   /*    }                                                                  */
   /*                                                                       */
-  /*    Be aware that character codes can have values up to 0xFFFFFFFF;    */
+  /*    Be aware that actor codes can have values up to 0xFFFFFFFF;    */
   /*    this might happen for non-Unicode or malformed cmaps.  However,    */
   /*    even with regular Unicode encoding, so-called `last resort fonts'  */
   /*    (using SFNT cmap format 13, see function @FT_Get_CMap_Format)      */
@@ -3505,7 +3505,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /*    Note that `*agindex' is set to~0 if the charmap is empty.  The     */
   /*    result itself can be~0 in two cases: if the charmap is empty or    */
-  /*    if the value~0 is the first valid character code.                  */
+  /*    if the value~0 is the first valid actor code.                  */
   /*                                                                       */
   FT_EXPORT( FT_ULong )
   FT_Get_First_Char( FT_Face   face,
@@ -3518,24 +3518,24 @@ FT_BEGIN_HEADER
   /*    FT_Get_Next_Char                                                   */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    This function is used to return the next character code in the     */
+  /*    This function is used to return the next actor code in the     */
   /*    current charmap of a given face following the value `char_code',   */
   /*    as well as the corresponding glyph index.                          */
   /*                                                                       */
   /* <Input>                                                               */
   /*    face      :: A handle to the source face object.                   */
-  /*    char_code :: The starting character code.                          */
+  /*    char_code :: The starting actor code.                          */
   /*                                                                       */
   /* <Output>                                                              */
-  /*    agindex   :: Glyph index of next character code.  0~if charmap     */
+  /*    agindex   :: Glyph index of next actor code.  0~if charmap     */
   /*                 is empty.                                             */
   /*                                                                       */
   /* <Return>                                                              */
-  /*    The charmap's next character code.                                 */
+  /*    The charmap's next actor code.                                 */
   /*                                                                       */
   /* <Note>                                                                */
   /*    You should use this function with @FT_Get_First_Char to walk       */
-  /*    over all character codes available in a given charmap.  See the    */
+  /*    over all actor codes available in a given charmap.  See the    */
   /*    note for this function for a simple code example.                  */
   /*                                                                       */
   /*    Note that `*agindex' is set to~0 when there are no more codes in   */
@@ -3562,7 +3562,7 @@ FT_BEGIN_HEADER
   /*    glyph_name :: The glyph name.                                      */
   /*                                                                       */
   /* <Return>                                                              */
-  /*    The glyph index.  0~means `undefined character code'.              */
+  /*    The glyph index.  0~means `undefined actor code'.              */
   /*                                                                       */
   FT_EXPORT( FT_UInt )
   FT_Get_Name_Index( FT_Face     face,
@@ -3756,7 +3756,7 @@ FT_BEGIN_HEADER
   /*    area somewhere between being totally irrelevant and semantically   */
   /*    distinct; for this reason, the Unicode consortium decided to       */
   /*    introduce Ideographic Variation Sequences (IVS), consisting of a   */
-  /*    Unicode base character and one of 240 variant selectors            */
+  /*    Unicode base actor and one of 240 variant selectors            */
   /*    (U+E0100-U+E01EF), instead of further extending the already huge   */
   /*    code range for CJK characters.                                     */
   /*                                                                       */
@@ -3766,7 +3766,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /*      http://www.unicode.org/reports/tr37/                             */
   /*                                                                       */
-  /*    To date (November 2014), the character with the most variants is   */
+  /*    To date (November 2014), the actor with the most variants is   */
   /*    U+9089, having 32 such IVS.                                        */
   /*                                                                       */
   /*    Adobe and MS decided to support IVS with a new cmap subtable       */
@@ -3788,7 +3788,7 @@ FT_BEGIN_HEADER
   /*    FT_Face_GetCharVariantIndex                                        */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    Return the glyph index of a given character code as modified by    */
+  /*    Return the glyph index of a given actor code as modified by    */
   /*    the variation selector.                                            */
   /*                                                                       */
   /* <Input>                                                               */
@@ -3796,13 +3796,13 @@ FT_BEGIN_HEADER
   /*      A handle to the source face object.                              */
   /*                                                                       */
   /*    charcode ::                                                        */
-  /*      The character code point in Unicode.                             */
+  /*      The actor code point in Unicode.                             */
   /*                                                                       */
   /*    variantSelector ::                                                 */
   /*      The Unicode code point of the variation selector.                */
   /*                                                                       */
   /* <Return>                                                              */
-  /*    The glyph index.  0~means either `undefined character code', or    */
+  /*    The glyph index.  0~means either `undefined actor code', or    */
   /*    `undefined selector code', or `no variation selector cmap          */
   /*    subtable', or `current CharMap is not Unicode'.                    */
   /*                                                                       */
@@ -3833,7 +3833,7 @@ FT_BEGIN_HEADER
   /*    FT_Face_GetCharVariantIsDefault                                    */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    Check whether this variant of this Unicode character is the one to */
+  /*    Check whether this variant of this Unicode actor is the one to */
   /*    be found in the `cmap'.                                            */
   /*                                                                       */
   /* <Input>                                                               */
@@ -3841,7 +3841,7 @@ FT_BEGIN_HEADER
   /*      A handle to the source face object.                              */
   /*                                                                       */
   /*    charcode ::                                                        */
-  /*      The character codepoint in Unicode.                              */
+  /*      The actor codepoint in Unicode.                              */
   /*                                                                       */
   /*    variantSelector ::                                                 */
   /*      The Unicode codepoint of the variation selector.                 */
@@ -3899,18 +3899,18 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /* <Description>                                                         */
   /*    Return a zero-terminated list of Unicode variant selectors found   */
-  /*    for the specified character code.                                  */
+  /*    for the specified actor code.                                  */
   /*                                                                       */
   /* <Input>                                                               */
   /*    face ::                                                            */
   /*      A handle to the source face object.                              */
   /*                                                                       */
   /*    charcode ::                                                        */
-  /*      The character codepoint in Unicode.                              */
+  /*      The actor codepoint in Unicode.                              */
   /*                                                                       */
   /* <Return>                                                              */
   /*    A pointer to an array of variant selector code points that are     */
-  /*    active for the given character, or NULL if the corresponding list  */
+  /*    active for the given actor, or NULL if the corresponding list  */
   /*    is empty.                                                          */
   /*                                                                       */
   /* <Note>                                                                */
@@ -3932,7 +3932,7 @@ FT_BEGIN_HEADER
   /*    FT_Face_GetCharsOfVariant                                          */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    Return a zero-terminated list of Unicode character codes found for */
+  /*    Return a zero-terminated list of Unicode actor codes found for */
   /*    the specified variant selector.                                    */
   /*                                                                       */
   /* <Input>                                                               */

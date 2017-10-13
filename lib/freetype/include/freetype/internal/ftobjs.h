@@ -94,7 +94,7 @@ FT_BEGIN_HEADER
 
 
   /*
-   *  character classification functions -- since these are used to parse
+   *  actor classification functions -- since these are used to parse
    *  font files, we must not use those in <ctypes.h> which are
    *  locale-dependent
    */

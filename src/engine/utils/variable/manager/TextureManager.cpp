@@ -1,25 +1,15 @@
-#pragma warning(push)
-#pragma warning(disable:4172)
-
 #include "engine\utils\variable\manager\TextureManager.h"
+#include "engine\gfx\LTexture.h"
 
-Texture& MTexture::findUnit(std::string p_unitName)
-{
-	for(Uint32 i = 0; i < m_unitList.size(); i++)
-	{
-		if(m_unitList[i].getName() == p_unitName)
-			return m_unitList[i];
-	}
-	return Texture();
-}
-Uint32 MTexture::findUnitID(std::string p_unitName)
-{
-	for(Uint32 i = 0; i < m_unitList.size(); i++)
-	{
-		if(m_unitList[i].getName() == p_unitName)
-			return i;
-	}
-	return 0;
-}
+ManagerMap<std::string, Texture*> MTexture::m_manager;
 
-#pragma warning(pop)
+Texture* MTexture::getTexture(std::string p_filePath) {
+	if(m_manager.contains(p_filePath)) {
+		return m_manager.getUnit(p_filePath);
+	}
+	else {
+		Texture* tex = LTexture::loadTexture(p_filePath);
+		m_manager.addUnit(p_filePath, tex);
+		return tex;
+	}
+}

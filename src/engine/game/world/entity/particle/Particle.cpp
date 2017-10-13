@@ -1,130 +1,63 @@
 #include "engine\game\world\entity\particle\Particle.h"
 
-void Particle::update(WorldData &p_world, GLfloat p_updateTime)
-{
+Particle::Particle() {
+	/*
+		   /\       
+		  /  \      
+		 /,--.\     
+		/< () >\    
+	   /  `--'  \   
+	  /          \  
+	 /   fnord?   \ 
+	/______________\
+	hjm
+	*/
+}
+Particle::Particle(Vector3<GLfloat> p_position, Vector3<GLfloat> p_velocity, GLfloat p_size, GLfloat p_life, Color p_color, GLfloat p_weight) {
+	m_maxHealth = p_life;
+	m_health = p_life;
+	m_size = p_size;
+	m_color = p_color;
+	m_position = p_position;
+	m_velocity = p_velocity;
+	m_weight = p_weight;
+	m_bounciness = 0.7f;
+};
+
+void Particle::update(WorldData &p_world, GLfloat p_updateTime) {
 	m_velocity = m_velocity - Vector3<GLfloat>{0, m_weight, 0} * p_updateTime;
 	Vector3<GLfloat> _velocity = m_velocity * p_updateTime * 10;
 	GLdouble _near = 0, _far = 1;
 	Sint8 _face = 0;
-
-	while(_velocity.getLength() > 0.0001f)
-	{
+	while(_velocity.getLength() > 0) {
 		p_world.castRay(m_position, _velocity, _near, _far, _face);
-		if(_near < 1 && _face != 0)
-		{
+		if(_near < 1 && _face != 0) {
 			m_position.x += _velocity.x * _near;
 			m_position.y += _velocity.y * _near;
 			m_position.z += _velocity.z * _near;
 			_velocity = _velocity * (1.f - _near);
-			if(_face & (FACE_NORTH | FACE_SOUTH))
-			{
+			if(_face & (FACE_NORTH | FACE_SOUTH)) {
 				m_velocity.x = -m_velocity.x * m_bounciness;
 				_velocity.x = -_velocity.x * m_bounciness;
 			}
-			if(_face & (FACE_TOP | FACE_BOTTOM))
-			{
+			if(_face & (FACE_TOP | FACE_BOTTOM)) {
 				m_velocity.y = -m_velocity.y * m_bounciness;
 				_velocity.y = -_velocity.y * m_bounciness;
 			}
-			if(_face & (FACE_EAST | FACE_WEST))
-			{
+			if(_face & (FACE_EAST | FACE_WEST)) {
 				m_velocity.z = -m_velocity.y * m_bounciness;
 				_velocity.z = -_velocity.y * m_bounciness;
 			}
-
 			_near = 0;
 		}
-		else
-		{
+		else {
 			m_position.x += _velocity.x;
 			m_position.y += _velocity.y;
 			m_position.z += _velocity.z;
 			_velocity = {};
 		}
 	}
-	/*
-	while(_vel.getLength() > 0)
-	{
-		p_world.castBox(m_pos, {m_size / 16.f, m_size / 16.f, m_size / 16.f}, _vel, _near, _face);
-		if(_near != 1)
-		{
-			m_pos.x += _vel.x * _near;
-			m_pos.y += _vel.y * _near;
-			m_pos.z += _vel.z * _near;
-			_vel = _vel * (1.f - _near);
-			if(_face & 1)
-			{
-				if(fabsf(m_vel.x) < 0.05f)
-				{
-					m_vel.x = _vel.x = 0;
-					m_vel.y = m_vel.y * 0.7f;
-					_vel.y = _vel.y * 0.7f;
-					m_vel.z = m_vel.z * 0.7f;
-					_vel.z = _vel.z * 0.7f;
-				}
-				else
-				{
-					m_vel.x = -m_vel.x * 0.7f;
-					_vel.x = -_vel.x * 0.7f;
-					m_vel.y = m_vel.y * 0.7f;
-					_vel.y = _vel.y * 0.7f;
-					m_vel.z = m_vel.z * 0.7f;
-					_vel.z = _vel.z * 0.7f;
-				}
-			}
-			if(_face & 2)
-			{
-				if(fabsf(m_vel.y) < 0.05f)
-				{
-					m_vel.x = m_vel.x * 0.7f;
-					_vel.x = _vel.x * 0.7f;
-					m_vel.y = _vel.y = 0;
-					m_vel.z = m_vel.z * 0.7f;
-					_vel.z = _vel.z * 0.7f;
-				}
-				else
-				{
-					m_vel.x = m_vel.x * 0.7f;
-					_vel.x = _vel.x * 0.7f;
-					m_vel.y = -m_vel.y * 0.7f;
-					_vel.y = -_vel.y * 0.7f;
-					m_vel.z = m_vel.z * 0.7f;
-					_vel.z = _vel.z * 0.7f;
-				}
-			}
-			if(_face & 4)
-			{
-				if(fabsf(m_vel.z) < 0.05f)
-				{
-					m_vel.x = m_vel.x * 0.7f;
-					_vel.x = _vel.x * 0.7f;
-					m_vel.y = m_vel.y * 0.7f;
-					_vel.y = _vel.y * 0.7f;
-					m_vel.z = _vel.z = 0;
-				}
-				else
-				{
-					m_vel.x = m_vel.x * 0.7f;
-					_vel.x = _vel.x * 0.7f;
-					m_vel.y = m_vel.y * 0.7f;
-					_vel.y = _vel.y * 0.7f;
-					m_vel.z = -m_vel.z * 0.7f;
-					_vel.z = -_vel.z * 0.7f;
-				}
-			}
-
-			_near = 0;
-		}
-		else
-		{
-			m_pos.x += _vel.x;
-			m_pos.y += _vel.y;
-			m_pos.z += _vel.z;
-			_vel = {};
-		}
-	}
-	*/
-	m_life -= p_updateTime;
+	m_health -= p_updateTime;
 }
 void Particle::render()
 {
@@ -174,21 +107,22 @@ void Particle::render()
 	}
 	glPopMatrix();
 }
-GLfloat Particle::getLife()
-{
-	return m_life;
+
+ParticlePuff::ParticlePuff(Vector3<GLfloat> p_position, Vector3<GLfloat> p_velocity, GLfloat p_size, GLfloat p_life, Color p_color, GLfloat p_weight) {
+	m_position = p_position;
+	m_velocity = p_velocity;
+	m_size = p_size;
+	m_maxHealth = m_health = p_life;
+	m_color = p_color;
+	m_weight = p_weight;
+	m_bounciness = 0.7f;
 }
 
-
-
-void ParticlePuff::update(WorldData &p_world, GLfloat p_updateTime)
-{
+void ParticlePuff::update(WorldData &p_world, GLfloat p_updateTime) {
 	Particle::update(p_world, p_updateTime);
 }
-
-void ParticlePuff::render()
-{
-	GLfloat percent = m_life / m_maxLife;
+void ParticlePuff::render() {
+	GLfloat percent = m_health / m_maxHealth;
 	GLfloat scale = (1.f - percent) * 2.5f;
 	glPushMatrix();
 	{
@@ -236,3 +170,5 @@ void ParticlePuff::render()
 	}
 	glPopMatrix();
 }
+
+std::vector<Particle*> MParticle::m_particleList;

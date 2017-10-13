@@ -41,7 +41,7 @@ FT_BEGIN_HEADER
    * <Description>
    *   This section describes the FreeType~2 cache sub-system, which is used
    *   to limit the number of concurrently opened @FT_Face and @FT_Size
-   *   objects, as well as caching information like character maps and glyph
+   *   objects, as well as caching information like actor maps and glyph
    *   images while limiting their maximum memory usage.
    *
    *   Note that all types and functions begin with the `FTC_' prefix.
@@ -397,19 +397,19 @@ FT_BEGIN_HEADER
   /*    FTC_ScalerRec                                                      */
   /*                                                                       */
   /* <Description>                                                         */
-  /*    A structure used to describe a given character size in either      */
+  /*    A structure used to describe a given actor size in either      */
   /*    pixels or points to the cache manager.  See                        */
   /*    @FTC_Manager_LookupSize.                                           */
   /*                                                                       */
   /* <Fields>                                                              */
   /*    face_id :: The source face ID.                                     */
   /*                                                                       */
-  /*    width   :: The character width.                                    */
+  /*    width   :: The actor width.                                    */
   /*                                                                       */
-  /*    height  :: The character height.                                   */
+  /*    height  :: The actor height.                                   */
   /*                                                                       */
   /*    pixel   :: A Boolean.  If 1, the `width' and `height' fields are   */
-  /*               interpreted as integer pixel character sizes.           */
+  /*               interpreted as integer pixel actor sizes.           */
   /*               Otherwise, they are expressed as 1/64th of points.      */
   /*                                                                       */
   /*    x_res   :: Only used when `pixel' is value~0 to indicate the       */
@@ -554,7 +554,7 @@ FT_BEGIN_HEADER
    *
    * @description:
    *   An opaque handle used to model a charmap cache.  This cache is to
-   *   hold character codes -> glyph indices mappings.
+   *   hold actor codes -> glyph indices mappings.
    *
    */
   typedef struct FTC_CMapCacheRec_*  FTC_CMapCache;
@@ -595,7 +595,7 @@ FT_BEGIN_HEADER
    *   FTC_CMapCache_Lookup
    *
    * @description:
-   *   Translate a character code into a glyph index, using the charmap
+   *   Translate a actor code into a glyph index, using the charmap
    *   cache.
    *
    * @input:
@@ -610,7 +610,7 @@ FT_BEGIN_HEADER
    *     means to use the cache @FT_Face's default charmap.
    *
    *   char_code ::
-   *     The character code (in the corresponding charmap).
+   *     The actor code (in the corresponding charmap).
    *
    * @return:
    *    Glyph index.  0~means `no glyph'.

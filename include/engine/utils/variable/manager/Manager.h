@@ -1,110 +1,75 @@
 #pragma once
 #include "..\..\Singleton.h"
 #include "..\..\Utilities.h"
+#include <map>
+#include <set>
 #include <vector>
 
 template<class T>
-class Manager : public Singleton<Manager<T>>
-{
+class ManagerSet {
 protected:
-	std::vector<T> m_unitList;
+	std::vector<T> m_unitSet;
 public:
-	Manager() {};
-	Manager(const Manager&) {};
-	Manager operator=(const Manager&) {};
-
-	// Create unit, no matter if it exists or not
-	Uint32 addUnit(T& p_unit)
-	{
-		m_unitList.push_back(p_unit);
-		return Uint32(m_unitList.size() - 1);
-	}
-
-	bool contains(T& p_unit)
-	{
-		for(Uint32 i = 0; i < m_unitList.size(); i++)
-			if(p_unit == m_unitList[i])
-				return true;
-		return false;
-	}
-
-	T& getUnit(Uint32 p_guid)
-	{
-		return m_unitList.at(p_guid);
-	}
-
-	std::vector<T>& getUnitList()
-	{
-		return m_unitList;
-	}
-
-	// Look for unit, if it doesnt exist it adds it
-	Uint32 getUnitID(T& p_unit)
-	{
-		for(Uint32 i = 0; i < m_unitList.size(); i++)
-			if(p_unit == m_unitList[i])
+	Uint32 getUnitId(T p_unit) {
+		Uint32 i = 0;
+		for(T unit : m_unitSet) {
+			if(unit == p_unit) {
 				return i;
-		return addUnit(p_unit);
+			}
+			i++;
+		}
+		m_unitSet.push_back(p_unit);
+		return i;
 	}
-
-	// Look for unit, if it doesnt exist it adds it
-	void removeUnit(Uint16 p_guid)
-	{
-		m_unitList.erase(m_unitList.begin() + p_guid);
+	T getUnit(Uint32 p_id) {
+		return m_unitSet[p_id];
 	}
 };
 
+template<class K, class V>
+class ManagerMap {
+protected:
+	std::map<K, V> m_unitMap;
+public:
+	bool contains(K key) {
+		return (m_unitMap.find(key) != m_unitMap.end());
+	}
+	void addUnit(K key, V value) {
+		if(m_unitMap.find(key) == m_unitMap.end()) {
+			m_unitMap.insert({key, value});
+		}
+	}
+	V getUnit(K key) {
+		return m_unitMap[key];
+	}
+};
 
-
-template<class T>
-class ManagerEntity : public Singleton<ManagerEntity<T>>
+template<class E>
+class ManagerEntity
 {
 protected:
-	std::vector<T> m_unitList;
+	std::vector<E> m_unitList;
 public:
-	ManagerEntity() {};
-	ManagerEntity(const ManagerEntity&) {};
-	ManagerEntity operator=(const ManagerEntity&) {};
-
-	// Create unit, no matter if it exists or not
-	Uint32 addUnit(T p_unit)
-	{
+	Uint32 addUnit(E p_unit) {
 		m_unitList.push_back(p_unit);
 		return Uint32(m_unitList.size() - 1);
 	}
-
-	bool contains(T p_unit)
-	{
-		for(Uint32 i = 0; i < m_unitList.size(); i++)
-			if(p_unit == m_unitList[i])
-				return true;
-		return false;
+	E& getUnit(Uint32 p_index) {
+		return m_unitList.at(p_index);
 	}
-
-	T getUnit(Uint32 p_guid)
-	{
-		return m_unitList.at(p_guid);
+	Uint32 getUnitCount() {
+		return m_unitList.size();
 	}
-
-	std::vector<T>& getUnitList()
-	{
+	std::vector<E>& getUnitList() {
 		return m_unitList;
 	}
-
-	// Look for unit, if it doesnt exist it adds it
-	Uint32 getUnitID(T p_unit)
-	{
+	Uint32 getUnitID(E p_unit) {
 		for(Uint32 i = 0; i < m_unitList.size(); i++)
 			if(p_unit == m_unitList[i])
 				return i;
 		return addUnit(p_unit);
 	}
-
-	// Look for unit, if it doesnt exist it adds it
-	T removeUnit(Uint16 p_guid)
-	{
-		T _temp = m_unitList[p_guid];
+	void removeUnit(Uint16 p_index) {
 		m_unitList.erase(m_unitList.begin() + p_guid);
-		return _temp;
 	}
 };

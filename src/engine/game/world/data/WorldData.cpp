@@ -1,6 +1,6 @@
 #include "engine\game\world\data\WorldData.h"
 
-void WorldData::setVoxel(Vector3<Sint32> p_pos, Voxel p_voxel) {
+void WorldData::setVoxel(Vector3<Sint32> p_pos, Uint32 p_voxel) {
 	Vector3<Sint32> _pos = Vector3<Sint32>((Vector3<GLfloat>(p_pos) / CHUNK_SIZE).floor());
 	while(_pos.y > Sint32(m_chunkData[_pos.x][_pos.z].size()) - 1)
 		addChunk({_pos.x, _pos.z});

@@ -72,7 +72,7 @@ protected:
 	bool m_hovered;
 	ColorTheme m_colorTheme;
 
-	Sint32 m_texture = -1;
+	std::string m_texture = "";
 	TextureStyle m_textureStyle = TextureStyle::STRETCH;
 
 	Sint8 m_border = Border::BORDER_ALL;

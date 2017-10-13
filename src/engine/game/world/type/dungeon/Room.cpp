@@ -7,7 +7,7 @@ Room::Room(std::string p_roomName, Vector3<Sint32> p_roomSize)
 
 	m_roomSize = p_roomSize;
 
-	Uint16 noVoxel = MVoxel::getInstance().getUnitID(Voxel(0, MColor::getInstance().getUnitID(Color())));
+	Uint16 noVoxel = MVoxel::getVoxelId(Voxel(0, MColor::getColorId(Color())));
 	m_voxelData = new Uint16**[m_roomSize.x];
 	for(Uint16 x = 0; x < m_roomSize.x; x++)
 	{
@@ -40,11 +40,11 @@ Room::~Room()
 
 void Room::setVoxel(Vector3<Sint32> p_pos, Voxel p_voxel)
 {
-	m_voxelData[p_pos.x][p_pos.y][p_pos.z] = MVoxel::getInstance().getUnitID(p_voxel);
+	m_voxelData[p_pos.x][p_pos.y][p_pos.z] = MVoxel::getVoxelId(p_voxel);
 }
 Voxel Room::getVoxel(Vector3<Sint32> p_pos)
 {
-	return MVoxel::getInstance().getUnit(m_voxelData[p_pos.x][p_pos.y][p_pos.z]);
+	return MVoxel::getVoxel(m_voxelData[p_pos.x][p_pos.y][p_pos.z]);
 }
 Uint16 Room::getVoxelId(Vector3<Sint32> p_pos)
 {

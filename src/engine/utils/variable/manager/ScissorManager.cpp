@@ -1,5 +1,7 @@
 #include "engine\utils\variable\manager\ScissorManager.h"
 
+std::vector<Rect> MScissor::m_unitList;
+
 void MScissor::toggle()
 {
 	if(glIsEnabled(GL_SCISSOR_TEST) || m_unitList.empty())

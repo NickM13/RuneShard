@@ -134,13 +134,15 @@
     <ClCompile Include="lib\glfw\include\glad.c" />
     <ClCompile Include="lib\glfw\include\tinycthread.c" />
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\engine\game\command\Command.cpp" />
+    <ClCompile Include="src\engine\game\console\Console.cpp" />
     <ClCompile Include="src\engine\game\Game.cpp" />
     <ClCompile Include="src\engine\game\menu\ingame\PSMain.cpp" />
     <ClCompile Include="src\engine\game\menu\ingame\PSOptions.cpp" />
     <ClCompile Include="src\engine\game\menu\PauseScreen.cpp" />
     <ClCompile Include="src\engine\game\world\data\Chunk.cpp" />
     <ClCompile Include="src\engine\game\world\data\WorldData.cpp" />
-    <ClCompile Include="src\engine\game\world\entity\character\Character.cpp" />
+    <ClCompile Include="src\engine\game\world\entity\actor\Actor.cpp" />
     <ClCompile Include="src\engine\game\world\entity\Entity.cpp" />
     <ClCompile Include="src\engine\game\world\entity\particle\Particle.cpp" />
     <ClCompile Include="src\engine\game\world\type\dungeon\lRoom.cpp" />
@@ -171,14 +173,20 @@
     <ClCompile Include="src\engine\sfx\Sound.cpp" />
     <ClCompile Include="src\engine\utils\global\event\GKey.cpp" />
     <ClCompile Include="src\engine\utils\global\event\GMouse.cpp" />
+    <ClCompile Include="src\engine\utils\global\GGameState.cpp" />
     <ClCompile Include="src\engine\utils\global\GScreen.cpp" />
     <ClCompile Include="src\engine\utils\Utilities.cpp" />
+    <ClCompile Include="src\engine\utils\variable\manager\ColorManager.cpp" />
     <ClCompile Include="src\engine\utils\variable\manager\ScissorManager.cpp" />
     <ClCompile Include="src\engine\utils\variable\manager\TextureManager.cpp" />
+    <ClCompile Include="src\engine\utils\variable\manager\VoxelManager.cpp" />
+    <ClCompile Include="src\engine\utils\variable\manager\VoxelModelManager.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\engine\game\command\Command.h" />
+    <ClInclude Include="include\engine\game\console\Console.h" />
     <ClInclude Include="include\engine\game\Game.h" />
     <ClInclude Include="include\engine\game\menu\ingame\PSMain.h" />
     <ClInclude Include="include\engine\game\menu\ingame\PSOptions.h" />
@@ -186,8 +194,7 @@
     <ClInclude Include="include\engine\game\menu\Screen.h" />
     <ClInclude Include="include\engine\game\world\data\Chunk.h" />
     <ClInclude Include="include\engine\game\world\data\WorldData.h" />
-    <ClInclude Include="include\engine\game\world\entity\character\Character.h" />
-    <ClInclude Include="include\engine\game\world\entity\EntityManager.h" />
+    <ClInclude Include="include\engine\game\world\entity\actor\Actor.h" />
     <ClInclude Include="include\engine\game\world\entity\Entity.h" />
     <ClInclude Include="include\engine\game\world\entity\particle\Particle.h" />
     <ClInclude Include="include\engine\game\world\entity\world\WorldEntity.h" />
@@ -238,6 +245,7 @@
     <ClInclude Include="include\engine\sfx\Sound.h" />
     <ClInclude Include="include\engine\utils\global\event\GKey.h" />
     <ClInclude Include="include\engine\utils\global\event\GMouse.h" />
+    <ClInclude Include="include\engine\utils\global\GGameState.h" />
     <ClInclude Include="include\engine\utils\global\GScreen.h" />
     <ClInclude Include="include\engine\utils\OpenGL.h" />
     <ClInclude Include="include\engine\utils\Singleton.h" />

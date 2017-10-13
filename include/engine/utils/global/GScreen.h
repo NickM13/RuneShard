@@ -31,6 +31,4 @@ public:
 	} m_windowCommand;
 
 	static void initWindow(GLFWwindow *p_window);
-
-	static void updateWindow();
 };

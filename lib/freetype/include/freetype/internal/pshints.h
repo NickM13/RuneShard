@@ -80,7 +80,7 @@ FT_BEGIN_HEADER
    *
    * @description:
    *   This is a handle to an opaque structure used to record glyph hints
-   *   from a Type 1 character glyph character string.
+   *   from a Type 1 actor glyph actor string.
    *
    *   The methods used to operate on this object are defined by the
    *   @T1_Hints_FuncsRec structure.  Recording glyph hints is normally
@@ -367,7 +367,7 @@ FT_BEGIN_HEADER
    *
    * @description:
    *   This is a handle to an opaque structure used to record glyph hints
-   *   from a Type 2 character glyph character string.
+   *   from a Type 2 actor glyph actor string.
    *
    *   The methods used to operate on this object are defined by the
    *   @T2_Hints_FuncsRec structure.  Recording glyph hints is normally

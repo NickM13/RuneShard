@@ -44,7 +44,6 @@ void Application::close() {
 void Application::keyCallback(GLFWwindow* p_window, int p_keycode, int p_scancode, int p_action, int p_mods) {
 	//std::cout << p_keycode << " " << p_scancode << " " << p_action << " " << p_mods << "\n";
 	GKey::keyEvent(p_keycode, p_scancode, p_action, p_mods);
-	if(GKey::keyPressed('`')) GScreen::m_exitting = 2;
 }
 
 void Application::mousePressCallback(GLFWwindow* p_window, int p_button, int p_state, int p_mods) {
@@ -101,9 +100,6 @@ void Application::run() {
 	GLdouble i;
 	while(GScreen::m_exitting != 2) {
 		i = glfwGetTime();
-	#ifdef _DEBUG
-		if(GKey::keyPressed('1')) DebugBreak();
-	#endif
 		input();
 		update();
 		render();

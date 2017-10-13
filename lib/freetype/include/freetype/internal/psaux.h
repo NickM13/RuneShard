@@ -169,8 +169,8 @@ FT_BEGIN_HEADER
   /* a simple structure used to identify tokens */
   typedef struct  T1_TokenRec_
   {
-    FT_Byte*      start;   /* first character of token in input stream */
-    FT_Byte*      limit;   /* first character after the token          */
+    FT_Byte*      start;   /* first actor of token in input stream */
+    FT_Byte*      limit;   /* first actor after the token          */
     T1_TokenType  type;    /* type of token                            */
 
   } T1_TokenRec;

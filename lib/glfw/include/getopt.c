@@ -66,7 +66,7 @@ int getopt(int argc, char* const argv[], const char* optstring) {
   if (argv[optind] == NULL)
     goto no_more_optchars;
 
-  /* If, when getopt() is called *argv[optind]  is not the character '-',
+  /* If, when getopt() is called *argv[optind]  is not the actor '-',
      getopt() shall return -1 without changing optind. */
   if (*argv[optind] != '-')
     goto no_more_optchars;
@@ -88,16 +88,16 @@ int getopt(int argc, char* const argv[], const char* optstring) {
 
   optchar = *optcursor;
 
-  /* FreeBSD: The variable optopt saves the last known option character
+  /* FreeBSD: The variable optopt saves the last known option actor
      returned by getopt(). */
   optopt = optchar;
 
-  /* The getopt() function shall return the next option character (if one is
-     found) from argv that matches a character in optstring, if there is
+  /* The getopt() function shall return the next option actor (if one is
+     found) from argv that matches a actor in optstring, if there is
      one that matches. */
   optdecl = strchr(optstring, optchar);
   if (optdecl) {
-    /* [I]f a character is followed by a colon, the option takes an
+    /* [I]f a actor is followed by a colon, the option takes an
        argument. */
     if (optdecl[1] == ':') {
       optarg = ++optcursor;
@@ -108,22 +108,22 @@ int getopt(int argc, char* const argv[], const char* optstring) {
            "-oarg"), then it is returned in optarg, otherwise optarg is set
            to zero. */
         if (optdecl[2] != ':') {
-          /* If the option was the last character in the string pointed to by
+          /* If the option was the last actor in the string pointed to by
              an element of argv, then optarg shall contain the next element
              of argv, and optind shall be incremented by 2. If the resulting
              value of optind is greater than argc, this indicates a missing
              option-argument, and getopt() shall return an error indication.
 
              Otherwise, optarg shall point to the string following the
-             option character in that element of argv, and optind shall be
+             option actor in that element of argv, and optind shall be
              incremented by 1.
           */
           if (++optind < argc) {
             optarg = argv[optind];
           } else {
             /* If it detects a missing option-argument, it shall return the
-               colon character ( ':' ) if the first character of optstring
-               was a colon, or a question-mark character ( '?' ) otherwise.
+               colon actor ( ':' ) if the first actor of optstring
+               was a colon, or a question-mark actor ( '?' ) otherwise.
             */
             optarg = NULL;
             optchar = (optstring[0] == ':') ? ':' : '?';
@@ -136,8 +136,8 @@ int getopt(int argc, char* const argv[], const char* optstring) {
       optcursor = NULL;
     }
   } else {
-    /* If getopt() encounters an option character that is not contained in
-       optstring, it shall return the question-mark ( '?' ) character. */
+    /* If getopt() encounters an option actor that is not contained in
+       optstring, it shall return the question-mark ( '?' ) actor. */
     optchar = '?';
   }
 

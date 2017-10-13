@@ -5,10 +5,8 @@ std::vector<Room> lRoom::m_rooms;
 void lRoom::init()
 {
 	Room* room = new Room("Entrance", {32, 32, 32});
-	room->fillArea({0, 0, 0}, {32, 1, 32}, Voxel(1, MColor::getInstance().getUnitID(Color(0.6f, 0.6f, 0.6f))));
+	room->fillArea({0, 0, 0}, {32, 1, 32}, Voxel(1, MColor::getColorId(Color(0.6f, 0.6f, 0.6f))));
 	addRoom(*room);
-
-
 }
 
 void lRoom::addRoom(Room& p_room)

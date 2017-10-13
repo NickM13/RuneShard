@@ -17,8 +17,9 @@ private:
 	std::vector<VoxelMatrix*> m_matrixList;
 
 public:
-	VoxelModel(std::string p_fileName);
+	VoxelModel();
 	~VoxelModel();
 
+	std::vector<VoxelMatrix*>& getMatrixList();
 	void render();
 };

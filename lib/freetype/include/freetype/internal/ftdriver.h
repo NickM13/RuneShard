@@ -142,7 +142,7 @@ FT_BEGIN_HEADER
   /*                        loading a single glyph image.                  */
   /*                                                                       */
   /*    request_size     :: A handle to a function used to request the new */
-  /*                        character size.  Can be set to 0 if the        */
+  /*                        actor size.  Can be set to 0 if the        */
   /*                        scaling done in the base layer suffices.       */
   /*                                                                       */
   /*    select_size      :: A handle to a function used to select a new    */

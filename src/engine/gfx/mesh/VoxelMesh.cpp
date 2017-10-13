@@ -90,7 +90,7 @@ void VoxelMesh::createMesh(Uint16*** p_voxelIds, Sint8*** p_faceData, Vector3<Si
 			_voxels[x][y] = new Voxel[p_dimensions.z + 2];
 			_faces[x][y] = new Sint8[p_dimensions.z + 2];
 			for(Uint16 z = 0; z < p_dimensions.z + 2; z++) {
-				_voxels[x][y][z] = MVoxel::getInstance().getUnit(p_voxelIds[x][y][z]);
+				_voxels[x][y][z] = MVoxel::getVoxel(p_voxelIds[x][y][z]);
 				if(_voxels[x][y][z].interactionType)
 					_faces[x][y][z] = p_faceData[x][y][z];
 				else
@@ -154,7 +154,7 @@ void VoxelMesh::createMesh(Uint16*** p_voxelIds, Sint8*** p_faceData, Vector3<Si
 					for(Uint16 i = 0; i < y2; i++)
 						for(Uint16 j = 0; j < z2; j++)
 							_faces[x][y + i][z + j] -= FACE_NORTH;
-					_color = MColor::getInstance().getUnit(_colorId) * _shading[0];
+					_color = MColor::getColor(_colorId) * _shading[0];
 					p[0] = ao.x1 + (ao.y1 + ao.y2) / 2;
 					p[1] = ao.y1 + (ao.x1 + ao.x2) / 2;
 					p[2] = ao.x2 + (ao.y1 + ao.y2) / 2;
@@ -223,7 +223,7 @@ void VoxelMesh::createMesh(Uint16*** p_voxelIds, Sint8*** p_faceData, Vector3<Si
 					for(Uint16 i = 0; i < y2; i++)
 						for(Uint16 j = 0; j < z2; j++)
 							_faces[x][y + i][z + j] -= FACE_SOUTH;
-					_color = MColor::getInstance().getUnit(_colorId) * _shading[1];
+					_color = MColor::getColor(_colorId) * _shading[1];
 					p[0] = ao.x1 + (ao.y1 + ao.y2) / 2;
 					p[1] = ao.y1 + (ao.x1 + ao.x2) / 2;
 					p[2] = ao.x2 + (ao.y1 + ao.y2) / 2;
@@ -292,7 +292,7 @@ void VoxelMesh::createMesh(Uint16*** p_voxelIds, Sint8*** p_faceData, Vector3<Si
 					for(Uint16 i = 0; i < x2; i++)
 						for(Uint16 j = 0; j < y2; j++)
 							_faces[x + i][y + j][z] -= FACE_EAST;
-					_color = MColor::getInstance().getUnit(_colorId) * _shading[2];
+					_color = MColor::getColor(_colorId) * _shading[2];
 					p[0] = ao.x1 + (ao.y1 + ao.y2) / 2;
 					p[1] = ao.y1 + (ao.x1 + ao.x2) / 2;
 					p[2] = ao.x2 + (ao.y1 + ao.y2) / 2;
@@ -360,7 +360,7 @@ void VoxelMesh::createMesh(Uint16*** p_voxelIds, Sint8*** p_faceData, Vector3<Si
 					for(Uint16 i = 0; i < x2; i++)
 						for(Uint16 j = 0; j < y2; j++)
 							_faces[x + i][y + j][z] -= FACE_WEST;
-					_color = MColor::getInstance().getUnit(_colorId) * _shading[3];
+					_color = MColor::getColor(_colorId) * _shading[3];
 					p[0] = ao.x1 + (ao.y1 + ao.y2) / 2;
 					p[1] = ao.y1 + (ao.x1 + ao.x2) / 2;
 					p[2] = ao.x2 + (ao.y1 + ao.y2) / 2;
@@ -428,7 +428,7 @@ void VoxelMesh::createMesh(Uint16*** p_voxelIds, Sint8*** p_faceData, Vector3<Si
 					for(Uint16 i = 0; i < x2; i++)
 						for(Uint16 j = 0; j < z2; j++)
 							_faces[x + i][y][z + j] -= FACE_TOP;
-					_color = MColor::getInstance().getUnit(_colorId) * _shading[4];
+					_color = MColor::getColor(_colorId) * _shading[4];
 					p[0] = ao.x1 + (ao.y1 + ao.y2) / 2;
 					p[1] = ao.y1 + (ao.x1 + ao.x2) / 2;
 					p[2] = ao.x2 + (ao.y1 + ao.y2) / 2;
@@ -496,7 +496,7 @@ void VoxelMesh::createMesh(Uint16*** p_voxelIds, Sint8*** p_faceData, Vector3<Si
 					for(Uint16 i = 0; i < x2; i++)
 						for(Uint16 j = 0; j < z2; j++)
 							_faces[x + i][y][z + j] -= FACE_BOTTOM;
-					_color = MColor::getInstance().getUnit(_colorId) * _shading[5];
+					_color = MColor::getColor(_colorId) * _shading[5];
 					p[0] = ao.x1 + (ao.y1 + ao.y2) / 2;
 					p[1] = ao.y1 + (ao.x1 + ao.x2) / 2;
 					p[2] = ao.x2 + (ao.y1 + ao.y2) / 2;

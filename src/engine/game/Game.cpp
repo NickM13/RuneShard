@@ -1,8 +1,10 @@
 #include "engine\game\Game.h"
 
+#include "engine\game\command\Command.h"
 #include "engine\gfx\font\Font.h"
-
 #include "engine\sfx\Sound.h"
+
+#include "engine\utils\global\GGameState.h"
 
 #include <functional>
 #include <iostream>
@@ -14,6 +16,69 @@ Game::Game() {
 	Sound::getInstance().init();
 	m_world = new WorldIsland();
 	m_world->generate(Vector2<Sint32>(4, 4));
+	MChatCommand::addCommand("exit", new ChatCommand([&](std::vector<std::string> p_args) {
+		if(p_args.size() == 1) {
+			GScreen::m_exitting = 2;
+			return true;
+		}
+		return false;
+	}, "exit"));
+	MChatCommand::addCommand("outline", new ChatCommand([&](std::vector<std::string> p_args) {
+		if(p_args.size() == 2) {
+			if(p_args[1] == "true") {
+				GGameState::m_modelOutline = true;
+				MConsole::addLine(MConsole::ConsoleLine::NORMAL, "Model outlines enabled");
+				return true;
+			}
+			else if(p_args[1] == "false") {
+				GGameState::m_modelOutline = false;
+				MConsole::addLine(MConsole::ConsoleLine::NORMAL, "Model outlines disabled");
+				return true;
+			}
+		}
+		return false;
+	}, "outline <true/false>"));
+	MChatCommand::addCommand("tp", new ChatCommand([&](std::vector<std::string> p_args) {
+		if(p_args.size() == 4) {
+			Vector3<GLfloat> pos;
+			try {
+				pos.x = std::stof(p_args[1]);
+				pos.y = std::stof(p_args[2]);
+				pos.z = std::stof(p_args[3]);
+			}
+			catch(std::invalid_argument e) {
+				return false;
+			}
+			m_world->getPlayer()->setPosition(pos);
+			MConsole::addLine(MConsole::ConsoleLine::NORMAL, "Player teleported");
+			return true;
+		}
+		return false;
+	}, "tp x y z"));
+	MChatCommand::addCommand("spawn", new ChatCommand([&](std::vector<std::string> p_args) {
+		if(p_args.size() == 4) {
+			Vector3<GLfloat> pos;
+			try {
+				pos.x = std::stof(p_args[1]);
+				pos.y = std::stof(p_args[2]);
+				pos.z = std::stof(p_args[3]);
+			}
+			catch(std::invalid_argument e) {
+				return false;
+			}
+			m_world->getPlayer()->setPosition(pos);
+			m_world->addActor(new Actor());
+			MConsole::addLine(MConsole::ConsoleLine::NORMAL, "Player teleported");
+			return true;
+		}
+		return false;
+	}, "tp x y z"));
+	MKeyCommand::addCommand({'`', 0}, new KeyCommand([&]() {
+		MConsole::setOpen(true);
+	}));
+	MKeyCommand::addCommand({GLFW_KEY_ESCAPE, 0}, new KeyCommand([&]() {
+		GScreen::m_exitting = 2;
+	}));
 }
 Game::~Game() {
 	Sound::getInstance().close();
@@ -52,29 +117,25 @@ void Game::input() {
 	if(_mouseGui.y > GScreen::m_screenSize.y / 2)
 		_mouseGui.y = GScreen::m_screenSize.y / 2;
 	GMouse::setMousePosGui(_mouseGui);
-	if(GKey::keyPressed(GLFW_KEY_ESCAPE)) {
-		if(m_engineState == GAME) {
-			if(PauseScreen::getInstance().isPaused()) {
-				PauseScreen::getInstance().setScreen(0);
-			}
-			else {
-				PauseScreen::getInstance().setScreen(1);
-				GMouse::setMousePosGui({});
+	if(!MConsole::isOpen()) {
+		for(GKey::KeyPress keyPress : GKey::getKeyEvents()) {
+			if(keyPress.m_action == 1) {
+				MKeyCommand::checkCommand({keyPress.m_keyCode, keyPress.m_mods});
 			}
 		}
-	}
+		switch(m_engineState) {
+		case MENU:
 
-	switch(m_engineState) {
-	case MENU:
-
-		break;
-	case GAME:
-		if(!PauseScreen::getInstance().isPaused())
-			m_world->input(_mouseMoved);
-		else
-			PauseScreen::getInstance().input();
-		break;
+			break;
+		case GAME:
+			if(!PauseScreen::getInstance().isPaused())
+				m_world->input(_mouseMoved);
+			else
+				PauseScreen::getInstance().input();
+			break;
+		}
 	}
+	else MConsole::input();
 }
 void Game::update() {
 	m_deltaUpdate = min(0.5f, GLfloat(glfwGetTime() - m_lastUpdate));
@@ -94,6 +155,7 @@ void Game::update() {
 			PauseScreen::getInstance().update(m_deltaUpdate);
 		break;
 	}
+	MConsole::update();
 }
 void Game::render3d() {
 	switch(m_engineState)
@@ -134,11 +196,13 @@ void Game::render2d() {
 		Font::print(std::string("X: ") + Util::numToString(m_world->getPlayer()->getCenter().x, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 10);
 		Font::print(std::string("Y: ") + Util::numToString(m_world->getPlayer()->getCenter().y, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 30);
 		Font::print(std::string("Z: ") + Util::numToString(m_world->getPlayer()->getCenter().z, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 50);
-		if(PauseScreen::getInstance().isPaused())
-		{
+		if(PauseScreen::getInstance().isPaused()) {
 			PauseScreen::getInstance().render();
+		}
+		if(PauseScreen::getInstance().isPaused() || MConsole::isOpen()) {
 			renderMouse();
 		}
 		break;
 	}
+	MConsole::render();
 }

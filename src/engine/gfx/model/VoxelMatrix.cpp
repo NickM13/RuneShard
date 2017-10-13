@@ -6,7 +6,7 @@ VoxelMatrix::VoxelMatrix(std::string p_name, Vector3<GLfloat> p_pos, Vector3<Sin
 	m_size = p_size;
 	m_pos = p_pos;
 
-	Uint16 noVoxel = MVoxel::getInstance().getUnitID(Voxel(0, MColor::getInstance().getUnitID(Color())));
+	Uint16 noVoxel = MVoxel::getVoxelId(Voxel(0, MColor::getColorId(Color())));
 
 	m_voxelData = new Uint16**[m_size.x + 2];
 	m_faceData = new Sint8**[m_size.x + 2];
@@ -33,7 +33,7 @@ VoxelMatrix::VoxelMatrix(VoxelMatrix& m)
 	m_size = m.getSize();
 	m_pos = m.getPos();
 
-	Uint16 noVoxel = MVoxel::getInstance().getUnitID(Voxel(0, MColor::getInstance().getUnitID(Color())));
+	Uint16 noVoxel = MVoxel::getVoxelId(Voxel(0, MColor::getColorId(Color())));
 
 	m_voxelData = new Uint16**[m_size.x + 2];
 	m_faceData = new Sint8**[m_size.x + 2];
@@ -105,7 +105,7 @@ void VoxelMatrix::operator=(VoxelMatrix& m)
 	m_size = m.getSize();
 	m_pos = m.getPos();
 
-	Uint16 noVoxel = MVoxel::getInstance().getUnitID(Voxel(0, MColor::getInstance().getUnitID(Color())));
+	Uint16 noVoxel = MVoxel::getVoxelId(Voxel(0, MColor::getColorId(Color())));
 
 	m_voxelData = new Uint16**[m_size.x + 2];
 	m_faceData = new Sint8**[m_size.x + 2];
@@ -167,7 +167,7 @@ void VoxelMatrix::setSize(Vector3<Sint32> p_size)
 
 	m_size = p_size;
 
-	Uint16 noVoxel = MVoxel::getInstance().getUnitID(Voxel(0, MColor::getInstance().getUnitID(Color())));
+	Uint16 noVoxel = MVoxel::getVoxelId(Voxel(0, MColor::getColorId(Color())));
 
 	m_voxelData = new Uint16**[p_size.x + 2];
 	m_faceData = new Sint8**[p_size.x + 2];
@@ -209,8 +209,8 @@ bool VoxelMatrix::setVoxel(Vector3<Sint32> p_pos, Voxel p_voxel)
 {
 	if(p_pos.x < 0 || p_pos.y < 0 || p_pos.z < 0 || p_pos.x >= m_size.x || p_pos.y >= m_size.y || p_pos.z >= m_size.z) return false;
 	Vector3<Sint32> _pos = p_pos + 1;
-	if(m_voxelData[_pos.x][_pos.y][_pos.z] == MVoxel::getInstance().getUnitID(p_voxel)) return false;
-	if(p_voxel.interactionType != MVoxel::getInstance().getUnit(m_voxelData[_pos.x][_pos.y][_pos.z]).interactionType)
+	if(m_voxelData[_pos.x][_pos.y][_pos.z] == MVoxel::getVoxelId(p_voxel)) return false;
+	if(p_voxel.interactionType != MVoxel::getVoxel(m_voxelData[_pos.x][_pos.y][_pos.z]).interactionType)
 	{
 		// Set face data of surrounding voxels
 		if(p_pos.x < m_size.x)
@@ -261,14 +261,14 @@ bool VoxelMatrix::setVoxel(Vector3<Sint32> p_pos, Voxel p_voxel)
 				m_faceData[_pos.x][_pos.y - 1][_pos.z] += FACE_TOP;
 		}
 	}
-	m_voxelData[_pos.x][_pos.y][_pos.z] = MVoxel::getInstance().getUnitID(p_voxel);
+	m_voxelData[_pos.x][_pos.y][_pos.z] = MVoxel::getVoxelId(p_voxel);
 	m_needsRasterize = true;
 	return true;
 }
 Voxel VoxelMatrix::getVoxel(Vector3<Sint32> p_pos)
 {
 	p_pos = p_pos + 1;
-	return MVoxel::getInstance().getUnit(m_voxelData[p_pos.x][p_pos.y][p_pos.z]);
+	return MVoxel::getVoxel(m_voxelData[p_pos.x][p_pos.y][p_pos.z]);
 }
 Uint16 VoxelMatrix::getVoxelId(Vector3<Sint32> p_pos)
 {

@@ -134,7 +134,7 @@ FT_BEGIN_HEADER
   *    FT_Get_BDF_Charset_ID
   *
   * @description:
-  *    Retrieve a BDF font character set identity, according to
+  *    Retrieve a BDF font actor set identity, according to
   *    the BDF specification.
   *
   * @input:

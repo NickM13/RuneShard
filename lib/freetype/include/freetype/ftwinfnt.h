@@ -67,7 +67,7 @@ FT_BEGIN_HEADER
    *   FT_WinFNT_ID_DEFAULT ::
    *     This is used for font enumeration and font creation as a
    *     `don't care' value.  Valid font files don't contain this value.
-   *     When querying for information about the character set of the font
+   *     When querying for information about the actor set of the font
    *     that is currently selected into a specified device context, this
    *     return value (of the related Windows API) simply denotes failure.
    *
@@ -85,11 +85,11 @@ FT_BEGIN_HEADER
    *       `roman.fon', and `script.fon' on Windows.
    *
    *       The `CreateFont' documentation says: The FT_WinFNT_ID_OEM value
-   *       specifies a character set that is operating-system dependent.
+   *       specifies a actor set that is operating-system dependent.
    *
    *       The `IFIMETRICS' documentation from the `Windows Driver
    *       Development Kit' says: This font supports an OEM-specific
-   *       character set.  The OEM character set is system dependent.
+   *       actor set.  The OEM actor set is system dependent.
    *
    *       In general OEM, as opposed to ANSI (i.e., cp1252), denotes the
    *       second default codepage that most international versions of

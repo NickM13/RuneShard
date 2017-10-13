@@ -103,11 +103,11 @@
    *
    * @description:
    *   Read the `gasp' table from a TrueType or OpenType font file and
-   *   return the entry corresponding to a given character pixel size.
+   *   return the entry corresponding to a given actor pixel size.
    *
    * @input:
    *   face :: The source face handle.
-   *   ppem :: The vertical character pixel size.
+   *   ppem :: The vertical actor pixel size.
    *
    * @return:
    *   Bit flags (see @FT_GASP_XXX), or @FT_GASP_NO_TABLE if there is no

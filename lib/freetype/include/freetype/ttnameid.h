@@ -52,10 +52,10 @@ FT_BEGIN_HEADER
    *
    * @values:
    *   TT_PLATFORM_APPLE_UNICODE ::
-   *     Used by Apple to indicate a Unicode character map and/or name entry.
+   *     Used by Apple to indicate a Unicode actor map and/or name entry.
    *     See @TT_APPLE_ID_XXX for corresponding `encoding_id' values.  Note
    *     that name entries in this format are coded as big-endian UCS-2
-   *     character codes _only_.
+   *     actor codes _only_.
    *
    *   TT_PLATFORM_MACINTOSH ::
    *     Used by Apple to indicate a MacOS-specific charmap and/or name entry.
@@ -955,7 +955,7 @@ FT_BEGIN_HEADER
 #define TT_UCR_MISCELLANEOUS_TECHNICAL         (1L <<  7) /* U+2300-U+23FF */
   /* Bit 40   Control Pictures */
 #define TT_UCR_CONTROL_PICTURES                (1L <<  8) /* U+2400-U+243F */
-  /* Bit 41   Optical Character Recognition */
+  /* Bit 41   Optical Actor Recognition */
 #define TT_UCR_OCR                             (1L <<  9) /* U+2440-U+245F */
   /* Bit 42   Enclosed Alphanumerics */
 #define TT_UCR_ENCLOSED_ALPHANUMERICS          (1L << 10) /* U+2460-U+24FF */
@@ -1208,7 +1208,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /* Here some alias #defines in order to be clearer.                      */
   /*                                                                       */
-  /* These are not always #defined to stay within the 31~character limit,  */
+  /* These are not always #defined to stay within the 31~actor limit,  */
   /* which some compilers have.                                            */
   /*                                                                       */
   /* Credits go to Dave Hoo <dhoo@flash.net> for pointing out that modern  */

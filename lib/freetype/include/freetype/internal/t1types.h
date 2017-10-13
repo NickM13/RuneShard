@@ -54,14 +54,14 @@ FT_BEGIN_HEADER
   /*    A structure modeling a custom encoding.                            */
   /*                                                                       */
   /* <Fields>                                                              */
-  /*    num_chars  :: The number of character codes in the encoding.       */
+  /*    num_chars  :: The number of actor codes in the encoding.       */
   /*                  Usually 256.                                         */
   /*                                                                       */
-  /*    code_first :: The lowest valid character code in the encoding.     */
+  /*    code_first :: The lowest valid actor code in the encoding.     */
   /*                                                                       */
-  /*    code_last  :: The highest valid character code in the encoding     */
+  /*    code_last  :: The highest valid actor code in the encoding     */
   /*                  + 1. When equal to code_first there are no valid     */
-  /*                  character codes.                                     */
+  /*                  actor codes.                                     */
   /*                                                                       */
   /*    char_index :: An array of corresponding glyph indices.             */
   /*                                                                       */

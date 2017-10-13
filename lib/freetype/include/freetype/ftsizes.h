@@ -60,7 +60,7 @@ FT_BEGIN_HEADER
   /*    field.                                                             */
   /*                                                                       */
   /*    It is however possible to create more sizes for a given face,      */
-  /*    mostly in order to manage several character pixel sizes of the     */
+  /*    mostly in order to manage several actor pixel sizes of the     */
   /*    same font family and style.  See @FT_New_Size and @FT_Done_Size.   */
   /*                                                                       */
   /*    Note that @FT_Set_Pixel_Sizes and @FT_Set_Char_Size only           */
@@ -130,7 +130,7 @@ FT_BEGIN_HEADER
   /*    Even though it is possible to create several size objects for a    */
   /*    given face (see @FT_New_Size for details), functions like          */
   /*    @FT_Load_Glyph or @FT_Load_Char only use the one that has been     */
-  /*    activated last to determine the `current character pixel size'.    */
+  /*    activated last to determine the `current actor pixel size'.    */
   /*                                                                       */
   /*    This function can be used to `activate' a previously created size  */
   /*    object.                                                            */

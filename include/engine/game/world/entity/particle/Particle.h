@@ -1,5 +1,7 @@
 #pragma once
 
+#include "..\Entity.h"
+
 #include "engine\utils\variable\datatype\Vector3.h"
 
 #include "engine\utils\variable\manager\Manager.h"
@@ -7,76 +9,58 @@
 
 #include "engine\game\world\data\WorldData.h"
 
-struct Particle
+struct Particle : public Entity
 {
-	GLfloat m_maxLife;
-	GLfloat m_life;
+protected:
 	GLfloat m_size;
 	Color m_color;
-	Vector3<GLfloat> m_position;
-	Vector3<GLfloat> m_velocity;
-	GLfloat m_weight;
 	GLfloat m_bounciness;
-
-	Particle(GLfloat p_life, GLfloat p_size, Color p_color, Vector3<GLfloat> p_position, Vector3<GLfloat> p_velocity, GLfloat p_weight)
-	{
-		m_maxLife = p_life;
-		m_life = p_life;
-		m_size = p_size;
-		m_color = p_color;
-		m_position = p_position;
-		m_velocity = p_velocity;
-		m_weight = p_weight;
-		m_bounciness = 0.7f;
-	};
-
-	Particle(Vector3<GLfloat> p_pos = {}, Vector3<GLfloat> p_vel = {})
-	{
-		m_life = 10.f;
-		m_size = 3.f;
-		m_color = MColor::getInstance().getUnit(Uint16(rand() % MColor::getInstance().getUnitList().size()));
-		m_position = p_pos;
-		m_velocity = p_vel;
-		m_weight = 0;
-		m_bounciness = 0.7f;
-	}
+	GLfloat m_weight;
+public:
+	Particle();
+	Particle(Vector3<GLfloat> p_position, Vector3<GLfloat> p_velocity, GLfloat p_size, GLfloat p_life, Color p_color, GLfloat p_weight);
 
 	virtual void update(WorldData &p_world, GLfloat p_updateTime);
 	virtual void render();
-	GLfloat getLife();
+
+	GLfloat getLife() const { return m_health; }
 };
 
 struct ParticlePuff : public Particle
 {
-	ParticlePuff(GLfloat p_life, GLfloat p_size, Color p_color, Vector3<GLfloat> p_position, Vector3<GLfloat> p_velocity, GLfloat p_weight)
-	{
-		m_maxLife = p_life;
-		m_life = p_life;
-		m_size = p_size;
-		m_color = p_color;
-		m_position = p_position;
-		m_velocity = p_velocity;
-		m_weight = p_weight;
-		m_bounciness = 0.7f;
-	};
-
-	ParticlePuff(Vector3<GLfloat> p_pos = {}, Vector3<GLfloat> p_vel = {})
-	{
-		m_maxLife = m_life = 2.f;
-		m_size = 1.f;
-		GLfloat r = (rand() % 4) / 32.f;
-		m_color = Color(r + 0.25f, r + 0.25f, r + 0.25f, 1.f);
-		m_position = p_pos;
-		m_velocity = p_vel;
-		m_weight = 0;
-		m_bounciness = 0.7f;
-	}
+public:
+	ParticlePuff(Vector3<GLfloat> p_position, Vector3<GLfloat> p_velocity, GLfloat p_size, GLfloat p_life, Color p_color, GLfloat p_weight);
 
 	void update(WorldData &p_world, GLfloat p_updateTime);
 	void render();
 };
 
-class MParticle : public ManagerEntity<Particle*>
+class MParticle
 {
-
+private:
+	static std::vector<Particle*> m_particleList;
+public:
+	static void addParticle(Particle* p_particle) {
+		m_particleList.push_back(p_particle);
+	}
+	static void input() {
+		for(Sint32 i = 0; i < Sint32(m_particleList.size()); i++) {
+			m_particleList[i]->input();
+		}
+	}
+	static void update(WorldData &p_world, GLfloat p_updateTime) {
+		for(Sint32 i = 0; i < Sint32(m_particleList.size()); i++) {
+			m_particleList[i]->update(p_world, p_updateTime);
+			if(!m_particleList[i]->exists()) {
+				delete m_particleList[i];
+				m_particleList.erase(m_particleList.begin() + i);
+				i--;
+			}
+		}
+	}
+	static void render() {
+		for(Sint32 i = 0; i < Sint32(m_particleList.size()); i++) {
+			m_particleList[i]->render();
+		}
+	}
 };

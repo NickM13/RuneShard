@@ -65,12 +65,12 @@ FT_BEGIN_HEADER
    *
    *   The auto-hinter provides various script modules to hint glyphs.
    *   Examples of supported scripts are Latin or CJK.  Before a glyph is
-   *   auto-hinted, the Unicode character map of the font gets examined, and
-   *   the script is then determined based on Unicode character ranges, see
+   *   auto-hinted, the Unicode actor map of the font gets examined, and
+   *   the script is then determined based on Unicode actor ranges, see
    *   below.
    *
    *   OpenType fonts, however, often provide much more glyphs than
-   *   character codes (small caps, superscripts, ligatures, swashes, etc.),
+   *   actor codes (small caps, superscripts, ligatures, swashes, etc.),
    *   to be controlled by so-called `features'.  Handling OpenType features
    *   can be quite complicated and thus needs a separate library on top of
    *   FreeType.

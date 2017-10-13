@@ -54,9 +54,6 @@
     <ClCompile Include="lib\glfw\include\tinycthread.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\game\world\entity\character\Character.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\game\world\entity\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -154,6 +151,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\game\world\entity\particle\Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\utils\variable\manager\VoxelManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\utils\variable\manager\ColorManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\utils\variable\manager\VoxelModelManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\game\world\entity\actor\Actor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\game\console\Console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\game\command\Command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\utils\global\GGameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -605,12 +623,6 @@
     <ClInclude Include="include\engine\game\world\entity\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\game\world\entity\character\Character.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\engine\game\world\entity\EntityManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\engine\gfx\model\VoxelModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -720,6 +732,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine\utils\variable\manager\VoxelModelManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\game\world\entity\actor\Actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\game\command\Command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\game\console\Console.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\utils\global\GGameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

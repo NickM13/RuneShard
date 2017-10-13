@@ -916,12 +916,12 @@ typedef void (* GLFWscrollfun)(GLFWwindow*,double,double);
  */
 typedef void (* GLFWkeyfun)(GLFWwindow*,int,int,int,int);
 
-/*! @brief The function signature for Unicode character callbacks.
+/*! @brief The function signature for Unicode actor callbacks.
  *
- *  This is the function signature for Unicode character callback functions.
+ *  This is the function signature for Unicode actor callback functions.
  *
  *  @param[in] window The window that received the event.
- *  @param[in] codepoint The Unicode code point of the character.
+ *  @param[in] codepoint The Unicode code point of the actor.
  *
  *  @sa glfwSetCharCallback
  *
@@ -929,15 +929,15 @@ typedef void (* GLFWkeyfun)(GLFWwindow*,int,int,int,int);
  */
 typedef void (* GLFWcharfun)(GLFWwindow*,unsigned int);
 
-/*! @brief The function signature for Unicode character with modifiers
+/*! @brief The function signature for Unicode actor with modifiers
  *  callbacks.
  *
- *  This is the function signature for Unicode character with modifiers callback
- *  functions.  It is called for each input character, regardless of what
+ *  This is the function signature for Unicode actor with modifiers callback
+ *  functions.  It is called for each input actor, regardless of what
  *  modifier keys are held down.
  *
  *  @param[in] window The window that received the event.
- *  @param[in] codepoint The Unicode code point of the character.
+ *  @param[in] codepoint The Unicode code point of the actor.
  *  @param[in] mods Bit field describing which [modifier keys](@ref mods) were
  *  held down.
  *
@@ -1069,7 +1069,7 @@ typedef struct GLFWimage
  *
  *  @remarks __X11:__ If the `LC_CTYPE` category of the current locale is set to
  *  `"C"` then the environment's locale will be applied to that category.  This
- *  is done because character input will not function when `LC_CTYPE` is set to
+ *  is done because actor input will not function when `LC_CTYPE` is set to
  *  `"C"`.  If another locale was set before this function was called, it will
  *  be left untouched.
  *
@@ -2449,7 +2449,7 @@ GLFWAPI void glfwSetInputMode(GLFWwindow* window, int mode, int value);
  *
  *  The key functions deal with physical keys, with [key tokens](@ref keys)
  *  named after their use on the standard US keyboard layout.  If you want to
- *  input text, use the Unicode character callback instead.
+ *  input text, use the Unicode actor callback instead.
  *
  *  The [modifier key bit masks](@ref mods) are not key tokens and cannot be
  *  used with this function.
@@ -2698,7 +2698,7 @@ GLFWAPI void glfwSetCursor(GLFWwindow* window, GLFWcursor* cursor);
  *  The key functions deal with physical keys, with layout independent
  *  [key tokens](@ref keys) named after their values in the standard US keyboard
  *  layout.  If you want to input text, use the
- *  [character callback](@ref glfwSetCharCallback) instead.
+ *  [actor callback](@ref glfwSetCharCallback) instead.
  *
  *  When a window loses input focus, it will generate synthetic key release
  *  events for all pressed keys.  You can tell these events from user-generated
@@ -2734,23 +2734,23 @@ GLFWAPI void glfwSetCursor(GLFWwindow* window, GLFWcursor* cursor);
  */
 GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* window, GLFWkeyfun cbfun);
 
-/*! @brief Sets the Unicode character callback.
+/*! @brief Sets the Unicode actor callback.
  *
- *  This function sets the character callback of the specified window, which is
- *  called when a Unicode character is input.
+ *  This function sets the actor callback of the specified window, which is
+ *  called when a Unicode actor is input.
  *
- *  The character callback is intended for Unicode text input.  As it deals with
+ *  The actor callback is intended for Unicode text input.  As it deals with
  *  characters, it is keyboard layout dependent, whereas the
  *  [key callback](@ref glfwSetKeyCallback) is not.  Characters do not map 1:1
  *  to physical keys, as a key may produce zero, one or more characters.  If you
  *  want to know whether a specific physical key was pressed or released, see
  *  the key callback instead.
  *
- *  The character callback behaves as system text input normally does and will
+ *  The actor callback behaves as system text input normally does and will
  *  not be called if modifier keys are held down that would prevent normal text
  *  input on that platform, for example a Super (Command) key on OS X or Alt key
  *  on Windows.  There is a
- *  [character with modifiers callback](@ref glfwSetCharModsCallback) that
+ *  [actor with modifiers callback](@ref glfwSetCharModsCallback) that
  *  receives these events.
  *
  *  @param[in] window The window whose callback to set.
@@ -2773,16 +2773,16 @@ GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* window, GLFWkeyfun cbfun);
  */
 GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow* window, GLFWcharfun cbfun);
 
-/*! @brief Sets the Unicode character with modifiers callback.
+/*! @brief Sets the Unicode actor with modifiers callback.
  *
- *  This function sets the character with modifiers callback of the specified
- *  window, which is called when a Unicode character is input regardless of what
+ *  This function sets the actor with modifiers callback of the specified
+ *  window, which is called when a Unicode actor is input regardless of what
  *  modifier keys are used.
  *
- *  The character with modifiers callback is intended for implementing custom
- *  Unicode character input.  For regular Unicode text input, see the
- *  [character callback](@ref glfwSetCharCallback).  Like the character
- *  callback, the character with modifiers callback deals with characters and is
+ *  The actor with modifiers callback is intended for implementing custom
+ *  Unicode actor input.  For regular Unicode text input, see the
+ *  [actor callback](@ref glfwSetCharCallback).  Like the actor
+ *  callback, the actor with modifiers callback deals with characters and is
  *  keyboard layout dependent.  Characters do not map 1:1 to physical keys, as
  *  a key may produce zero, one or more characters.  If you want to know whether
  *  a specific physical key was pressed or released, see the

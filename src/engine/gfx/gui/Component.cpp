@@ -211,12 +211,12 @@ void Component::renderFill(bool p_setColor)
 			else
 				m_colorTheme.m_primary.useColor();
 		}
-		if(m_texture != -1)
-			glBindTexture(GL_TEXTURE_2D, MTexture::getInstance().getUnit(m_texture).getId());
+		if(m_texture != "")
+			glBindTexture(GL_TEXTURE_2D, MTexture::getTexture(m_texture)->getId());
 
 		glBegin(GL_QUADS);
 		{
-			if(m_texture != -1)
+			if(m_texture != "")
 			{
 				Vector2<Sint32> _texSize;
 				if(m_textureStyle == TextureStyle::SCALE)
@@ -232,7 +232,7 @@ void Component::renderFill(bool p_setColor)
 				}
 				else if(m_textureStyle == TextureStyle::WRAP)
 				{
-					_texSize = MTexture::getInstance().getUnit(m_texture).getSize();
+					_texSize = MTexture::getTexture(m_texture)->getSize();
 					glTexCoord2f(0, 0);
 					glVertex2f(0, 0);
 					glTexCoord2f(GLfloat(m_size.x) / _texSize.x, 0);
@@ -244,7 +244,7 @@ void Component::renderFill(bool p_setColor)
 				}
 				else if(m_textureStyle == TextureStyle::SCALE)
 				{
-					_texSize = MTexture::getInstance().getUnit(m_texture).getSize();
+					_texSize = MTexture::getTexture(m_texture)->getSize();
 					// Top Left corner
 					glTexCoord2f(0, 1);
 					glVertex2f(0, 0);
