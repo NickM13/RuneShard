@@ -30,7 +30,7 @@ void WorldIsland::generate(Vector2<Sint32> p_worldSize)
 	addEntity(m_player);
 	Entity* man = new Entity(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2 - 3, 7, p_worldSize.y * CHUNK_SIZE / 2), Vector3<GLfloat>(1, 2, 1), Vector3<GLfloat>(0, 0, 0));
 	man->setModel(new VoxelModel("Fleegman.nvm"));
-	addEntity(man);
+	//addEntity(man);
 
 	VoxelModel* flower = new VoxelModel("Bush.nvm");
 

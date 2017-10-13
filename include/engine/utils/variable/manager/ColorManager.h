@@ -3,7 +3,4 @@
 #include "Manager.h"
 #include "..\datatype\Color.h"
 
-class MColor : public Manager<Color>
-{
-
-};
+class MColor : public Manager<Color> {};

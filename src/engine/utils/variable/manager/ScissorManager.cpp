@@ -19,23 +19,23 @@ Uint32 MScissor::push(Rect& p_area, bool p_override)
 	if(m_unitList.empty() || p_override)
 	{
 		_rect = p_area;
-		_rect.x += _mat[12] + Globals::getInstance().m_screenSize.x / 2;
-		_rect.y = Globals::getInstance().m_screenSize.y - (p_area.y + _mat[13] + Globals::getInstance().m_screenSize.y / 2 + p_area.h);
+		_rect.x += _mat[12];
+		_rect.y = GScreen::m_screenSize.y - (p_area.y + _mat[13] + p_area.h);
 		glEnable(GL_SCISSOR_TEST);
 	}
 	else
 	{
 		glGetIntegerv(GL_SCISSOR_BOX, _scissorBox);
-		_rect.x = GLfloat(max(GLint(_mat[12] + p_area.x + Globals::getInstance().m_screenSize.x / 2), _scissorBox[0]));
-		_rect.y = GLfloat(max(GLint(Globals::getInstance().m_screenSize.y - (p_area.y + _mat[13] + Globals::getInstance().m_screenSize.y / 2 + p_area.h)), _scissorBox[1]));
-		if((_mat[12] + p_area.x + Globals::getInstance().m_screenSize.x / 2) + p_area.w <= _scissorBox[0] + _scissorBox[2])
+		_rect.x = GLfloat(max(GLint(_mat[12] + p_area.x), _scissorBox[0]));
+		_rect.y = GLfloat(max(GLint(GScreen::m_screenSize.y - (p_area.y + _mat[13] + p_area.h)), _scissorBox[1]));
+		if((_mat[12] + p_area.x) + p_area.w <= _scissorBox[0] + _scissorBox[2])
 			_rect.w = p_area.w;
 		else
-			_rect.w = max(0, p_area.w - (((_mat[12] + p_area.x + Globals::getInstance().m_screenSize.x / 2) + p_area.w) - (_scissorBox[0] + _scissorBox[2])));
-		if((Globals::getInstance().m_screenSize.y - (p_area.y + _mat[13] + Globals::getInstance().m_screenSize.y / 2 + p_area.h)) + p_area.h < _scissorBox[1] + _scissorBox[3])
+			_rect.w = max(0, p_area.w - (((_mat[12] + p_area.x) + p_area.w) - (_scissorBox[0] + _scissorBox[2])));
+		if((GScreen::m_screenSize.y - (p_area.y + _mat[13] + p_area.h)) + p_area.h < _scissorBox[1] + _scissorBox[3])
 			_rect.h = p_area.h;
 		else
-			_rect.h = max(0, p_area.h - (((Globals::getInstance().m_screenSize.y - (p_area.y + _mat[13] + Globals::getInstance().m_screenSize.y / 2 + p_area.h)) + p_area.h) - (_scissorBox[1] + _scissorBox[3])));
+			_rect.h = max(0, p_area.h - (((GScreen::m_screenSize.y - (p_area.y + _mat[13] + p_area.h)) + p_area.h) - (_scissorBox[1] + _scissorBox[3])));
 	}
 	glScissor(GLint(_rect.x), GLint(_rect.y), GLsizei(_rect.w), GLsizei(_rect.h));
 	m_unitList.push_back(_rect);
@@ -47,12 +47,13 @@ Uint32 MScissor::push(Rect& p_area, bool p_override)
 
 Rect& MScissor::pop()
 {
-	m_unitList.pop_back();
-	if(!m_unitList.empty())
-	{
-		Rect _rect = m_unitList[m_unitList.size() - 1];
-		glScissor(GLint(_rect.x), GLint(_rect.y), GLsizei(_rect.w), GLsizei(_rect.h));
-		return _rect;
+	if(!m_unitList.empty()) {
+		m_unitList.pop_back();
+		if(!m_unitList.empty()) {
+			Rect _rect = m_unitList[m_unitList.size() - 1];
+			glScissor(GLint(_rect.x), GLint(_rect.y), GLsizei(_rect.w), GLsizei(_rect.h));
+			return _rect;
+		}
 	}
 	glDisable(GL_SCISSOR_TEST);
 	return Rect();

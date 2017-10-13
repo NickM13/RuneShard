@@ -5,11 +5,11 @@
 
 PauseScreen::PauseScreen()
 {
-	m_background = Panel("PANEL_BACKGROUND", "", Globals::getInstance().m_screenSize / -2, Globals::getInstance().m_screenSize, 2, true);
+	m_background = Panel("PANEL_BACKGROUND", "", GScreen::m_screenSize / -2, GScreen::m_screenSize, Component::Theme::PRIMARY, Component::Border::BORDER_ALL);
 
-	m_screens.push_back(Screen("None"));
-	m_screens.push_back(PSMain());
-	m_screens.push_back(PSOptions());
+	m_screens.push_back(new Screen("None"));
+	m_screens.push_back(new PSMain());
+	m_screens.push_back(new PSOptions());
 }
 
 bool PauseScreen::isPaused()
@@ -22,7 +22,7 @@ Uint16 PauseScreen::getScreen()
 }
 Screen PauseScreen::getScreen(Uint16 p_guid)
 {
-	return m_screens[p_guid];
+	return *m_screens[p_guid];
 }
 
 void PauseScreen::setScreen(Uint16 p_screen)
@@ -33,7 +33,7 @@ void PauseScreen::setScreen(std::string p_screen)
 {
 	for(Uint16 i = 0; i < m_screens.size(); i++)
 	{
-		if(m_screens[i].getName() == p_screen)
+		if(m_screens[i]->getName() == p_screen)
 		{
 			m_currScreen = i;
 			return;
@@ -44,12 +44,12 @@ void PauseScreen::setScreen(std::string p_screen)
 void PauseScreen::input()
 {
 	if(m_currScreen != 0)
-		m_screens[m_currScreen].input();
+		m_screens[m_currScreen]->input();
 }
 void PauseScreen::update(GLfloat p_updateTime)
 {
 	if(m_currScreen != 0)
-		m_screens[m_currScreen].update(p_updateTime);
+		m_screens[m_currScreen]->update(p_updateTime);
 }
 void PauseScreen::render()
 {
@@ -57,6 +57,6 @@ void PauseScreen::render()
 	{
 		m_background.render();
 
-		m_screens[m_currScreen].render();
+		m_screens[m_currScreen]->render();
 	}
 }

@@ -7,7 +7,7 @@
 struct Color
 {
 	GLfloat r, g, b, a;
-
+	
 	Color()
 	{
 		r = g = b = a = 1.f;

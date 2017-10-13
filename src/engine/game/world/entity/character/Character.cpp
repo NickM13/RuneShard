@@ -32,9 +32,9 @@ void Character::turn(Vector3<GLfloat> p_rotation) {
 
 void Character::input() {
 	Vector3<GLfloat> dev;
-	if(Globals::getInstance().m_keyStates[GLFW_KEY_E] == 1) {
+	if(GKey::keyDown(GLFW_KEY_E)) {
 		for(Uint16 i = 0; i < 200; i++) {
-			dev = Vector3<GLfloat>(rand() % 16 - 8, rand() % 16 - 8, rand() % 16 - 8).getNormal() / 8.f;
+			dev = Vector3<GLfloat>(rand() % 32 - 16, rand() % 32 - 16, rand() % 32 - 16).getNormal() / 2.f;
 			MParticle::getInstance().addUnit(new ParticlePuff(getCenter(), m_velocity + (getLookVector() + dev).getNormal() * 2));
 		}
 		m_soundJump.play();

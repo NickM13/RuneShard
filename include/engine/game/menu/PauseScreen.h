@@ -18,7 +18,7 @@ public:
 	void update(GLfloat p_updateTime);
 	void render();
 private:
-	std::vector<Screen> m_screens;
+	std::vector<Screen*> m_screens;
 	Uint16 m_currScreen;
 	Panel m_background;
 };

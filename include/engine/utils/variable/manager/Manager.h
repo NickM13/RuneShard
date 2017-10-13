@@ -8,9 +8,10 @@ class Manager : public Singleton<Manager<T>>
 {
 protected:
 	std::vector<T> m_unitList;
-
 public:
 	Manager() {};
+	Manager(const Manager&) {};
+	Manager operator=(const Manager&) {};
 
 	// Create unit, no matter if it exists or not
 	Uint32 addUnit(T& p_unit)

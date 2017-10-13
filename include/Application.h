@@ -1,10 +1,4 @@
 #pragma once
-
-#include "engine\utils\Globals.h"
-#include "engine\utils\OpenGL.h"
-#include "engine\utils\Singleton.h"
-#include "engine\utils\Utilities.h"
-
 #include "engine\game\Game.h"
 
 class Application : public Singleton<Application>
@@ -16,6 +10,7 @@ public:
 private:
 	static GLFWwindow * m_mainWindow;
 	static Vector2<Uint16> m_screenSize;
+	Game* m_game;
 
 	time_t m_maxFps = 60;
 	DWORD m_sleepTime;

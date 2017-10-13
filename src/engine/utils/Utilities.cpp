@@ -1,4 +1,5 @@
 #include "engine\utils\Utilities.h"
+#include "engine\utils\variable\datatype\Voxel.h"
 
 const Uint8 Math::m_permutation[256] = {151, 160, 137, 91, 90, 15,												// Hash lookup table as defined by Ken Perlin.  This is a randomly
 131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,				// arranged array of all numbers from 0-255 inclusive.
@@ -16,33 +17,23 @@ const Uint8 Math::m_permutation[256] = {151, 160, 137, 91, 90, 15,												//
 
 Uint8* Math::p = new Uint8[512];
 
-void Math::initPerlin(Uint32 p_seed)
-{
+void Math::initPerlin(Uint32 p_seed) {
 	srand(p_seed);
 	for(Uint16 i = 0; i < 512; i++)
-		p[i] = m_permutation[i%256];
+		p[i] = m_permutation[i % 256];
 }
-
 GLfloat repeat = 0;
-
-static GLfloat fade(GLfloat t)
-{
+static GLfloat fade(GLfloat t) {
 	return (6 * pow(t, 5) - 15 * pow(t, 4) + 10 * pow(t, 3));
 }
-
-Sint16 inc(Sint16 num)
-{
+Sint16 inc(Sint16 num) {
 	num++;
 	if(repeat > 0)
-		num = fmod(num, repeat);
-
+		num = Sint16(fmod(num, repeat));
 	return num;
 }
-
-GLfloat grad(Sint16 hash, GLfloat x, GLfloat y, GLfloat z)
-{
-	switch(hash & 0xF)
-	{
+GLfloat grad(Sint16 hash, GLfloat x, GLfloat y, GLfloat z) {
+	switch(hash & 0xF) {
 	case 0x0: return  x + y;
 	case 0x1: return -x + y;
 	case 0x2: return  x - y;
@@ -62,361 +53,261 @@ GLfloat grad(Sint16 hash, GLfloat x, GLfloat y, GLfloat z)
 	default: return 0;
 	}
 }
-
-GLfloat lerp(GLfloat a, GLfloat b, GLfloat x)
-{
+GLfloat lerp(GLfloat a, GLfloat b, GLfloat x) {
 	return a + x * (b - a);
 }
-
-GLfloat Math::perlin(GLfloat x, GLfloat y, GLfloat z)
-{
-	if(repeat > 0)
-	{
+GLfloat Math::perlin(GLfloat x, GLfloat y, GLfloat z) {
+	if(repeat > 0) {
 		x = fmod(x, repeat);
 		y = fmod(y, repeat);
 		z = fmod(z, repeat);
 	}
-
 	Sint16 xi = Sint16(x) & 255;
 	Sint16 yi = Sint16(y) & 255;
 	Sint16 zi = Sint16(z) & 255;
-
 	GLfloat xf = x - Sint16(x);
 	GLfloat yf = y - Sint16(y);
 	GLfloat zf = z - Sint16(z);
-
 	GLfloat u = fade(xf);
 	GLfloat v = fade(yf);
 	GLfloat w = fade(zf);
-
 	Sint16 aaa, aba, aab, abb, baa, bba, bab, bbb;
-	aaa = p[p[p[xi] +		yi] +		zi];
-	aba = p[p[p[xi] +		inc(yi)] +	zi];
-	aab = p[p[p[xi] +		yi] +		inc(zi)];
-	abb = p[p[p[xi] +		inc(yi)] +	inc(zi)];
-	baa = p[p[p[inc(xi)] +	yi] +		zi];
-	bba = p[p[p[inc(xi)] +	inc(yi)] +	zi];
-	bab = p[p[p[inc(xi)] +	yi] +		inc(zi)];
-	bbb = p[p[p[inc(xi)] +	inc(yi)] +	inc(zi)];
-
 	GLfloat x1, x2, y1, y2;
-	x1 = lerp(grad(aaa, xf, yf, zf),		grad(baa, xf - 1, yf, zf), u);
-	x2 = lerp(grad(aba, xf, yf - 1, zf),	grad(bba, xf - 1, yf - 1, zf), u);
+	aaa = p[p[p[xi] + yi] + zi];
+	aba = p[p[p[xi] + inc(yi)] + zi];
+	aab = p[p[p[xi] + yi] + inc(zi)];
+	abb = p[p[p[xi] + inc(yi)] + inc(zi)];
+	baa = p[p[p[inc(xi)] + yi] + zi];
+	bba = p[p[p[inc(xi)] + inc(yi)] + zi];
+	bab = p[p[p[inc(xi)] + yi] + inc(zi)];
+	bbb = p[p[p[inc(xi)] + inc(yi)] + inc(zi)];
+	x1 = lerp(grad(aaa, xf, yf, zf), grad(baa, xf - 1, yf, zf), u);
+	x2 = lerp(grad(aba, xf, yf - 1, zf), grad(bba, xf - 1, yf - 1, zf), u);
 	y1 = lerp(x1, x2, v);
-	x1 = lerp(grad(aab, xf, yf, zf - 1),	grad(bab, xf - 1, yf, zf - 1), u);
-	x1 = lerp(grad(abb, xf, yf - 1, zf - 1),grad(bbb, xf - 1, yf - 1, zf - 1), u);
+	x1 = lerp(grad(aab, xf, yf, zf - 1), grad(bab, xf - 1, yf, zf - 1), u);
+	x1 = lerp(grad(abb, xf, yf - 1, zf - 1), grad(bbb, xf - 1, yf - 1, zf - 1), u);
 	y2 = lerp(x1, x2, v);
-
 	return (lerp(y1, y2, w) + 1) / 2;
 }
 
-GLfloat Math::perlinNoise(GLfloat x, GLfloat y, GLfloat z, Sint16 p_octaves, GLfloat p_persistence)
-{
+GLfloat Math::perlinNoise(GLfloat x, GLfloat y, GLfloat z, Sint16 p_octaves, GLfloat p_persistence) {
 	GLfloat _total = 0;
 	GLfloat _frequency = 1;
 	GLfloat _amplitude = 1;
 	GLfloat _maxValue = 0;
-	for(Sint16 i = 0; i < p_octaves; i++)
-	{
+	for(Sint16 i = 0; i < p_octaves; i++) {
 		_total += perlin(x * _frequency, y * _frequency, z * _frequency) * _amplitude;
-
 		_maxValue += _amplitude;
-
 		_amplitude *= p_persistence;
 		_frequency *= 2;
 	}
 	return _total / _maxValue;
 }
 
-void Math::castRay3d(Vector3<GLfloat> p_start, Vector3<GLfloat> p_direction, Vector3<GLfloat> p_boxPosition, Vector3<GLfloat> p_boxDimension, GLfloat &p_near, GLfloat &p_far, Sint8 &p_side)
+void Math::castRay3d(Vector3<GLfloat> p_start, Vector3<GLfloat> p_direction, Vector3<GLfloat> p_boxPosition, Vector3<GLfloat> p_boxDimension, GLdouble &p_near, GLdouble &p_far, Sint8 &p_side)
 {
+	GLfloat _near = p_near, _far = p_far;
+	p_near = 0;
+	Sint8 _side = 0;
 	bool flip[3] = {p_direction.x < 0, p_direction.y < 0, p_direction.z < 0};
 	p_boxPosition = flipOverPoint(p_boxPosition, p_boxDimension, p_start, flip);
-
 	if(p_direction.x < 0)
 		p_direction.x = -p_direction.x;
 	if(p_direction.y < 0)
 		p_direction.y = -p_direction.y;
 	if(p_direction.z < 0)
 		p_direction.z = -p_direction.z;
-
-	GLfloat _near = p_near, _far = p_far;
-	p_near = 0;
-	Sint8 _side = 0;
-	if(p_direction.x != 0)
-	{
-		if(p_start.x > p_boxPosition.x + p_boxDimension.x)
-		{
+	if(p_direction.x != 0) {
+		if(p_start.x > p_boxPosition.x + p_boxDimension.x) {
 			_near = 1;
-			_far = 1;
+			_far = 0;
 		}
-		else
-		{
+		else {
 			_near = max(_near, (p_boxPosition.x - p_start.x) / (p_direction.x));
 			_far = min(_far, (p_boxPosition.x + p_boxDimension.x - p_start.x) / (p_direction.x));
-			if(_near >= p_near)
-			{
-				_side += 1;
+			if(_near > p_near) {
+				_side = flip[0] ? FACE_NORTH : FACE_SOUTH;
 				p_near = _near;
 			}
 		}
 	}
-	else if(p_start.x < p_boxPosition.x || p_start.x > p_boxPosition.x + p_boxDimension.x)
-	{
+	else if(p_start.x < p_boxPosition.x || p_start.x > p_boxPosition.x + p_boxDimension.x) {
 		_near = 1;
-		_far = 1;
+		_far = 0;
 	}
-	else
-	{
+	else {
 		_near = max(_near, 0);
 		_far = min(_far, 1);
-		if(_near >= p_near)
-		{
-			_side += 1;
+		if(_near > p_near) {
+			_side = flip[0] ? FACE_NORTH : FACE_SOUTH;
 			p_near = _near;
 		}
 	}
-
-	if(p_direction.y != 0)
-	{
-		if(p_start.y > p_boxPosition.y + p_boxDimension.y)
-		{
+	if(p_direction.y != 0) {
+		if(p_start.y > p_boxPosition.y + p_boxDimension.y) {
 			_near = 1;
-			_far = 1;
+			_far = 0;
 		}
-		else
-		{
+		else {
 			_near = max(_near, (p_boxPosition.y - p_start.y) / (p_direction.y));
 			_far = min(_far, (p_boxPosition.y + p_boxDimension.y - p_start.y) / (p_direction.y));
-			if(_near >= p_near)
-			{
-				if(_near > p_near)
-				{
-					if(_side & 1)
-						_side -= 1;
-				}
-				_side += 2;
+			if(_near > p_near) {
+				_side = flip[1] ? FACE_TOP : FACE_BOTTOM;
 				p_near = _near;
 			}
 		}
 	}
-	else if(p_start.y < p_boxPosition.y || p_start.y > p_boxPosition.y + p_boxDimension.y)
-	{
+	else if(p_start.y < p_boxPosition.y || p_start.y > p_boxPosition.y + p_boxDimension.y) {
 		_near = 1;
-		_far = 1;
+		_far = 0;
 	}
-	else
-	{
+	else {
 		_near = max(_near, 0);
 		_far = min(_far, 1);
-		if(_near >= p_near)
-		{
-			if(_near > p_near)
-			{
-				if(_side & 1)
-					_side -= 1;
-			}
-			_side += 2;
+		if(_near > p_near) {
+			_side = flip[1] ? FACE_TOP : FACE_BOTTOM;
 			p_near = _near;
 		}
 	}
-
-	if(p_direction.z != 0)
-	{
-		if(p_start.z > p_boxPosition.z + p_boxDimension.z)
-		{
+	if(p_direction.z != 0) {
+		if(p_start.z > p_boxPosition.z + p_boxDimension.z) {
 			_near = 1;
-			_far = 1;
+			_far = 0;
 		}
-		else
-		{
+		else {
 			_near = max(_near, (p_boxPosition.z - p_start.z) / (p_direction.z));
 			_far = min(_far, (p_boxPosition.z + p_boxDimension.z - p_start.z) / (p_direction.z));
-			if(_near >= p_near)
-			{
-				if(_near > p_near)
-				{
-					if(_side & 1)
-						_side -= 1;
-					if(_side & 2)
-						_side -= 2;
-				}
-				_side += 4;
+			if(_near > p_near) {
+				_side = flip[2] ? FACE_EAST : FACE_WEST;
 				p_near = _near;
 			}
 		}
 	}
-	else if(p_start.z < p_boxPosition.z || p_start.z > p_boxPosition.z + p_boxDimension.z)
-	{
+	else if(p_start.z < p_boxPosition.z || p_start.z > p_boxPosition.z + p_boxDimension.z) {
 		_near = 1;
-		_far = 1;
+		_far = 0;
 	}
-	else
-	{
+	else {
 		_near = max(_near, 0);
 		_far = min(_far, 1);
-		if(_near >= p_near)
-		{
-			if(_near > p_near)
-			{
-				if(_side & 1)
-					_side -= 1;
-				if(_side & 2)
-					_side -= 2;
-			}
-			_side += 4;
+		if(_near > p_near) {
+			_side = flip[2] ? FACE_EAST : FACE_WEST;
 			p_near = _near;
 		}
 	}
-	
-	if(_near < _far)
+
+	if(_near < _far) {
 		p_side = _side;
-	else
+		p_far = _far;
+	}
+	else {
 		p_side = 0;
-	p_near = max(0, min(1, _near));
-	p_far = min(1, max(0, _far));
+		p_near = 1;
+		p_far = 0;
+	}
 }
 
-
-void Math::castBox3d(Vector3<GLfloat> p_start, Vector3<GLfloat> p_dimension, Vector3<GLfloat> p_direction, Vector3<GLfloat> p_boxPosition, Vector3<GLfloat> p_boxDimension, GLfloat &p_near, GLfloat &p_far, Sint8 &p_side)
-{
-	GLfloat _near = 1, _nearCast;
-	GLfloat _far = 1;
+void Math::castBox3d(Vector3<GLfloat> p_start, Vector3<GLfloat> p_dimension, Vector3<GLfloat> p_direction, Vector3<GLfloat> p_boxPosition, Vector3<GLfloat> p_boxDimension, GLdouble &p_near, GLdouble &p_far, Sint8 &p_side) {
+	GLdouble _near = 1, _nearCast;
+	GLdouble _far = 1;
 	Sint8 _side = 0, _sideCast;
-
-	GLfloat _c = 0.0001f; // Slight offset for corners to cast from
+	GLdouble _c = 0.0001; // Slight offset for corners to cast from
 	Vector3<GLfloat> _dCount = (p_dimension / (p_boxDimension)).ceil();
-	Vector3<GLfloat> _dOffset = p_dimension / (_dCount) - _c * 2;
-
+	Vector3<GLfloat> _dOffset = p_dimension / (_dCount)-_c * 2;
 	p_direction = p_direction.getNormal();
-
-	if(p_direction.x < 0)
-	{
-		for(Uint16 y = 0; y <= _dCount.y; y++)
-		{
-			for(Uint16 z = 0; z <= _dCount.z; z++)
-			{
+	if(p_direction.x < 0) {
+		for(Uint16 y = 0; y <= _dCount.y; y++) {
+			for(Uint16 z = 0; z <= _dCount.z; z++) {
 				_nearCast = 0;
 				_sideCast = 0;
 				_far = 1;
 				castRay3d(p_start + Vector3<GLfloat>(-_c, y * _dOffset.y + _c, z * _dOffset.z + _c), p_direction, p_boxPosition, p_boxDimension, _nearCast, _far, _sideCast);
-				if((_nearCast < _near) && (_sideCast & 1))
-				{
+				if((_nearCast < _near) && ((_sideCast & FACE_NORTH) || _nearCast < _c)) {
 					_side = 1;
 					_near = _nearCast;
 				}
 			}
 		}
 	}
-	else
-	{
-		for(Uint16 y = 0; y <= _dCount.y; y++)
-		{
-			for(Uint16 z = 0; z <= _dCount.z; z++)
-			{
+	else {
+		for(Uint16 y = 0; y <= _dCount.y; y++) {
+			for(Uint16 z = 0; z <= _dCount.z; z++) {
 				_nearCast = 0;
 				_sideCast = 0;
 				_far = 1;
 				castRay3d(p_start + Vector3<GLfloat>(p_dimension.x + _c, y * _dOffset.y + _c, z * _dOffset.z + _c), p_direction, p_boxPosition, p_boxDimension, _nearCast, _far, _sideCast);
-				if((_nearCast < _near) && (_sideCast & 1))
-				{
+				if((_nearCast < _near) && ((_sideCast & FACE_SOUTH) || _nearCast < _c)) {
 					_side = 1;
 					_near = _nearCast;
 				}
 			}
 		}
 	}
-
-
-	if(p_direction.y < 0)
-	{
-		for(Uint16 x = 0; x <= _dCount.x; x++)
-		{
-			for(Uint16 z = 0; z <= _dCount.z; z++)
-			{
+	if(p_direction.y < 0) {
+		for(Uint16 x = 0; x <= _dCount.x; x++) {
+			for(Uint16 z = 0; z <= _dCount.z; z++) {
 				_nearCast = 0;
 				_sideCast = 0;
 				_far = 1;
 				castRay3d(p_start + Vector3<GLfloat>(x * _dOffset.x + _c, -_c, z * _dOffset.z + _c), p_direction, p_boxPosition, p_boxDimension, _nearCast, _far, _sideCast);
-				if((_nearCast < _near) && (_sideCast & 2))
-				{
+				if((_nearCast < _near) && ((_sideCast & FACE_TOP) || _nearCast < _c)) {
 					_side = 2;
 					_near = _nearCast;
 				}
 			}
 		}
 	}
-	else
-	{
-		for(Uint16 x = 0; x <= _dCount.x; x++)
-		{
-			for(Uint16 z = 0; z <= _dCount.z; z++)
-			{
+	else {
+		for(Uint16 x = 0; x <= _dCount.x; x++) {
+			for(Uint16 z = 0; z <= _dCount.z; z++) {
 				_nearCast = 0;
 				_sideCast = 0;
 				_far = 1;
 				castRay3d(p_start + Vector3<GLfloat>(x * _dOffset.x + _c, p_dimension.y + _c, z * _dOffset.z + _c), p_direction, p_boxPosition, p_boxDimension, _nearCast, _far, _sideCast);
-				if((_nearCast < _near) && (_sideCast & 2))
-				{
+				if((_nearCast < _near) && ((_sideCast & FACE_BOTTOM) || _nearCast < _c)) {
 					_side = 2;
 					_near = _nearCast;
 				}
 			}
 		}
 	}
-
-
-	if(p_direction.z < 0)
-	{
-		for(Uint16 x = 0; x <= _dCount.x; x++)
-		{
-			for(Uint16 y = 0; y <= _dCount.y; y++)
-			{
+	if(p_direction.z < 0) {
+		for(Uint16 x = 0; x <= _dCount.x; x++) {
+			for(Uint16 y = 0; y <= _dCount.y; y++) {
 				_nearCast = 0;
 				_sideCast = 0;
 				_far = 1;
 				castRay3d(p_start + Vector3<GLfloat>(x * _dOffset.x + _c, y * _dOffset.y + _c, -_c), p_direction, p_boxPosition, p_boxDimension, _nearCast, _far, _sideCast);
-				if((_nearCast < _near) && (_sideCast & 4))
-				{
+				if((_nearCast < _near) && ((_sideCast & FACE_EAST) || _nearCast < _c)) {
 					_side = 4;
 					_near = _nearCast;
 				}
 			}
 		}
 	}
-	else
-	{
-		for(Uint16 x = 0; x <= _dCount.x; x++)
-		{
-			for(Uint16 y = 0; y <= _dCount.y; y++)
-			{
+	else {
+		for(Uint16 x = 0; x <= _dCount.x; x++) {
+			for(Uint16 y = 0; y <= _dCount.y; y++) {
 				_nearCast = 0;
 				_sideCast = 0;
 				_far = 1;
 				castRay3d(p_start + Vector3<GLfloat>(x * _dOffset.x + _c, y * _dOffset.y + _c, p_dimension.z + _c), p_direction, p_boxPosition, p_boxDimension, _nearCast, _far, _sideCast);
-				if((_nearCast < _near) && (_sideCast & 4))
-				{
+				if((_nearCast < _near) && ((_sideCast & FACE_WEST) || _nearCast < _c)) {
 					_side = 4;
 					_near = _nearCast;
 				}
 			}
 		}
 	}
-
-	if(_side == 0)
-	{
-		for(Uint16 x = 0; x <= _dCount.x; x++)
-		{
-			for(Uint16 y = 0; y <= _dCount.y; y++)
-			{
-				for(Uint16 z = 0; z <= _dCount.z; z++)
-				{
+	if(_side == 0) {
+		for(Uint16 x = 0; x <= _dCount.x; x++) {
+			for(Uint16 y = 0; y <= _dCount.y; y++) {
+				for(Uint16 z = 0; z <= _dCount.z; z++) {
 					_nearCast = 0;
 					_sideCast = 0;
 					_far = 1;
 					castRay3d(p_start + Vector3<GLfloat>(x * _dOffset.x + _c, y * _dOffset.y + _c, z * _dOffset.z + _c), p_direction, p_boxPosition, p_boxDimension, _nearCast, _far, _sideCast);
-					if((_nearCast < _near) && (_sideCast & 4))
-					{
+					if((_nearCast < _near) && (_sideCast & 4)) {
 						_side = 4 + 2 + 1;
 						_near = _nearCast;
 					}
@@ -424,8 +315,6 @@ void Math::castBox3d(Vector3<GLfloat> p_start, Vector3<GLfloat> p_dimension, Vec
 			}
 		}
 	}
-
-
 	if(_side == 0)
 		_near = 1;
 	else

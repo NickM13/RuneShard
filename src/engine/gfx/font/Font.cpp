@@ -1,7 +1,13 @@
 #include "engine\gfx\font\Font.h"
 #include "engine\utils\Utilities.h"
 
-// Majority of this code based on NeHe's FreeType2 tutorial found here: http://nehe.gamedev.net/tutorial/freetype_fonts_in_opengl/24001/
+// TODO: Majority of this code based on NeHe's FreeType2 tutorial found here: http://nehe.gamedev.net/tutorial/freetype_fonts_in_opengl/24001/
+// Need to find out if I have to credit this
+
+std::vector<Font::FontType*> Font::m_fontList;
+Font::FontType* Font::m_font = 0;
+
+Alignment Font::m_alignment;
 
 //Finds first power of 2 >= int p_a
 inline int nextPower2(int p_a)
@@ -82,64 +88,62 @@ void Font::setAlignment(Alignment ALIGN)
 
 void Font::loadFont(std::string p_fontName, std::string p_src, Uint32 p_fontSize)
 {
-	m_fontList.push_back(FontType());
-	m_font = &m_fontList[m_fontList.size() - 1];
-	init(p_src, p_fontSize);
+	m_fontList.push_back(init(p_src, p_fontSize));
+	m_fontList[m_fontList.size() - 1]->m_fontName = p_fontName;
+	m_font = m_fontList[m_fontList.size() - 1];
 }
 void Font::setFont(std::string p_fontName)
 {
 	for(Uint16 i = 0; i < m_fontList.size(); i++)
-		if(m_fontList[i].m_fontName == p_fontName)
-			m_font = &m_fontList[i];
+		if(m_fontList[i]->m_fontName == p_fontName)
+			m_font = m_fontList[i];
 }
-void Font::init(std::string p_src, Uint32 p_fontSize)
+Font::FontType* Font::init(std::string p_src, Uint32 p_fontSize)
 {
-	m_font->m_textures = new GLuint[255];
-	m_font->m_charWidth = new GLuint[255];
-
-	m_font->m_height = p_fontSize;
-
+	FontType* _font = new FontType();
+	_font->m_textures = new GLuint[255];
+	_font->m_charWidth = new GLuint[255];
+	_font->m_height = p_fontSize;
 	FT_Library library;
-	if(FT_Init_FreeType(&library))
-		throw std::runtime_error("FT_Init_FreeType failed");
-	
+	if(FT_Init_FreeType(&library)) {
+		std::cerr << "FT_Init_FreeType failed" << std::endl;
+		return 0;
+	}
 	FT_Face face;
-
-	if(FT_New_Face(library, p_src.c_str(), 0, &face))
-		throw std::runtime_error("FT_New_Face failed (there is probably a problem with your font file)");
-
+	if(FT_New_Face(library, p_src.c_str(), 0, &face)) {
+		std::cerr << "FT_New_Face failed (there is probably a problem with your font file)" << std::endl;
+		return 0;
+	}
 	FT_Set_Char_Size(face, p_fontSize << 6, p_fontSize << 6, 96, 96);
-
-	m_font->m_listBase = glGenLists(255);
-	glGenTextures(255, m_font->m_textures);
-
+	_font->m_listBase = glGenLists(255);
+	glGenTextures(255, _font->m_textures);
 	for(Uint8 i = 0; i < 255; i++)
-		m_font->m_charWidth[i] = make_dList(face, i, m_font->m_listBase, m_font->m_textures);
-
+		_font->m_charWidth[i] = make_dList(face, i, _font->m_listBase, _font->m_textures);
 	FT_Done_Face(face);
-
 	FT_Done_FreeType(library);
+	return _font;
 }
 
 void Font::clean()
 {
 	for(Uint16 i = 0; i < m_fontList.size(); i++)
 	{
-		glDeleteLists(m_fontList[i].m_listBase, 255);
-		glDeleteTextures(255, m_fontList[i].m_textures);
-		delete[] m_fontList[i].m_textures;
+		glDeleteLists(m_fontList[i]->m_listBase, 255);
+		glDeleteTextures(255, m_fontList[i]->m_textures);
+		delete[] m_fontList[i]->m_textures;
 	}
+	m_fontList.clear();
 }
 
 Vector2<Sint32> Font::getMessageWidth(std::string p_msg)
 {
-	Sint32 _y = 1;
+	Sint32 _y = getHeight();
 	Sint32 _rVal = 0, _rMaxVal = 0;
 	for(Sint32 i = 0; i < Sint32(p_msg.length()); i++)
 	{
 		if(p_msg[i] == '\n')
 		{
-			_y++;
+			_y += getSpacingHeight();
 			_rMaxVal = max(_rVal, _rMaxVal);
 			_rVal = 0;
 		}
@@ -174,10 +178,13 @@ inline void pop_projection_matrix()
 
 void Font::print(std::string message, Sint32 x, Sint32 y)
 {
-	x = x + Globals::getInstance().m_screenSize.x / 2;
-	y = y + Globals::getInstance().m_screenSize.y / 2 + m_font->m_height / 2;
+	x = x;
+	y = y + m_font->m_height / 2;
 
 	Sint32 _offset = 0;
+
+	int id;
+	glGetIntegerv(GL_TEXTURE_BINDING_2D, &id);
 
 	pushScreenCoordinateMaterix();
 	glPushMatrix();
@@ -233,7 +240,7 @@ void Font::print(std::string message, Sint32 x, Sint32 y)
 					case ALIGN_LEFT:
 						break;
 					case ALIGN_CENTER:
-						glTranslatef(-GLfloat(getMessageWidth(message).x) / 2, 0, 0);
+						glTranslatef(-GLfloat(getMessageWidth(message).x / 2), 0, 0);
 						break;
 					case ALIGN_RIGHT:
 						glTranslatef(-GLfloat(getMessageWidth(message).x), 0, 0);
@@ -254,4 +261,6 @@ void Font::print(std::string message, Sint32 x, Sint32 y)
 	glPopMatrix();
 
 	pop_projection_matrix();
+
+	glBindTexture(GL_TEXTURE_2D, id);
 }

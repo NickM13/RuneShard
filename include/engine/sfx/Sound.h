@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LOpenAL.h"
+#include "engine\utils\Singleton.h"
 #include "engine\utils\Utilities.h"
 
 //Stores sound
@@ -15,25 +16,29 @@ private:
 	ALuint m_bufferId;
 };
 
-class MBuffer
+class MBuffer : public Singleton<MBuffer>
 {
 protected:
-	static std::vector<Buffer> m_unitList;
+	std::vector<Buffer> m_unitList;
 public:
+	MBuffer() {};
+	MBuffer(const MBuffer&) {};
+	MBuffer operator=(const MBuffer&) {};
+
 	// Create unit, no matter if it exists or not
-	static Uint32 addUnit(Buffer& p_unit)
+	Uint32 addUnit(Buffer& p_unit)
 	{
 		m_unitList.push_back(p_unit);
 		return Uint32(m_unitList.size() - 1);
 	}
 	// Create unit, no matter if it exists or not
-	static Uint32 addUnit(std::string p_name)
+	Uint32 addUnit(std::string p_name)
 	{
 		m_unitList.push_back(Buffer(p_name));
 		return Uint32(m_unitList.size() - 1);
 	}
 
-	static bool contains(std::string p_name)
+	bool contains(std::string p_name)
 	{
 		for(Uint32 i = 0; i < m_unitList.size(); i++)
 			if(p_name == m_unitList[i].getName())
@@ -41,11 +46,11 @@ public:
 		return false;
 	}
 
-	static Buffer& getUnit(Uint32 p_guid)
+	Buffer& getUnit(Uint32 p_guid)
 	{
 		return m_unitList.at(p_guid);
 	}
-	static Buffer& getUnit(std::string p_name)
+	Buffer& getUnit(std::string p_name)
 	{
 		for(Uint32 i = 0; i < m_unitList.size(); i++)
 			if(p_name == m_unitList[i].getName())
@@ -53,13 +58,13 @@ public:
 		return getUnit(addUnit(p_name));
 	}
 
-	static std::vector<Buffer>& getUnitList()
+	std::vector<Buffer>& getUnitList()
 	{
 		return m_unitList;
 	}
 
 	// Look for unit, if it doesnt exist it adds it
-	static Uint32 getUnitID(std::string p_name)
+	Uint32 getUnitID(std::string p_name)
 	{
 		for(Uint32 i = 0; i < m_unitList.size(); i++)
 			if(p_name == m_unitList[i].getName())
@@ -68,7 +73,7 @@ public:
 	}
 
 	// Look for unit, if it doesnt exist it adds it
-	static void removeUnit(Uint16 p_guid)
+	void removeUnit(Uint16 p_guid)
 	{
 		m_unitList.erase(m_unitList.begin() + p_guid);
 	}

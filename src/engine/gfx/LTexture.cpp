@@ -6,17 +6,17 @@
 #include <IL\il.h>
 #include <IL\ilut.h>
 
-bool LTexture::m_hasInit = false;
-GLuint LTexture::m_imgId = false;
+GLuint LTexture::m_imgId = 0;
+bool LTexture::m_isInit = false;
 
 void LTexture::init()
 {
-	if(!m_hasInit)
+	if(!m_isInit)
 	{
 		ilInit();
 		iluInit();
 		ilutInit();
-		m_hasInit = true;
+		m_isInit = true;
 	}
 }
 
@@ -25,8 +25,9 @@ GLuint LTexture::getPrevId()
 	return m_imgId;
 }
 
-GLuint LTexture::loadImage(std::string src)
+GLuint LTexture::getTextureId(std::string src)
 {
+	if(!m_isInit) return 0;
 	std::string _src = "res\\texture\\" + src;
 	ilGenImages(1, &m_imgId);
 	ilBindImage(m_imgId);
@@ -45,8 +46,9 @@ GLuint LTexture::loadImage(std::string src)
 	}
 }
 
-Texture LTexture::getImage(std::string src)
+Texture LTexture::getTexture(std::string src)
 {
+	if(!m_isInit) return Texture();
 	std::string _src = "res\\texture\\" + src;
 	ilGenImages(1, &m_imgId);
 	ilBindImage(m_imgId);
@@ -67,6 +69,7 @@ Texture LTexture::getImage(std::string src)
 
 void LTexture::freeTex(GLuint id)
 {
+	if(!m_isInit) return;
 	if(id == -1)
 	{
 		id = m_imgId;

@@ -3,11 +3,9 @@
 #include "engine\utils\OpenGL.h"
 #include "engine\utils\variable\datatype\Macros.h"
 #include "engine\utils\variable\datatype\Vector3.h"
+#include "engine\utils\variable\manager\VoxelModelManager.h"
 
 #include "engine\sfx\Sound.h"
-
-#include "engine\gfx\model\VoxelModel.h"
-
 #include "..\data\WorldData.h"
 
 #include <vector>
@@ -35,7 +33,7 @@ public:
 	virtual Vector3<GLfloat> getSize() { return m_size; };
 	virtual Vector3<GLfloat> getRotation() { return m_rotation; };
 	virtual Vector3<GLfloat> getVelocity() { return m_velocity; };
-	Vector3<GLfloat> getLookVector() { return Math::computeDirection({-m_rotation.x, m_rotation.y, m_rotation.z}); };
+	Vector3<GLfloat> getLookVector() { return Math::computeDirection({m_rotation.x, m_rotation.y, m_rotation.z}); };
 	Vector3<GLfloat> getEyePos() { return Vector3<GLfloat>(m_position.x, m_position.y + m_size.y - 0.15f, m_position.z); }
 
 	virtual void input();

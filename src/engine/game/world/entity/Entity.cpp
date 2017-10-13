@@ -88,10 +88,10 @@ void Entity::update(WorldData p_world, GLfloat p_deltaTime)
 		m_velocity.z = 0;
 	_velocity = ((_velocity + m_velocity) / 2) * (p_deltaTime * 10);
 
-	if(Globals::getInstance().m_keyStates[GLFW_KEY_4] == 1)
+	if(GKey::keyPressed(GLFW_KEY_4))
 		m_position.y = 20;
 
-	GLfloat _near = 0;
+	GLdouble _near = 0;
 	Sint8 _face = 0;
 	if(m_noClip)
 	{
@@ -100,16 +100,16 @@ void Entity::update(WorldData p_world, GLfloat p_deltaTime)
 	else
 	{
 		m_onGround = false;
-		while(_velocity.getLength() > 0)
+		while(_velocity.getLength() > 0.0001f)
 		{
 			p_world.castBox(m_position - Vector3<GLfloat>(m_size.x / 2, 0, m_size.z / 2), m_size, _velocity, _near, _face);
-			if(_near != 1)
+			if(_near < 1)
 			{
 				m_position.x += _velocity.x * _near;
 				m_position.y += _velocity.y * _near;
 				m_position.z += _velocity.z * _near;
 				_velocity = _velocity * (1.f - _near);
-				if(_face & 1)
+				if(_face & (FACE_NORTH | FACE_SOUTH))
 				{
 					if(m_velocity.x < 0)
 						m_position.x = roundf(m_position.x - m_size.x / 2) + m_size.x / 2;
@@ -119,7 +119,7 @@ void Entity::update(WorldData p_world, GLfloat p_deltaTime)
 					m_velocity.x = 0;
 					_velocity.x = 0;
 				}
-				if(_face & 2)
+				if(_face & (FACE_TOP | FACE_BOTTOM))
 				{
 					if(m_velocity.y < 0)
 					{
@@ -133,7 +133,7 @@ void Entity::update(WorldData p_world, GLfloat p_deltaTime)
 					m_velocity.y = 0;
 					_velocity.y = 0;
 				}
-				if(_face & 4)
+				if(_face & (FACE_EAST | FACE_WEST))
 				{
 					if(m_velocity.z < 0)
 						m_position.z = roundf(m_position.z - m_size.z / 2) + m_size.z / 2;
@@ -163,7 +163,13 @@ void Entity::render()
 	{
 		glColor3f(0.5f, 0.5f, 0.5f);
 		glTranslatef(m_position.x, m_position.y, m_position.z);
-		/*
+		if(m_voxelModel)
+		{
+			
+			glScalef(1.f / 16, 1.f / 16, 1.f / 16);
+			m_voxelModel->render();
+		}
+		return;
 		glBegin(GL_LINES);
 		{
 			glVertex3f(-m_size.x / 2, 0, -m_size.z / 2);
@@ -207,12 +213,6 @@ void Entity::render()
 			glVertex3f(-m_size.x / 2, m_size.y, -m_size.z / 2);
 		}
 		glEnd();
-		*/
-		if(m_voxelModel)
-		{
-			glScalef(1.f / 16, 1.f / 16, 1.f / 16);
-			m_voxelModel->render();
-		}
 	}
 	glPopMatrix();
 }

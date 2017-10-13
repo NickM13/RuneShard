@@ -1,7 +1,5 @@
 #include "engine\sfx\Sound.h"
 
-std::vector<Buffer> MBuffer::m_unitList;
-
 Source::Source(std::string p_sourceName)
 {
 	m_name = p_sourceName;

@@ -9,9 +9,9 @@ public:
 	Screen(std::string p_name = "") { m_name = p_name; };
 	~Screen() {};
 
-	void addComponent(Component* p_comp, Alignment p_align)
+	void addComponent(Component* p_comp, Anchor p_posAnchor, Anchor p_sizeAnchor)
 	{
-		m_gui.addComponent(p_comp, p_align);
+		m_gui.addComponent(p_comp, p_posAnchor, p_sizeAnchor);
 	}
 
 	std::string getName()

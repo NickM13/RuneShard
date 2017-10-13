@@ -7,27 +7,23 @@
 #include <functional>
 #include <iostream>
 
-bool Game::init()
-{
+Game::Game() {
 	m_engineState = GAME;
-
 	LTexture::init();
-	Font::getInstance().loadFont("UI", "res\\segoeui.ttf", 10);
+	Font::loadFont("UI", "res\\segoeui.ttf", 10);
 	Sound::getInstance().init();
-
 	m_world = new WorldIsland();
-	m_world->generate(Vector2<Sint32>(32, 32));
-
-	return true;
+	m_world->generate(Vector2<Sint32>(4, 4));
+}
+Game::~Game() {
+	Sound::getInstance().close();
 }
 
-void Game::resize()
-{
+void Game::resize() {
 
 }
 
-void Game::setEngineState(EngineState p_state)
-{
+void Game::setEngineState(EngineState p_state) {
 	if(m_engineState != p_state)
 	{
 		m_engineState = p_state;
@@ -43,40 +39,32 @@ void Game::setEngineState(EngineState p_state)
 	}
 }
 
-void Game::input()
-{
-	Vector2<Sint32> _mouseMoved = Globals::getInstance().m_mousePos - m_mouseBuffer;
-	m_mouseBuffer = Globals::getInstance().m_mousePos;
-	Globals::getInstance().m_guiMousePos = Globals::getInstance().m_guiMousePos + _mouseMoved;
-
-	if(Globals::getInstance().m_guiMousePos.x < Globals::getInstance().m_screenSize.x / -2)
-		Globals::getInstance().m_guiMousePos.x = Globals::getInstance().m_screenSize.x / -2;
-	if(Globals::getInstance().m_guiMousePos.y < Globals::getInstance().m_screenSize.y / -2)
-		Globals::getInstance().m_guiMousePos.y = Globals::getInstance().m_screenSize.y / -2;
-
-	if(Globals::getInstance().m_guiMousePos.x > Globals::getInstance().m_screenSize.x / 2)
-		Globals::getInstance().m_guiMousePos.x = Globals::getInstance().m_screenSize.x / 2;
-	if(Globals::getInstance().m_guiMousePos.y > Globals::getInstance().m_screenSize.y / 2)
-		Globals::getInstance().m_guiMousePos.y = Globals::getInstance().m_screenSize.y / 2;
-
-	if(Globals::getInstance().m_keyStates[GLFW_KEY_ESCAPE] == 1)
-	{
-		if(m_engineState == GAME)
-		{
-			if(PauseScreen::getInstance().isPaused())
-			{
+void Game::input() {
+	Vector2<Sint32> _mouseMoved = GMouse::getMousePos() - m_mouseBuffer;
+	Vector2<Sint32> _mouseGui = GMouse::getMousePosGui() + _mouseMoved;
+	m_mouseBuffer = GMouse::getMousePos();
+	if(_mouseGui.x < GScreen::m_screenSize.x / -2)
+		_mouseGui.x = GScreen::m_screenSize.x / -2;
+	if(_mouseGui.y < GScreen::m_screenSize.y / -2)
+		_mouseGui.y = GScreen::m_screenSize.y / -2;
+	if(_mouseGui.x > GScreen::m_screenSize.x / 2)
+		_mouseGui.x = GScreen::m_screenSize.x / 2;
+	if(_mouseGui.y > GScreen::m_screenSize.y / 2)
+		_mouseGui.y = GScreen::m_screenSize.y / 2;
+	GMouse::setMousePosGui(_mouseGui);
+	if(GKey::keyPressed(GLFW_KEY_ESCAPE)) {
+		if(m_engineState == GAME) {
+			if(PauseScreen::getInstance().isPaused()) {
 				PauseScreen::getInstance().setScreen(0);
 			}
-			else
-			{
+			else {
 				PauseScreen::getInstance().setScreen(1);
-				Globals::getInstance().m_guiMousePos = {};
+				GMouse::setMousePosGui({});
 			}
 		}
 	}
 
-	switch(m_engineState)
-	{
+	switch(m_engineState) {
 	case MENU:
 
 		break;
@@ -88,13 +76,11 @@ void Game::input()
 		break;
 	}
 }
-
-void Game::update()
-{
+void Game::update() {
 	m_deltaUpdate = min(0.5f, GLfloat(glfwGetTime() - m_lastUpdate));
 	m_lastUpdate = GLfloat(glfwGetTime());
 
-	Globals::getInstance().m_deltaTime = m_deltaUpdate;
+	GScreen::m_deltaTime = m_deltaUpdate;
 
 	switch(m_engineState)
 	{
@@ -109,9 +95,7 @@ void Game::update()
 		break;
 	}
 }
-
-void Game::render3d()
-{
+void Game::render3d() {
 	switch(m_engineState)
 	{
 	case MENU:
@@ -122,13 +106,12 @@ void Game::render3d()
 		break;
 	}
 }
-void Game::renderMouse()
-{
+void Game::renderMouse() {
 	glPushMatrix();
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glColor3f(1, 1, 1);
-		glTranslatef(GLfloat(Globals::getInstance().m_guiMousePos.x), GLfloat(Globals::getInstance().m_guiMousePos.y), 0);
+		glTranslatef(GLfloat(GMouse::getMousePosGui().x), GLfloat(GMouse::getMousePosGui().y), 0);
 		glBegin(GL_QUADS);
 		{
 			glVertex2f(0, 0);
@@ -140,18 +123,17 @@ void Game::renderMouse()
 	}
 	glPopMatrix();
 }
-void Game::render2d()
-{
+void Game::render2d() {
 	switch(m_engineState)
 	{
 	case MENU:
 
 		break;
 	case GAME:
-		Font::getInstance().setAlignment(Alignment::ALIGN_LEFT);
-		Font::getInstance().print(std::string("X: ") + Util::numToString(m_world->getPlayer()->getCenter().x, 2), -Globals::getInstance().m_screenSize.x / 2 + 5, -Globals::getInstance().m_screenSize.y / 2 + 10);
-		Font::getInstance().print(std::string("Y: ") + Util::numToString(m_world->getPlayer()->getCenter().y, 2), -Globals::getInstance().m_screenSize.x / 2 + 5, -Globals::getInstance().m_screenSize.y / 2 + 30);
-		Font::getInstance().print(std::string("Z: ") + Util::numToString(m_world->getPlayer()->getCenter().z, 2), -Globals::getInstance().m_screenSize.x / 2 + 5, -Globals::getInstance().m_screenSize.y / 2 + 50);
+		Font::setAlignment(Alignment::ALIGN_LEFT);
+		Font::print(std::string("X: ") + Util::numToString(m_world->getPlayer()->getCenter().x, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 10);
+		Font::print(std::string("Y: ") + Util::numToString(m_world->getPlayer()->getCenter().y, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 30);
+		Font::print(std::string("Z: ") + Util::numToString(m_world->getPlayer()->getCenter().z, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 50);
 		if(PauseScreen::getInstance().isPaused())
 		{
 			PauseScreen::getInstance().render();
@@ -159,19 +141,4 @@ void Game::render2d()
 		}
 		break;
 	}
-}
-
-void Game::close()
-{
-	switch(m_engineState)
-	{
-	case MENU:
-
-		break;
-	case GAME:
-
-		break;
-	}
-
-	Sound::getInstance().close();
 }

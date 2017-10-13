@@ -1,5 +1,4 @@
 #include "engine\game\world\World.h"
-#include "engine\utils\Globals.h"
 #include "engine\utils\Utilities.h"
 #include "engine\utils\variable\manager\ColorManager.h"
 
@@ -9,10 +8,10 @@
 
 void World::init(Vector2<Sint32> p_worldSize)
 {
-	m_skyTexture = LTexture::getImage("Daylight Sky.png");
+	m_skyTexture = LTexture::getTexture("Daylight Sky.png");
 	
 	//m_player = new Character(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2, 25, p_worldSize.y * CHUNK_SIZE / 2), Vector3<GLfloat>(0.9f, 1.8f, 0.9f), Vector3<GLfloat>(0, 0, 0));
-	m_player = new Character(Vector3<GLfloat>(8, 25, 8), Vector3<GLfloat>(0.9f, 1.8f, 0.9f), Vector3<GLfloat>(0, 0, 0));
+	m_player = new Character(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2, 7, p_worldSize.y * CHUNK_SIZE / 2), Vector3<GLfloat>(0.9f, 1.8f, 0.9f), Vector3<GLfloat>(0, 0, 0));
 
 	m_worldData.m_worldSize = Vector3<Sint32>(p_worldSize.x, 1, p_worldSize.y);
 
@@ -75,43 +74,34 @@ void World::addWorldEntity(Vector2<Sint32> p_pos, VoxelModel* p_model)
 
 void World::input(Vector2<Sint32> p_mousePos)
 {
-	Sint8* _keys = Globals::getInstance().m_keyStates;
 	m_player->turn(Vector3<GLfloat>(p_mousePos.y / 4.f, p_mousePos.x / 4.f, 0));
-
 	m_camRot = m_player->getRotation();
 	Vector3<GLfloat> _dir;
-	if(_keys[GLFW_KEY_W] != 0)
-	{
+	if(GKey::keyDown(GLFW_KEY_W)) {
 		_dir.x += (Math::sind(m_camRot.y));
 		_dir.z -= (Math::cosd(m_camRot.y));
 	}
-	if(_keys[GLFW_KEY_A] != 0)
-	{
+	if(GKey::keyDown(GLFW_KEY_A)) {
 		_dir.x -= (Math::cosd(m_camRot.y));
 		_dir.z -= (Math::sind(m_camRot.y));
 	}
-	if(_keys[GLFW_KEY_S] != 0)
-	{
+	if(GKey::keyDown(GLFW_KEY_S)) {
 		_dir.x -= (Math::sind(m_camRot.y));
 		_dir.z += (Math::cosd(m_camRot.y));
 	}
-	if(_keys[GLFW_KEY_D] != 0)
-	{
+	if(GKey::keyDown(GLFW_KEY_D)) {
 		_dir.x += (Math::cosd(m_camRot.y));
 		_dir.z += (Math::sind(m_camRot.y));
 	}
 	m_player->move(_dir);
-	if(_keys[GLFW_KEY_SPACE] == 1)
+	if(GKey::keyPressed(GLFW_KEY_SPACE))
 		m_player->jump();
 
 	m_entities.input();
 }
 void World::update(GLfloat p_deltaUpdate)
 {
-	Globals _g = Globals::getInstance();
-
 	m_entities.update(m_worldData, p_deltaUpdate);
-
 	for(Sint16 i = Sint16(MParticle::getInstance().getUnitList().size()) - 1; i >= 0; i--)
 	{
 		MParticle::getInstance().getUnit(i)->update(m_worldData, p_deltaUpdate);

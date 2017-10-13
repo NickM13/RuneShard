@@ -82,13 +82,11 @@ struct Vector3
 	}
 
 	GLfloat dot(Vector3 p_vec) const
-	{
-		return (p_vec.x * x + p_vec.y * y + p_vec.z * z);
-	}
+	{ return (p_vec.x * x + p_vec.y * y + p_vec.z * z); }
 
 	GLfloat getLength() const
 	{ return sqrtf(GLfloat(x*x + y*y + z*z)); }
 
 	void print() const
-	{ std::cout << x << ", " << y << ", " << z; }
+	{ std::cout << x << ", " << y << ", " << z << std::endl; }
 };
