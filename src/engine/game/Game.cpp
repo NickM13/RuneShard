@@ -22,7 +22,7 @@ Game::Game() {
 			return true;
 		}
 		return false;
-	}, "exit"));
+	}, "exit", "Exits game"));
 	MChatCommand::addCommand("outline", new ChatCommand([&](std::vector<std::string> p_args) {
 		if(p_args.size() == 2) {
 			if(p_args[1] == "true") {
@@ -37,7 +37,7 @@ Game::Game() {
 			}
 		}
 		return false;
-	}, "outline <true/false>"));
+	}, "outline <true/false>", "Turns on/off outlines"));
 	MChatCommand::addCommand("tp", new ChatCommand([&](std::vector<std::string> p_args) {
 		if(p_args.size() == 4) {
 			Vector3<GLfloat> pos;
@@ -54,9 +54,13 @@ Game::Game() {
 			return true;
 		}
 		return false;
-	}, "tp x y z"));
+	}, "tp x y z", "Teleports you"));
 	MChatCommand::addCommand("spawn", new ChatCommand([&](std::vector<std::string> p_args) {
-		if(p_args.size() == 4) {
+		if(p_args.size() == 1) {
+			m_world->addActor(new Actor());
+			return true;
+		}
+		else if(p_args.size() == 4) {
 			Vector3<GLfloat> pos;
 			try {
 				pos.x = std::stof(p_args[1]);
@@ -72,7 +76,14 @@ Game::Game() {
 			return true;
 		}
 		return false;
-	}, "tp x y z"));
+	}, "**WIP**", "Create entity"));
+	MChatCommand::addCommand("help", new ChatCommand([&](std::vector<std::string> p_args) {
+		if(p_args.size() == 1) {
+			MChatCommand::help();
+			return true;
+		}
+		return false;
+	}, "help", "Displays all commands"));
 	MKeyCommand::addCommand({'`', 0}, new KeyCommand([&]() {
 		MConsole::setOpen(true);
 	}));

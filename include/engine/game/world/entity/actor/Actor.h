@@ -11,6 +11,7 @@ protected:
 public:
 	Actor() {};
 	Actor(Vector3<GLfloat> p_position, Vector3<GLfloat> p_size, Vector3<GLfloat> p_rotation);
+	Actor(std::string p_fileName) {};
 	~Actor() {};
 
 	void setMoveSpeed(GLfloat p_moveSpeed);
@@ -36,6 +37,9 @@ private:
 public:
 	static void addActor(Actor* p_actor) {
 		m_actorList.push_back(p_actor);
+	}
+	static void addActor(std::string p_scriptName) {
+		m_actorList.push_back(p_scriptName);
 	}
 	static void input() {
 		for(Sint16 i = 0; i < Sint16(m_actorList.size()); i++) {

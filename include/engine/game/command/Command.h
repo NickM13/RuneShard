@@ -9,10 +9,13 @@ struct ChatCommand {
 private:
 	std::function<bool(std::vector<std::string>)> m_function;
 	std::string m_usage;
+	std::string m_description;
 public:
-	ChatCommand(std::function<bool(std::vector<std::string>)> p_function, std::string p_usage);
+	ChatCommand(std::function<bool(std::vector<std::string>)> p_function, std::string p_usage, std::string p_description);
 	void callFunction(std::string p_cmd);
 	void printMisuse();
+	std::string getUsage() const;
+	std::string getDescription() const;
 };
 
 class MChatCommand {
@@ -21,6 +24,7 @@ private:
 public:
 	static void addCommand(std::string p_cmdName, ChatCommand* p_chatCmd);
 	static void checkCommand(std::string p_command);
+	static void help();
 };
 
 struct KeyCommand {
