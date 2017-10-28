@@ -12,7 +12,7 @@ private:
 	static Vector2<Uint16> m_screenSize;
 	Game* m_game;
 
-	time_t m_maxFps = 60;
+	time_t m_maxFps;
 	DWORD m_sleepTime;
 
 

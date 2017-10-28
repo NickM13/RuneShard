@@ -41,11 +41,25 @@ void MChatCommand::checkCommand(std::string p_command) {
 	if(m_commands.find(arg0) != m_commands.end())
 		m_commands[arg0]->callFunction(p_command);
 	else
-		MConsole::addLine(MConsole::ConsoleLine::MISUSE, "Error: Command '" + arg0 + "' unknown");
+		MConsole::addLine(MConsole::ConsoleLine::MISUSE, "Error: Command '" + arg0 + "' unknown.  Type help for a list of commands.");
 }
-void MChatCommand::help() {
+void MChatCommand::help(std::string p_filter) {
+	size_t _loc;
+	bool _success;
 	for(std::pair<std::string, ChatCommand*> cmd : m_commands) {
-		MConsole::addLine(MConsole::ConsoleLine::NORMAL, cmd.first + " <" + cmd.second->getUsage() + ">: " + cmd.second->getDescription());
+		_loc = 0;
+		_success = true;
+		for(char c : p_filter) {
+			if((_loc = cmd.first.find(c, _loc)) >= cmd.first.size()) {
+				_success = false;
+				break;
+			}
+		}
+		if(_success) {
+			MConsole::addLine(MConsole::ConsoleLine::NORMAL, cmd.first + ":");
+			MConsole::addLine(MConsole::ConsoleLine::NORMAL, "  Usage: " + cmd.second->getUsage());
+			MConsole::addLine(MConsole::ConsoleLine::NORMAL, "  Description: " + cmd.second->getDescription());
+		}
 	}
 }
 

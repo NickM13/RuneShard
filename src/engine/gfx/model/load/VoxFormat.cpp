@@ -1,4 +1,5 @@
 #include "engine\gfx\model\load\VoxFormat.h"
+#include "engine\utils\FileExt.h"
 
 struct Chunk_t
 {

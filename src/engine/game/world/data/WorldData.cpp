@@ -1,4 +1,6 @@
 #include "engine\game\world\data\WorldData.h"
+#include "engine\utils\Math.h"
+#include "engine\utils\global\GGameState.h"
 
 void WorldData::setVoxel(Vector3<Sint32> p_pos, Uint32 p_voxel) {
 	Vector3<Sint32> _pos = Vector3<Sint32>((Vector3<GLfloat>(p_pos) / CHUNK_SIZE).floor());
@@ -173,16 +175,16 @@ void WorldData::addChunk(Vector2<Sint32> p_chunk){
 bool WorldData::castRay(Vector3<GLfloat> p_start, Vector3<GLfloat> p_direction, GLdouble &p_near, GLdouble &p_far, Sint8 &p_face) {
 	GLdouble _near = 0, _far = 1;
 	GLdouble _cNear = 0, _cFar = 1;
+	Vector3<GLdouble> _to = Vector3<GLdouble>(0.0001, 0.0001, 0.0001);
+	Vector3<GLdouble> _box = Vector3<GLdouble>(1, 1, 1) + (_to * 2);
 	Sint32 _close = -1;
 	Vector2<GLfloat> _closest = {1, 1};
 	Vector3<Sint32> _size = m_worldSize * CHUNK_SIZE;
 	p_face = 0;
-	p_near -= 0.000001f;
-	p_far += 0.000001f;
 	p_direction = p_direction * (p_far - p_near);
-	Math::castRay3d(p_start, p_direction, p_start.floor(), {1, 1, 1}, _cNear, _cFar, p_face);
+	Math::castRay3d(p_start, p_direction, (p_start - _to).floor(), _box, _cNear, _cFar, p_face);
 	Vector3<GLfloat> _floor = (p_start).floor();
-	int i = 50;
+	int i = 500;
 	do {
 		if(_floor.x >= 0 && _floor.y >= 0 && _floor.z >= 0 &&
 			_floor.x < _size.x && _floor.y < _size.y && _floor.z < _size.z && getVoxel(_floor).interactionType != 0) {
@@ -190,9 +192,9 @@ bool WorldData::castRay(Vector3<GLfloat> p_start, Vector3<GLfloat> p_direction, 
 			p_far = _near;
 			return true;
 		}
-		_near = _cFar + 0.00001f;
+		_near = _cFar;
 		_cNear = 0, _cFar = 1;
-		Math::castRay3d(p_start, p_direction, (p_start + p_direction * (_near)).floor(), {1, 1, 1}, _cNear, _cFar, p_face);
+		Math::castRay3d(p_start, p_direction, (p_start + p_direction * (_near) - _to).floor(), _box, _cNear, _cFar, p_face);
 		_floor = (p_start + p_direction * _near).floor();
 		i--;
 	} while(_cNear < 1 && _near < _far && i > 0);

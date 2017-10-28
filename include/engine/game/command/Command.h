@@ -24,7 +24,7 @@ private:
 public:
 	static void addCommand(std::string p_cmdName, ChatCommand* p_chatCmd);
 	static void checkCommand(std::string p_command);
-	static void help();
+	static void help(std::string p_filter = "");
 };
 
 struct KeyCommand {

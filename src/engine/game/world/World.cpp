@@ -1,37 +1,48 @@
 #include "engine\game\world\World.h"
 #include "engine\utils\Utilities.h"
 #include "engine\utils\variable\manager\ColorManager.h"
+#include "engine\utils\FileExt.h"
 
 #include <direct.h>
 
 #include <iostream>
 
-void World::init(Vector2<Sint32> p_worldSize) {
+World::World() {
 	m_skyTexture = MTexture::getTexture("Daylight Sky.png");
-	//m_player = new Actor(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2, 25, p_worldSize.y * CHUNK_SIZE / 2), Vector3<GLfloat>(0.9f, 1.8f, 0.9f), Vector3<GLfloat>(0, 0, 0));
-	m_player = new Actor(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2, 7, p_worldSize.y * CHUNK_SIZE / 2), Vector3<GLfloat>(0.9f, 1.8f, 0.9f), Vector3<GLfloat>(0, 0, 0));
+	m_camera = new Camera();
+}
+
+void World::init(Vector2<Sint32> p_worldSize) {
+	if(m_initialized) clear();
+	m_camera->followActor(addActor(new Roger(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2, 7, p_worldSize.y * CHUNK_SIZE / 2)))->setName("Player"));
 	m_worldData.m_worldSize = Vector3<Sint32>(p_worldSize.x, 1, p_worldSize.y);
 	m_worldData.m_chunkData = new std::vector<Chunk*>*[m_worldData.m_worldSize.x];
 	for(Uint16 x = 0; x < m_worldData.m_worldSize.x; x++) {
 		m_worldData.m_chunkData[x] = new std::vector<Chunk*>[m_worldData.m_worldSize.z];
-		for(Uint16 y = 0; y < m_worldData.m_worldSize.z; y++)
-			m_worldData.m_chunkData[x][y].push_back(new Chunk());
+		for(Uint16 z = 0; z < m_worldData.m_worldSize.z; z++)
+			m_worldData.m_chunkData[x][z].push_back(new Chunk());
 	}
 	m_initialized = true;
 }
 void World::generate(Vector2<Sint32> p_worldSize) {
 
 }
-World::~World() {
-	if(!m_initialized)
-		return;
-	for(Uint16 x = 0; x < m_worldData.m_worldSize.x; x++) {
-		for(Uint16 y = 0; y < m_worldData.m_worldSize.z; y++) {
-			m_worldData.m_chunkData[x][y].clear();
+void World::clear() {
+	if(m_initialized) {
+		for(Uint16 x = 0; x < m_worldData.m_worldSize.x; x++) {
+			for(Uint16 z = 0; z < m_worldData.m_worldSize.z; z++) {
+				for(Uint16 y = 0; y < m_worldData.m_chunkData[x][z].size(); y++)
+					delete m_worldData.m_chunkData[x][z][y];
+				m_worldData.m_chunkData[x][z].clear();
+			}
+			delete[] m_worldData.m_chunkData[x];
 		}
-		delete[] m_worldData.m_chunkData[x];
+		delete[] m_worldData.m_chunkData;
+		m_initialized = false;
 	}
-	delete[] m_worldData.m_chunkData;
+}
+World::~World() {
+	clear();
 }
 
 void World::setVoxel(Vector3<Sint32> p_pos, Uint32 p_voxel) {
@@ -54,27 +65,8 @@ Actor* World::addActor(Actor* p_actor) {
 }
 
 void World::input(Vector2<Sint32> p_mousePos) {
-	m_player->turn(Vector3<GLfloat>(p_mousePos.y / 4.f, p_mousePos.x / 4.f, 0));
-	Vector3<GLfloat> _dir;
-	if(GKey::keyDown(GLFW_KEY_W)) {
-		_dir.x += (Math::sind(m_player->getRotation().y));
-		_dir.z -= (Math::cosd(m_player->getRotation().y));
-	}
-	if(GKey::keyDown(GLFW_KEY_A)) {
-		_dir.x -= (Math::cosd(m_player->getRotation().y));
-		_dir.z -= (Math::sind(m_player->getRotation().y));
-	}
-	if(GKey::keyDown(GLFW_KEY_S)) {
-		_dir.x -= (Math::sind(m_player->getRotation().y));
-		_dir.z += (Math::cosd(m_player->getRotation().y));
-	}
-	if(GKey::keyDown(GLFW_KEY_D)) {
-		_dir.x += (Math::cosd(m_player->getRotation().y));
-		_dir.z += (Math::sind(m_player->getRotation().y));
-	}
-	m_player->move(_dir);
-	if(GKey::keyPressed(GLFW_KEY_SPACE))
-		m_player->jump();
+	m_camera->addRotation(Vector3<GLfloat>(p_mousePos.y / 4.f, p_mousePos.x / 4.f, 0));
+	m_camera->input();
 
 	MActor::input();
 	MParticle::input();
@@ -82,12 +74,13 @@ void World::input(Vector2<Sint32> p_mousePos) {
 void World::update(GLfloat p_deltaUpdate) {
 	MActor::update(m_worldData, p_deltaUpdate);
 	MParticle::update(m_worldData, p_deltaUpdate);
+	m_camera->update(m_worldData, p_deltaUpdate);
 }
 void World::render() {
 	glPushMatrix();
 	{
 		renderSkyBox();
-		m_player->useView();
+		m_camera->useView();
 		glBindTexture(GL_TEXTURE_2D, 0);
 		for(Uint16 x = 0; x < m_worldData.m_worldSize.x; x++) {
 			for(Uint16 z = 0; z < m_worldData.m_worldSize.z; z++) {
@@ -110,9 +103,7 @@ void World::render() {
 void World::renderSkyBox() {
 	glPushMatrix();
 	{
-		glRotatef(m_player->getRotation().x, 1, 0, 0);
-		glRotatef(m_player->getRotation().y, 0, 1, 0);
-		glRotatef(m_player->getRotation().z, 0, 0, 1);
+		m_camera->useRotation();
 		glBindTexture(GL_TEXTURE_2D, m_skyTexture->getId());
 		glColor3f(1, 1, 1);
 		glScalef(1024, 1024, 1024);

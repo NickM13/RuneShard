@@ -2,5 +2,6 @@
 
 class GGameState {
 public:
-	static bool m_modelOutline;
+	static bool m_outline;
+	static float m_gravity;
 };

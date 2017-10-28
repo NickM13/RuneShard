@@ -9,6 +9,7 @@
 #include <freetype/ftglyph.h>
 #include <freetype/ftoutln.h>
 #include <freetype/fttrigon.h>
+#include <map>
 
 enum Alignment
 {
@@ -35,15 +36,13 @@ public:
 private:
 	struct FontType
 	{
-		std::string m_fontName;
 		Sint16 m_height;
 		GLuint* m_textures;
 		GLuint* m_charWidth;
 		GLuint m_listBase;
-
 		GLfloat m_spacing;
 	};
-	static std::vector<FontType*> m_fontList;
+	static std::map<std::string, FontType*> m_fontList;
 	static FontType* m_font;
 	
 	static Alignment m_alignment;

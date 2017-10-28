@@ -1,4 +1,5 @@
 #include "engine\utils\global\event\GKey.h"
+#include <Windows.h>
 
 Sint8 GKey::m_keyStates[GKey::m_keyCount];
 Sint8 GKey::m_specStates[GKey::m_specCount];
@@ -33,4 +34,12 @@ void GKey::pressKey(Sint32 p_keyCode) {
 }
 void GKey::releaseKey(Sint32 p_keyCode) {
 	m_keyStates[p_keyCode] = KEY_RELEASE;
+}
+
+void GKey::keyBreakpoint(Sint32 p_key) {
+#ifdef _DEBUG
+	if(keyPressed(p_key)) {
+		DebugBreak();
+	}
+#endif
 }

@@ -17,6 +17,8 @@ Uint32 MScissor::push(Rect& p_area, bool p_override)
 	glGetFloatv(GL_MODELVIEW_MATRIX, _mat);
 	bool _sci = (glIsEnabled(GL_SCISSOR_TEST) != 0);
 	int _scissorBox[4];
+	p_area.x = p_area.x + GScreen::m_screenSize.x / 2;
+	p_area.y = p_area.y + GScreen::m_screenSize.y / 2;
 
 	if(m_unitList.empty() || p_override)
 	{

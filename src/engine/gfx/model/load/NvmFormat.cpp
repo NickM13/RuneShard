@@ -1,4 +1,5 @@
 #include "engine\gfx\model\load\NvmFormat.h"
+#include "engine\utils\FileExt.h"
 
 void NvmFormat::loadModel(std::string p_fileName, std::vector<VoxelMatrix*> &p_matrixList) {
 	std::ifstream _file;

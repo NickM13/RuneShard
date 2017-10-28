@@ -1,5 +1,6 @@
 #include "engine\game\world\data\Chunk.h"
 #include "engine\utils\variable\manager\ColorManager.h"
+#include "engine\utils\global\GGameState.h"
 
 Chunk::Chunk() {
 	Uint16 noVoxel = MVoxel::getVoxelId(Voxel(0, MColor::getColorId(Color())));
@@ -96,21 +97,23 @@ void Chunk::render() {
 		m_needsRasterize = false;
 	}
 	m_mesh->renderMesh();
-	glBegin(GL_LINES);
-	{
-		glColor3f(1, 0, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(CHUNK_SIZE, 0, 0);
+	if(GGameState::m_outline) {
+		glBegin(GL_LINES);
+		{
+			glColor3f(1, 0, 0);
+			glVertex3f(0, 0, 0);
+			glVertex3f(CHUNK_SIZE, 0, 0);
 
-		glColor3f(0, 0.75f, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, CHUNK_SIZE, 0);
+			glColor3f(0, 0.75f, 0);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, CHUNK_SIZE, 0);
 
-		glColor3f(0, 0, 1);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 0, CHUNK_SIZE);
+			glColor3f(0, 0, 1);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, 0, CHUNK_SIZE);
+		}
+		glEnd();
 	}
-	glEnd();
 }
 
 void Chunk::rasterize() {

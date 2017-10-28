@@ -4,38 +4,30 @@
 // TODO: Majority of this code based on NeHe's FreeType2 tutorial found here: http://nehe.gamedev.net/tutorial/freetype_fonts_in_opengl/24001/
 // Need to find out if I have to credit this
 
-std::vector<Font::FontType*> Font::m_fontList;
+std::map<std::string, Font::FontType*> Font::m_fontList;
 Font::FontType* Font::m_font = 0;
 
 Alignment Font::m_alignment;
 
 //Finds first power of 2 >= int p_a
-inline int nextPower2(int p_a)
-{
+inline int nextPower2(int p_a) {
 	int _rval = 1;
 	while(_rval < p_a) _rval *= 2;
 	return _rval;
 }
 
-GLuint make_dList(FT_Face face, Uint8 ch, GLuint list_base, GLuint* tex_base)
-{
+GLuint make_dList(FT_Face face, Uint8 ch, GLuint list_base, GLuint* tex_base) {
 	if(FT_Load_Glyph(face, FT_Get_Char_Index(face, ch), FT_LOAD_DEFAULT))
 		throw std::runtime_error("FT_Load_Glyph failed");
-
 	FT_Glyph glyph;
 	if(FT_Get_Glyph(face->glyph, &glyph))
 		throw std::runtime_error("FT_Get_Glyph failed");
-
 	FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
 	FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
-
 	FT_Bitmap& bitmap=bitmap_glyph->bitmap;
-
 	int width = nextPower2(bitmap.width);
 	int height = nextPower2(bitmap.rows);
-
 	GLubyte* expanded_data = new GLubyte[2 * width * height];
-
 	for(Uint32 j = 0; j < Uint32(height); j++) {
 		for(Uint32 i = 0; i < Uint32(width); i++) {
 			expanded_data[2 * (i + j * width)] = 255;
@@ -43,27 +35,20 @@ GLuint make_dList(FT_Face face, Uint8 ch, GLuint list_base, GLuint* tex_base)
 				(i >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[i + bitmap.width * j];
 		}
 	}
-
 	glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, expanded_data);
-
 	delete[] expanded_data;
-
 	glNewList(list_base + ch, GL_COMPILE);
 	{
 		glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
-
 		glPushMatrix();
 		{
 			glTranslatef(GLfloat(bitmap_glyph->left), 0, 0);
 			glTranslatef(0, GLfloat(bitmap_glyph->top) - bitmap.rows, 0);
-			
 			GLfloat x = GLfloat(bitmap.width) / GLfloat(width),
 				y = GLfloat(bitmap.rows) / GLfloat(height);
-
 			glBegin(GL_QUADS);
 			{
 				glTexCoord2f(0, 0); glVertex2f(0, GLfloat(bitmap.rows));
@@ -81,25 +66,22 @@ GLuint make_dList(FT_Face face, Uint8 ch, GLuint list_base, GLuint* tex_base)
 	return (face->glyph->advance.x >> 6);
 }
 
-void Font::setAlignment(Alignment ALIGN)
-{
+void Font::setAlignment(Alignment ALIGN) {
 	m_alignment = ALIGN;
 }
 
-void Font::loadFont(std::string p_fontName, std::string p_src, Uint32 p_fontSize)
-{
-	m_fontList.push_back(init(p_src, p_fontSize));
-	m_fontList[m_fontList.size() - 1]->m_fontName = p_fontName;
-	m_font = m_fontList[m_fontList.size() - 1];
+void Font::loadFont(std::string p_fontName, std::string p_src, Uint32 p_fontSize) {
+	m_fontList.insert({p_fontName, init(p_src, p_fontSize)});
+	m_font = m_fontList[p_fontName];
 }
-void Font::setFont(std::string p_fontName)
-{
-	for(Uint16 i = 0; i < m_fontList.size(); i++)
-		if(m_fontList[i]->m_fontName == p_fontName)
-			m_font = m_fontList[i];
+void Font::setFont(std::string p_fontName) {
+	if(m_fontList.find(p_fontName) != m_fontList.end()) {
+		m_font = m_fontList[p_fontName];
+	}
 }
 Font::FontType* Font::init(std::string p_src, Uint32 p_fontSize)
 {
+	p_src = "res\\font\\" + p_src;
 	FontType* _font = new FontType();
 	_font->m_textures = new GLuint[255];
 	_font->m_charWidth = new GLuint[255];
@@ -124,25 +106,20 @@ Font::FontType* Font::init(std::string p_src, Uint32 p_fontSize)
 	return _font;
 }
 
-void Font::clean()
-{
-	for(Uint16 i = 0; i < m_fontList.size(); i++)
-	{
-		glDeleteLists(m_fontList[i]->m_listBase, 255);
-		glDeleteTextures(255, m_fontList[i]->m_textures);
-		delete[] m_fontList[i]->m_textures;
+void Font::clean() {
+	for(std::pair<std::string, Font::FontType*> font : m_fontList) {
+		glDeleteLists(font.second->m_listBase, 255);
+		glDeleteTextures(255, font.second->m_textures);
+		delete[] font.second->m_textures;
 	}
 	m_fontList.clear();
 }
 
-Vector2<Sint32> Font::getMessageWidth(std::string p_msg)
-{
+Vector2<Sint32> Font::getMessageWidth(std::string p_msg) {
 	Sint32 _y = getHeight();
 	Sint32 _rVal = 0, _rMaxVal = 0;
-	for(Sint32 i = 0; i < Sint32(p_msg.length()); i++)
-	{
-		if(p_msg[i] == '\n')
-		{
+	for(Sint32 i = 0; i < Sint32(p_msg.length()); i++) {
+		if(p_msg[i] == '\n') {
 			_y += getSpacingHeight();
 			_rMaxVal = max(_rVal, _rMaxVal);
 			_rVal = 0;
@@ -154,8 +131,7 @@ Vector2<Sint32> Font::getMessageWidth(std::string p_msg)
 	return Vector2<Sint32>(_rMaxVal, _y);
 }
 
-inline void pushScreenCoordinateMaterix()
-{
+inline void pushScreenCoordinateMaterix() {
 	glPushAttrib(GL_TRANSFORM_BIT);
 	{
 		GLint viewport[4];
@@ -168,35 +144,27 @@ inline void pushScreenCoordinateMaterix()
 	glPopAttrib();
 }
 
-inline void pop_projection_matrix()
-{
+inline void pop_projection_matrix() {
 	glPushAttrib(GL_TRANSFORM_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glPopAttrib();
 }
 
-void Font::print(std::string message, Sint32 x, Sint32 y)
-{
+void Font::print(std::string message, Sint32 x, Sint32 y) {
 	x = x;
 	y = y + m_font->m_height / 2;
-
 	Sint32 _offset = 0;
-
 	int id;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &id);
-
 	pushScreenCoordinateMaterix();
 	glPushMatrix();
 	{
 		glScalef(1, -1, 1);
-
 		GLuint font = m_font->m_listBase;
-
 		Sint32 h = Sint32(getSpacingHeight());
 		char text[256];
 		va_list ap;
-
 		if(message == "")
 			*text = 0;
 		else {
@@ -204,7 +172,6 @@ void Font::print(std::string message, Sint32 x, Sint32 y)
 			vsprintf_s(text, message.c_str(), ap);
 			va_end(ap);
 		}
-
 		const char *start_line = text;
 		std::vector<std::string> lines;
 		const char *c;
@@ -221,16 +188,13 @@ void Font::print(std::string message, Sint32 x, Sint32 y)
 			for(const char *n = start_line; n < c; n++) line.append(1, *n);
 			lines.push_back(line);
 		}
-
 		glPushAttrib(GL_LIST_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT | GL_TRANSFORM_BIT);
 		{
 			glMatrixMode(GL_MODELVIEW);
 			glEnable(GL_BLEND);
 			glListBase(font);
-
 			GLfloat modelview_matrix[16];
 			glGetFloatv(GL_MODELVIEW_MATRIX, modelview_matrix);
-
 			for(Sint32 i=0; i < Sint32(lines.size()); i++) {
 				glPushMatrix();
 				{
@@ -250,7 +214,6 @@ void Font::print(std::string message, Sint32 x, Sint32 y)
 					}
 					glTranslatef(GLfloat(x), GLfloat(y + h * i), 0);
 					glMultMatrixf(modelview_matrix);
-
 					glCallLists(lines[i].length(), GL_UNSIGNED_BYTE, lines[i].c_str());
 				}
 				glPopMatrix();
@@ -259,8 +222,6 @@ void Font::print(std::string message, Sint32 x, Sint32 y)
 		glPopAttrib();
 	}
 	glPopMatrix();
-
 	pop_projection_matrix();
-
 	glBindTexture(GL_TEXTURE_2D, id);
 }

@@ -14,10 +14,6 @@ Entity::~Entity() {
 
 }
 
-void Entity::setModel(VoxelModel* p_voxelModel) {
-	m_voxelModel = p_voxelModel;
-}
-
 void Entity::push(Vector3<GLfloat> p_direction) {
 	m_velocity = m_velocity + p_direction;
 }
@@ -31,20 +27,38 @@ void Entity::turn(Vector3<GLfloat> p_rotation) {
 void Entity::input() {
 
 }
-void Entity::update(WorldData p_world, GLfloat p_deltaTime) {
+void Entity::updatePhysics(WorldData p_world, GLfloat p_deltaTime) {
 
+}
+void Entity::updateCollision(WorldData p_world, GLfloat p_deltaTime) {
+
+}
+void Entity::update(WorldData p_world, GLfloat p_deltaTime) {
+	while(m_rotation.y < 0)
+		m_rotation.y += 360;
+	m_rotation.y = fmod(m_rotation.y, 360);
+	if(m_rotation.x < -90)
+		m_rotation.x = -90;
+	else if(m_rotation.x > 90)
+		m_rotation.x = 90;
+	updatePhysics(p_world, p_deltaTime);
+	updateCollision(p_world, p_deltaTime);
 }
 void Entity::render() {
 	glPushMatrix();
 	{
-		glColor3f(0.5f, 0.5f, 0.5f);
 		glTranslatef(m_position.x, m_position.y, m_position.z);
-		if(m_voxelModel) {
-			glScalef(1.f / 16, 1.f / 16, 1.f / 16);
-			m_voxelModel->render();
-		}
-		// Outline
-		/*
+		renderModel();
+		renderOutline();
+		renderShadow();
+	}
+	glPopMatrix();
+}
+void Entity::renderModel() {
+
+}
+void Entity::renderOutline() {
+	if(GGameState::m_outline) {
 		glBegin(GL_LINES);
 		{
 			glVertex3f(-m_size.x / 2, 0, -m_size.z / 2);
@@ -75,9 +89,7 @@ void Entity::render() {
 			glVertex3f(-m_size.x / 2, m_size.y, -m_size.z / 2);
 		}
 		glEnd();
-		*/
 	}
-	glPopMatrix();
 }
 void Entity::renderShadow() {
 	/*
@@ -118,11 +130,4 @@ void Entity::renderShadow() {
 		}
 	}
 	*/
-}
-
-void Entity::useView() {
-	glRotatef(m_rotation.x, 1, 0, 0);
-	glRotatef(m_rotation.y, 0, 1, 0);
-	glRotatef(m_rotation.z, 0, 0, 1);
-	glTranslatef(-(m_position.x), -(m_position.y + m_size.y - 0.15f), -(m_position.z));
 }

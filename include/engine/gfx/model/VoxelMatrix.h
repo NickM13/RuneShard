@@ -21,14 +21,15 @@ public:
 
 	void setPosition(Vector3<GLfloat> p_pos);
 	void addPosition(Vector3<GLfloat> p_pos);
-	Vector3<GLfloat> getPos() { return m_pos; }
 	void setSize(Vector3<Sint32> p_size);
-	Vector3<Sint32> getSize() { return m_size; }
-
 	void shiftVoxels(Vector3<Sint32> p_direction);
 	bool setVoxel(Vector3<Sint32> p_pos, Voxel p_voxel);
-	Voxel getVoxel(Vector3<Sint32> p_pos);
-	Uint16 getVoxelId(Vector3<Sint32> p_pos);
+
+	Vector3<GLfloat> getPos() const { return m_pos; }
+	Vector3<Sint32> getSize() const { return m_size; }
+	Voxel getVoxel(Vector3<Sint32> p_pos) const;
+	Uint16 getVoxelId(Vector3<Sint32> p_pos) const;
+	Uint16*** getRawVoxelData() const { return m_voxelData; }
 
 	void update();
 	void render();

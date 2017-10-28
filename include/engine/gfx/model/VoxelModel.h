@@ -15,11 +15,13 @@ class VoxelModel
 {
 private:
 	std::vector<VoxelMatrix*> m_matrixList;
-
 public:
 	VoxelModel();
 	~VoxelModel();
 
+	Vector3<GLfloat> getModelPos();
+	Vector3<Sint32> getModelSize();
 	std::vector<VoxelMatrix*>& getMatrixList();
+	void createShadow();
 	void render();
 };

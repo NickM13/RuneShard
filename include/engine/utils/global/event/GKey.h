@@ -34,4 +34,6 @@ public:
 	static bool keyDown(Sint32 p_keyCode) { return (m_keyStates[p_keyCode] & KEY_HOLD); }
 	static bool keyReleased(Sint32 p_keyCode) { return (m_keyStates[p_keyCode] & KEY_RELEASE); }
 	static std::vector<KeyPress> getKeyEvents() { return m_keyEvents; }
+
+	static void keyBreakpoint(Sint32 p_key);
 };

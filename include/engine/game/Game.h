@@ -1,4 +1,5 @@
 #pragma once
+#include "engine\network\NetworkAdapter.h"
 
 #include "engine\gfx\font\Font.h"
 #include "engine\utils\global\event\GKey.h"
@@ -18,6 +19,7 @@
 #include "world\World.h"
 #include "world\type\WorldDungeon.h"
 #include "world\type\WorldIsland.h"
+#include "engine\gfx\gui\container\Container.h"
 
 #include <vector>
 
@@ -27,18 +29,18 @@ protected:
 	GLfloat m_lastUpdate, m_deltaUpdate;
 	Vector2<Sint32> m_mouseBuffer;
 	World* m_world;
-	
+	Container* m_gui;
 public:
-	enum EngineState {
+	enum GameState {
 		MENU = 0,
 		GAME = 1
-	} m_engineState;
+	} m_gameState;
 
 	Game();
 	~Game();
 	void resize();
 
-	void setEngineState(EngineState p_state);
+	void setGameState(GameState p_state);
 	World* getWorld() { return m_world; }
 
 	void input();

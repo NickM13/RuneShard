@@ -71,16 +71,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(ProjectDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)log\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)lib\devil\include;$(ProjectDir)lib\glfw\include;$(ProjectDir)lib\freetype\include;$(ProjectDir)lib\freealut\include;$(ProjectDir)lib\glew\include;$(ProjectDir)lib\OpenAL\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\devil\include;$(ProjectDir)lib\glfw\include;$(ProjectDir)lib\freetype\include;$(ProjectDir)lib\freealut\include;$(ProjectDir)lib\glew\include;$(ProjectDir)lib\OpenAL\include;$(ProjectDir)lib\glm\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
     <ReferencePath> $(ProjectDir)res;$(ReferencePath)</ReferencePath>
-    <LibraryPath>$(ProjectDir)lib\devil\lib;$(ProjectDir)lib\glew\lib;$(ProjectDir)lib\glfw\lib;$(ProjectDir)lib\freetype\lib;$(ProjectDir)lib\freealut\lib;$(ProjectDir)lib\OpenAL\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib\devil\lib;$(ProjectDir)lib\glew\lib;$(ProjectDir)lib\glfw\lib;$(ProjectDir)lib\freetype\lib;$(ProjectDir)lib\freealut\lib;$(ProjectDir)lib\OpenAL\lib;$(ProjectDir)lib\glm\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)log\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)lib\devil\include;$(ProjectDir)lib\glfw\include;$(ProjectDir)lib\freetype\include;$(ProjectDir)lib\freealut\include;$(ProjectDir)lib\glew\include;$(ProjectDir)lib\OpenAL\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\devil\include;$(ProjectDir)lib\glfw\include;$(ProjectDir)lib\freetype\include;$(ProjectDir)lib\freealut\include;$(ProjectDir)lib\glew\include;$(ProjectDir)lib\OpenAL\include;$(ProjectDir)lib\glm\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
     <ReferencePath> $(ProjectDir)res;$(ReferencePath)</ReferencePath>
-    <LibraryPath>$(ProjectDir)lib\devil\lib;$(ProjectDir)lib\glew\lib;$(ProjectDir)lib\glfw\lib;$(ProjectDir)lib\freetype\lib;$(ProjectDir)lib\freealut\lib;$(ProjectDir)lib\OpenAL\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib\devil\lib;$(ProjectDir)lib\glew\lib;$(ProjectDir)lib\glfw\lib;$(ProjectDir)lib\freetype\lib;$(ProjectDir)lib\freealut\lib;$(ProjectDir)lib\OpenAL\lib;$(ProjectDir)lib\glm\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -90,7 +90,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;DevIL.lib;ILU.lib;ILUT.lib;OpenAL32.lib;alut.lib;freetyped.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;DevIL.lib;ILU.lib;ILUT.lib;OpenAL32.lib;alut.lib;ws2_32.lib;glm.lib;freetyped.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -112,7 +112,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;DevIL.lib;ILU.lib;ILUT.lib;OpenAL32.lib;alut.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;DevIL.lib;ILU.lib;ILUT.lib;OpenAL32.lib;alut.lib;ws2_32.lib;glm.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,13 +136,17 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\engine\game\command\Command.cpp" />
     <ClCompile Include="src\engine\game\console\Console.cpp" />
+    <ClCompile Include="src\engine\game\debug\DebugUI.cpp" />
     <ClCompile Include="src\engine\game\Game.cpp" />
     <ClCompile Include="src\engine\game\menu\ingame\PSMain.cpp" />
     <ClCompile Include="src\engine\game\menu\ingame\PSOptions.cpp" />
     <ClCompile Include="src\engine\game\menu\PauseScreen.cpp" />
+    <ClCompile Include="src\engine\game\world\camera\Camera.cpp" />
     <ClCompile Include="src\engine\game\world\data\Chunk.cpp" />
     <ClCompile Include="src\engine\game\world\data\WorldData.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\Actor.cpp" />
+    <ClCompile Include="src\engine\game\world\entity\actor\adventurer\Adventurer.cpp" />
+    <ClCompile Include="src\engine\game\world\entity\actor\adventurer\warrior\Warrior.cpp" />
     <ClCompile Include="src\engine\game\world\entity\Entity.cpp" />
     <ClCompile Include="src\engine\game\world\entity\particle\Particle.cpp" />
     <ClCompile Include="src\engine\game\world\type\dungeon\lRoom.cpp" />
@@ -163,6 +167,7 @@
     <ClCompile Include="src\engine\gfx\gui\field\Text.cpp" />
     <ClCompile Include="src\engine\gfx\gui\field\TextField.cpp" />
     <ClCompile Include="src\engine\gfx\gui\frequency\Slider.cpp" />
+    <ClCompile Include="src\engine\gfx\gui\frequency\Graph.cpp" />
     <ClCompile Include="src\engine\gfx\gui\icon\Icon.cpp" />
     <ClCompile Include="src\engine\gfx\LTexture.cpp" />
     <ClCompile Include="src\engine\gfx\mesh\VoxelMesh.cpp" />
@@ -170,11 +175,16 @@
     <ClCompile Include="src\engine\gfx\model\VoxelMatrix.cpp" />
     <ClCompile Include="src\engine\gfx\model\VoxelModel.cpp" />
     <ClCompile Include="src\engine\gfx\model\load\VoxFormat.cpp" />
+    <ClCompile Include="src\engine\network\Network.cpp" />
+    <ClCompile Include="src\engine\network\NetworkAdapter.cpp" />
     <ClCompile Include="src\engine\sfx\Sound.cpp" />
+    <ClCompile Include="src\engine\utils\FileExt.cpp" />
     <ClCompile Include="src\engine\utils\global\event\GKey.cpp" />
     <ClCompile Include="src\engine\utils\global\event\GMouse.cpp" />
     <ClCompile Include="src\engine\utils\global\GGameState.cpp" />
     <ClCompile Include="src\engine\utils\global\GScreen.cpp" />
+    <ClCompile Include="src\engine\utils\Math.cpp" />
+    <ClCompile Include="src\engine\utils\Perlin.cpp" />
     <ClCompile Include="src\engine\utils\Utilities.cpp" />
     <ClCompile Include="src\engine\utils\variable\manager\ColorManager.cpp" />
     <ClCompile Include="src\engine\utils\variable\manager\ScissorManager.cpp" />
@@ -187,14 +197,22 @@
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\engine\game\command\Command.h" />
     <ClInclude Include="include\engine\game\console\Console.h" />
+    <ClInclude Include="include\engine\game\debug\DebugUI.h" />
     <ClInclude Include="include\engine\game\Game.h" />
     <ClInclude Include="include\engine\game\menu\ingame\PSMain.h" />
     <ClInclude Include="include\engine\game\menu\ingame\PSOptions.h" />
     <ClInclude Include="include\engine\game\menu\PauseScreen.h" />
     <ClInclude Include="include\engine\game\menu\Screen.h" />
+    <ClInclude Include="include\engine\game\world\ability\Ability.h" />
+    <ClInclude Include="include\engine\game\world\camera\Camera.h" />
     <ClInclude Include="include\engine\game\world\data\Chunk.h" />
     <ClInclude Include="include\engine\game\world\data\WorldData.h" />
+    <ClInclude Include="include\engine\game\world\entity\ability\AbilityEntity.h" />
     <ClInclude Include="include\engine\game\world\entity\actor\Actor.h" />
+    <ClInclude Include="include\engine\game\world\entity\actor\adventurer\Adventurer.h" />
+    <ClInclude Include="include\engine\game\world\entity\actor\adventurer\warrior\Warrior.h" />
+    <ClInclude Include="include\engine\game\world\entity\actor\actors\Roger.h" />
+    <ClInclude Include="include\engine\game\world\entity\actor\LActor.h" />
     <ClInclude Include="include\engine\game\world\entity\Entity.h" />
     <ClInclude Include="include\engine\game\world\entity\particle\Particle.h" />
     <ClInclude Include="include\engine\game\world\entity\world\WorldEntity.h" />
@@ -224,6 +242,7 @@
     <ClInclude Include="include\engine\gfx\gui\field\Text.h" />
     <ClInclude Include="include\engine\gfx\gui\field\TextField.h" />
     <ClInclude Include="include\engine\gfx\gui\frequency\Slider.h" />
+    <ClInclude Include="include\engine\gfx\gui\frequency\Graph.h" />
     <ClInclude Include="include\engine\gfx\gui\icon\Icon.h" />
     <ClInclude Include="include\engine\gfx\gui\List.h" />
     <ClInclude Include="include\engine\gfx\gui\NumberField.h" />
@@ -242,12 +261,15 @@
     <ClInclude Include="include\engine\gfx\model\load\VoxFormat.h" />
     <ClInclude Include="include\engine\gfx\model\VoxelMatrix.h" />
     <ClInclude Include="include\engine\gfx\model\VoxelModel.h" />
+    <ClInclude Include="include\engine\network\Network.h" />
+    <ClInclude Include="include\engine\network\NetworkAdapter.h" />
     <ClInclude Include="include\engine\sfx\Sound.h" />
     <ClInclude Include="include\engine\utils\global\event\GKey.h" />
     <ClInclude Include="include\engine\utils\global\event\GMouse.h" />
     <ClInclude Include="include\engine\utils\global\GGameState.h" />
     <ClInclude Include="include\engine\utils\global\GScreen.h" />
     <ClInclude Include="include\engine\utils\OpenGL.h" />
+    <ClInclude Include="include\engine\utils\Perlin.h" />
     <ClInclude Include="include\engine\utils\Singleton.h" />
     <ClInclude Include="include\engine\utils\Utilities.h" />
     <ClInclude Include="include\engine\utils\variable\datatype\Color.h" />
@@ -264,6 +286,8 @@
     <ClInclude Include="include\engine\utils\variable\manager\ScissorManager.h" />
     <ClInclude Include="include\engine\utils\variable\manager\TextureManager.h" />
     <ClInclude Include="include\engine\utils\variable\manager\VoxelManager.h" />
+    <ClInclude Include="include\engine\utils\FileExt.h" />
+    <ClInclude Include="include\engine\utils\Math.h" />
     <ClInclude Include="lib\devil\include\IL\config.h" />
     <ClInclude Include="lib\devil\include\IL\devil_internal_exports.h" />
     <ClInclude Include="lib\devil\include\IL\il.h" />
@@ -385,6 +409,7 @@
     <None Include="glfw3.dll" />
     <None Include="ILU.dll" />
     <None Include="ILUT.dll" />
+    <None Include="msvcr120.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

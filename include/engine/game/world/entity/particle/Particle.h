@@ -14,8 +14,6 @@ struct Particle : public Entity
 protected:
 	GLfloat m_size;
 	Color m_color;
-	GLfloat m_bounciness;
-	GLfloat m_weight;
 public:
 	Particle();
 	Particle(Vector3<GLfloat> p_position, Vector3<GLfloat> p_velocity, GLfloat p_size, GLfloat p_life, Color p_color, GLfloat p_weight);

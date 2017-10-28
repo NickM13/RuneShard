@@ -6,21 +6,16 @@ VoxelMatrix::VoxelMatrix(std::string p_name, Vector3<GLfloat> p_pos, Vector3<Sin
 	m_size = p_size;
 	m_pos = p_pos;
 
-	Uint16 noVoxel = MVoxel::getVoxelId(Voxel(0, MColor::getColorId(Color())));
-
 	m_voxelData = new Uint16**[m_size.x + 2];
 	m_faceData = new Sint8**[m_size.x + 2];
-	for(Uint16 x = 0; x < m_size.x + 2; x++)
-	{
+	for(Uint16 x = 0; x < m_size.x + 2; x++) {
 		m_voxelData[x] = new Uint16*[m_size.y + 2];
 		m_faceData[x] = new Sint8*[m_size.y + 2];
-		for(Uint16 y = 0; y < m_size.y + 2; y++)
-		{
+		for(Uint16 y = 0; y < m_size.y + 2; y++) {
 			m_voxelData[x][y] = new Uint16[m_size.z + 2];
 			m_faceData[x][y] = new Sint8[m_size.z + 2];
-			for(Uint16 z = 0; z < m_size.z + 2; z++)
-			{
-				m_voxelData[x][y][z] = noVoxel;
+			for(Uint16 z = 0; z < m_size.z + 2; z++) {
+				m_voxelData[x][y][z] = 0;
 				m_faceData[x][y][z] = FACE_ALL;
 			}
 		}
@@ -265,12 +260,12 @@ bool VoxelMatrix::setVoxel(Vector3<Sint32> p_pos, Voxel p_voxel)
 	m_needsRasterize = true;
 	return true;
 }
-Voxel VoxelMatrix::getVoxel(Vector3<Sint32> p_pos)
+Voxel VoxelMatrix::getVoxel(Vector3<Sint32> p_pos) const
 {
 	p_pos = p_pos + 1;
 	return MVoxel::getVoxel(m_voxelData[p_pos.x][p_pos.y][p_pos.z]);
 }
-Uint16 VoxelMatrix::getVoxelId(Vector3<Sint32> p_pos)
+Uint16 VoxelMatrix::getVoxelId(Vector3<Sint32> p_pos) const
 {
 	p_pos = p_pos + 1;
 	return m_voxelData[p_pos.x][p_pos.y][p_pos.z];

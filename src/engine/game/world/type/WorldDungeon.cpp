@@ -7,8 +7,6 @@ void WorldDungeon::generate(Vector2<Sint32> p_worldSize)
 	init(p_worldSize);
 
 	addRoom(lRoom::getRoom("Entrance"), {0, 0, 0});
-
-	addActor(m_player);
 }
 
 void WorldDungeon::addRoom(Room& p_room, Vector3<Sint32> p_pos)

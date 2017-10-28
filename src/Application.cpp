@@ -11,11 +11,11 @@ bool Application::init() {
 	GScreen::m_screenSize = m_screenSize;
 	GScreen::m_exitting = 0;
 	GKey::init();
-	if(!glfwInit())
-		return false;
-	if(!glewInit())
-		return false;
+	if(!glfwInit()) return false;
+	if(!glewInit()) return false;
 	m_screenSize = GScreen::m_screenSize;
+
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_RESIZABLE, false);
 	m_mainWindow = glfwCreateWindow(m_screenSize.x, m_screenSize.y, "Voxel Engine Indev v0.1", 0, 0);
 	glfwSetInputMode(m_mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -23,16 +23,21 @@ bool Application::init() {
 		glfwTerminate();
 		return false;
 	}
+
 	glfwSetKeyCallback(m_mainWindow, keyCallback);
 	glfwSetMouseButtonCallback(m_mainWindow, mousePressCallback);
 	glfwSetCursorEnterCallback(m_mainWindow, mouseEnterCallback);
 	glfwSetCursorPosCallback(m_mainWindow, mouseMovedCallback);
 	glfwSetScrollCallback(m_mainWindow, mouseScrollCallback);
 	glfwSetWindowSizeCallback(m_mainWindow, windowResizeCallback);
+
 	glfwSetWindowPos(m_mainWindow, 320, 200);
 	glfwMakeContextCurrent(m_mainWindow);
+	
 	glClearColor(0.35f, 0.25f, 0.95f, 1);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_MULTISAMPLE_ARB);
+	
 	m_game = new Game();
 	return true;
 }
