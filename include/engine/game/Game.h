@@ -30,6 +30,7 @@ protected:
 	Vector2<Sint32> m_mouseBuffer;
 	World* m_world;
 	Container* m_gui;
+	Texture* m_vignette;
 public:
 	enum GameState {
 		MENU = 0,

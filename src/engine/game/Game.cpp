@@ -21,6 +21,7 @@ Game::Game() {
 	LTexture::init();
 	Font::loadFont("Console", "consolas.ttf", 10);
 	Font::loadFont("UI", "segoeui.ttf", 10);
+	m_vignette = MTexture::getTexture("gui\\Vignette.png");
 	Sound::getInstance().init();
 	m_world = new WorldIsland();
 	m_world->generate(Vector2<Sint32>(4, 4));
@@ -70,7 +71,7 @@ Game::Game() {
 	}, "tp [x] [y] [z]", "Teleports you"));
 	MChatCommand::addCommand("roger", new ChatCommand([&](std::vector<std::string> p_args) {
 		if(p_args.size() == 1) {
-			m_world->addActor(new Roger(m_world->getPlayer()->getPosition()));
+			m_world->addActor(new Roger(m_world->getCamera()->getPosition()));
 			MConsole::addLine(MConsole::ConsoleLine::NORMAL, "Roger doger'd");
 			return true;
 		}
@@ -254,9 +255,9 @@ void Game::render2d() {
 	case GAME:
 		glColor3f(1, 1, 1);
 		Font::setAlignment(Alignment::ALIGN_LEFT);
-		Font::print(std::string("X: ") + Util::numToString(m_world->getPlayer()->getCenter().x, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 10);
-		Font::print(std::string("Y: ") + Util::numToString(m_world->getPlayer()->getCenter().y, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 30);
-		Font::print(std::string("Z: ") + Util::numToString(m_world->getPlayer()->getCenter().z, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 50);
+		//Font::print(std::string("X: ") + Util::numToString(m_world->getPlayer()->getCenter().x, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 10);
+		//Font::print(std::string("Y: ") + Util::numToString(m_world->getPlayer()->getCenter().y, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 30);
+		//Font::print(std::string("Z: ") + Util::numToString(m_world->getPlayer()->getCenter().z, 2), -GScreen::m_screenSize.x / 2 + 5, -GScreen::m_screenSize.y / 2 + 50);
 		if(PauseScreen::getInstance().isPaused()) {
 			PauseScreen::getInstance().render();
 		}
@@ -265,4 +266,15 @@ void Game::render2d() {
 		}
 		break;
 	}
+	glBindTexture(GL_TEXTURE_2D, m_vignette->getId());
+	glColor3f(1, 1, 1);
+	glTranslatef(-GScreen::m_screenSize.x / 2, -GScreen::m_screenSize.y / 2, 0);
+	glBegin(GL_QUADS);
+	{
+		glTexCoord2f(0, 0); glVertex2f(0, 0);
+		glTexCoord2f(1, 0); glVertex2f(GScreen::m_screenSize.x, 0);
+		glTexCoord2f(1, 1); glVertex2f(GScreen::m_screenSize.x, GScreen::m_screenSize.y);
+		glTexCoord2f(0, 1); glVertex2f(0, GScreen::m_screenSize.y);
+	}
+	glEnd();
 }

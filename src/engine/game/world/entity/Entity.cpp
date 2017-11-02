@@ -41,7 +41,6 @@ void Entity::update(WorldData p_world, GLfloat p_deltaTime) {
 		m_rotation.x = -90;
 	else if(m_rotation.x > 90)
 		m_rotation.x = 90;
-	updatePhysics(p_world, p_deltaTime);
 	updateCollision(p_world, p_deltaTime);
 }
 void Entity::render() {

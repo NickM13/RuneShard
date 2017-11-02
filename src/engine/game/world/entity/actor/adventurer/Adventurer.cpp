@@ -4,19 +4,3 @@ Adventurer::Adventurer(Vector3<GLfloat> p_position, Vector3<GLfloat> p_size, Vec
 	: Actor(p_position, p_size, p_rotation) {
 
 }
-
-void Adventurer::abilityDash() {
-
-}
-void Adventurer::abilityLeft() {
-	
-}
-void Adventurer::abilityRight() {
-
-}
-void Adventurer::ability1() {
-
-}
-void Adventurer::ability2() {
-
-}

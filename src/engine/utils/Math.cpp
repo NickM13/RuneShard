@@ -254,21 +254,23 @@ void Math::castBox3d(Vector3<double> p_start, Vector3<double> p_dimension, Vecto
 	p_near = _near;
 	p_side = _side;
 }
-
+#include <iostream>
 double Math::smoothChange(double x1, double x2, double p_rateOfChange, double p_time) {
 	double diff = x2 - x1;
+	double diffa = fabs(diff);
 	double change = 0;
-	if(diff != 0) {
-		change = p_rateOfChange * (pow(fabs(diff), 2) - fmax(0, pow(fabs(diff) - p_time, 2)));
-		change = fmin(change, fabs(diff));
+	if(diffa > 0.001) {
+		change = p_rateOfChange * (pow(diffa, 2) - pow(fmax(0, diffa - p_time), 2));
+		change = fmax(0, fmin(change, diffa));
 		if(diff < 0)
 			change = -change;
 	}
+	else
+		change = diff;
 	return change;
 }
 
 Vector2<double> Math::smoothChangeVec2(Vector2<double> x1, Vector2<double> x2, double p_rateOfChange, double p_time) {
-	Vector2<double> diff = x2 - x1;
 	Vector2<double> change = {};
 	change.x = smoothChange(x1.x, x2.x, p_rateOfChange, p_time);
 	change.y = smoothChange(x1.y, x2.y, p_rateOfChange, p_time);
@@ -276,7 +278,6 @@ Vector2<double> Math::smoothChangeVec2(Vector2<double> x1, Vector2<double> x2, d
 }
 
 Vector3<double> Math::smoothChangeVec3(Vector3<double> x1, Vector3<double> x2, double p_rateOfChange, double p_time) {
-	Vector3<double> diff = x2 - x1;
 	Vector3<double> change = {};
 	change.x = smoothChange(x1.x, x2.x, p_rateOfChange, p_time);
 	change.y = smoothChange(x1.y, x2.y, p_rateOfChange, p_time);

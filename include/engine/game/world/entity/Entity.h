@@ -1,5 +1,4 @@
 #pragma once
-
 #include "engine\utils\Math.h"
 #include "engine\utils\OpenGL.h"
 #include "engine\utils\variable\datatype\Macros.h"
@@ -18,7 +17,7 @@ protected:
 	Vector3<GLfloat> m_size;
 	Vector3<GLfloat> m_rotation;
 	Vector3<GLfloat> m_acceleration;
-	Vector3<GLfloat> m_velocity;
+	Vector3<GLfloat> m_velocity, m_tVelocity;
 	GLfloat m_weight;
 	GLfloat m_bounciness;
 	GLfloat m_health, m_maxHealth;
@@ -26,6 +25,9 @@ protected:
 	bool m_onGround = false;
 	bool m_collided = false;
 	bool m_exists = true;
+
+	virtual void updatePhysics(WorldData p_world, GLfloat p_deltaTime);
+	virtual void updateCollision(WorldData p_world, GLfloat p_deltaTime);
 
 	virtual void renderModel();
 	virtual void renderOutline();
@@ -53,9 +55,7 @@ public:
 	Vector3<GLfloat> getEyePos() { return Vector3<GLfloat>(m_position.x, m_position.y + m_size.y + 0.15f, m_position.z); }
 
 	void input();
-	virtual void updatePhysics(WorldData p_world, GLfloat p_deltaTime); // Add gravity
-	virtual void updateCollision(WorldData p_world, GLfloat p_deltaTime);
-	void update(WorldData p_world, GLfloat p_deltaTime);
+	virtual void update(WorldData p_world, GLfloat p_deltaTime);
 	void render();
 
 	bool exists() const { return m_exists; }

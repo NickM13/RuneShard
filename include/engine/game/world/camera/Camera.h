@@ -5,7 +5,9 @@
 class Camera {
 private:
 	Actor *m_followActor;
-	Vector3<GLfloat> m_position;
+	Vector3<GLfloat> m_tPosition, m_position;
+	Vector3<GLfloat> m_velocity;
+	Vector2<GLfloat> m_acceleration;
 	Vector3<GLfloat> m_tRotation, m_rotation;
 	GLfloat m_boomDistance;
 	GLfloat m_tBoomDistance;
@@ -20,6 +22,9 @@ public:
 	void addPosition(Vector3<GLfloat> p_position, bool p_hardset = false);
 	void setRotation(Vector3<GLfloat> p_position, bool p_hardset = false);
 	void addRotation(Vector3<GLfloat> p_position, bool p_hardset = false);
+
+	Vector3<GLfloat> getPosition() const { return m_position; }
+	Vector3<GLfloat> getRotation() const { return m_rotation; }
 
 	virtual void input();
 	virtual void update(WorldData& p_worldData, GLfloat p_deltaTime);
