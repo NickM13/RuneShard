@@ -230,6 +230,7 @@
     <ClCompile Include="src\engine\game\world\entity\actor\adventurer\Adventurer.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\adventurer\mage\Mage.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\adventurer\warrior\Warrior.cpp" />
+    <ClCompile Include="src\engine\game\world\entity\actor\LActor.cpp" />
     <ClCompile Include="src\engine\game\world\entity\Entity.cpp" />
     <ClCompile Include="src\engine\game\world\entity\particle\Particle.cpp" />
     <ClCompile Include="src\engine\game\world\entity\projectile\Projectile.cpp" />

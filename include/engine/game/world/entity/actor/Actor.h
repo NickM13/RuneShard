@@ -15,6 +15,11 @@ protected:
 		HUMAN = 0,
 		ORC = 1
 	};
+	enum Class {
+		ADVENTURER,
+		WARRIOR,
+		MAGE
+	};
 	Uint32 m_id;
 	std::string m_name;
 	bool m_isSprinting;
@@ -22,19 +27,19 @@ protected:
 	Uint8 m_airJumps;
 	GLfloat m_airJumpBurst; // Timer for moving faster after double jumping
 	VoxelModel* m_voxelModel = 0;
-	struct ControlBind {
+	struct Bind {
 		enum Hardware {
 			MOUSE = 0,
 			KEYBOARD = 1,
 			OTHER = 2
 		} hardware;
 		Sint32 id;
-		ControlBind(Hardware p_hardware = OTHER, Sint32 p_id = 0) : hardware(p_hardware), id(p_id) {};
-		bool operator<(ControlBind p_cb) const {
+		Bind(Hardware p_hardware = OTHER, Sint32 p_id = 0) : hardware(p_hardware), id(p_id) {};
+		bool operator<(Bind p_cb) const {
 			return (hardware < p_cb.hardware || (hardware == p_cb.hardware && (id < p_cb.id)));
 		}
 	};
-	std::map<ControlBind, Ability*> m_abilityMap;
+	std::map<Bind, Ability*> m_abilityMap;
 	struct Stats {
 		GLfloat m_moveSpeed;
 		GLfloat m_jumpHeight;
@@ -59,6 +64,9 @@ public:
 	Actor* setName(std::string p_name);
 	Actor* setMoveSpeed(GLfloat p_moveSpeed);
 	Actor* setJumpHeight(GLfloat p_jumpHeight);
+
+	Actor* setPosition(Vector3<GLfloat> p_position) { m_position = p_position; return this; }
+	Actor* setRotation(Vector3<GLfloat> p_rotation) { m_rotation = p_rotation; return this; }
 
 	void setMovement(Vector3<GLfloat> p_direction);
 	void setMovement(Direction p_direction);

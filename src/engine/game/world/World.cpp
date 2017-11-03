@@ -14,7 +14,7 @@ World::World() {
 
 void World::init(Vector2<Sint32> p_worldSize) {
 	if(m_initialized) clear();
-	m_camera->followActor(addActor(new Roger(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2, 7, p_worldSize.y * CHUNK_SIZE / 2)))->setName("Player"));
+	m_camera->followActor(addActor(LActor::getActor("Roger")->setPosition(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2, 7, p_worldSize.y * CHUNK_SIZE / 2)))->setName("Player"));
 	m_worldData.m_worldSize = Vector3<Sint32>(p_worldSize.x, 1, p_worldSize.y);
 	m_worldData.m_chunkData = new std::vector<Chunk*>*[m_worldData.m_worldSize.x];
 	for(Uint16 x = 0; x < m_worldData.m_worldSize.x; x++) {

@@ -71,7 +71,7 @@ Game::Game() {
 	}, "tp [x] [y] [z]", "Teleports you"));
 	MChatCommand::addCommand("roger", new ChatCommand([&](std::vector<std::string> p_args) {
 		if(p_args.size() == 1) {
-			m_world->addActor(new Roger(m_world->getCamera()->getPosition()));
+			m_world->addActor(LActor::getActor("Roger")->setPosition(m_world->getCamera()->getPosition()));
 			MConsole::addLine(MConsole::ConsoleLine::NORMAL, "Roger doger'd");
 			return true;
 		}

@@ -27,6 +27,7 @@ void Camera::addPosition(Vector3<GLfloat> p_position, bool p_hardset) {
 void Camera::setRotation(Vector3<GLfloat> p_rotation, bool p_hardset) {
 	m_tRotation = p_rotation;
 	if(p_hardset) m_position = m_tRotation;
+	m_tRotation.x = min(90, max(-90, m_tRotation.x));
 }
 void Camera::addRotation(Vector3<GLfloat> p_rotation, bool p_hardset) {
 	setRotation(m_tRotation + p_rotation, p_hardset);
@@ -70,7 +71,7 @@ void Camera::input() {
 		}
 	}
 
-	m_tBoomDistance -= GMouse::getScroll() / 2.f;
+	m_tBoomDistance -= GMouse::getScroll() / 4.f;
 	if(m_tBoomDistance < MIN_BOOM) m_tBoomDistance = MIN_BOOM;
 	if(m_tBoomDistance > MAX_BOOM) m_tBoomDistance = MAX_BOOM;
 }
@@ -78,6 +79,7 @@ void Camera::input() {
 void Camera::update(WorldData& p_worldData, GLfloat p_deltaTime) {
 	if(m_followActor != nullptr) {
 		m_position = m_tPosition = m_followActor->getEyePos();
+		m_position.y += 0.5f;
 	}
 	else {
 		m_tPosition = m_tPosition + m_velocity * p_deltaTime;

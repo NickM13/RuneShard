@@ -80,13 +80,13 @@ void Actor::jump() {
 }
 
 void Actor::abilityInput() {
-	for(std::pair<ControlBind, Ability*> ability : m_abilityMap) {
+	for(std::pair<Bind, Ability*> ability : m_abilityMap) {
 		switch(ability.first.hardware) {
-		case ControlBind::MOUSE:
-			if(GKey::keyPressed(ability.first.id)) ability.second->press();
-			if(GKey::keyReleased(ability.first.id)) ability.second->release();
+		case Bind::MOUSE:
+			if(GMouse::mousePressed(ability.first.id)) ability.second->press();
+			if(GMouse::mouseReleased(ability.first.id)) ability.second->release();
 			break;
-		case ControlBind::KEYBOARD:
+		case Bind::KEYBOARD:
 			if(GKey::keyPressed(ability.first.id)) ability.second->press();
 			if(GKey::keyReleased(ability.first.id)) ability.second->release();
 		default: break;
@@ -94,7 +94,7 @@ void Actor::abilityInput() {
 	}
 }
 void Actor::abilityUpdate() {
-	for(std::pair<ControlBind, Ability*> ability : m_abilityMap) {
+	for(std::pair<Bind, Ability*> ability : m_abilityMap) {
 		ability.second->update();
 	}
 }

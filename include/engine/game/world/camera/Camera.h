@@ -11,7 +11,7 @@ private:
 	Vector3<GLfloat> m_tRotation, m_rotation;
 	GLfloat m_boomDistance;
 	GLfloat m_tBoomDistance;
-	const GLfloat MAX_BOOM = 100, MIN_BOOM = 2;
+	const GLfloat MAX_BOOM = 20, MIN_BOOM = 0;
 	const Vector3<GLfloat> _camSize = Vector3<GLfloat>(0.1f, 0.1f, 0.1f);
 public:
 	Camera();

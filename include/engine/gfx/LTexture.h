@@ -2,8 +2,7 @@
 #include "engine\utils\OpenGL.h"
 #include "engine\utils\variable\manager\TextureManager.h"
 
-class LTexture
-{
+class LTexture {
 private:
 	static bool m_isInit;
 public:

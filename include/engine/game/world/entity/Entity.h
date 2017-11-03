@@ -40,9 +40,9 @@ public:
 	void push(Vector3<GLfloat> p_direction);
 	virtual void move(Vector3<GLfloat> p_direction);
 	virtual void turn(Vector3<GLfloat> p_rotation);
-	void setPosition(Vector3<GLfloat> p_position) { m_position = p_position; }
+	Entity* setPosition(Vector3<GLfloat> p_position) { m_position = p_position; return this; }
 	void addPosition(Vector3<GLfloat> p_position) { m_position = m_position + p_position; }
-	void setRotation(Vector3<GLfloat> p_rotation) { m_rotation = p_rotation; }
+	Entity* setRotation(Vector3<GLfloat> p_rotation) { m_rotation = p_rotation; return this; }
 	void addRotation(Vector3<GLfloat> p_rotation) { m_rotation = m_rotation + p_rotation; }
 
 	Vector3<GLfloat> getPosition() const { return m_position; };
@@ -52,7 +52,7 @@ public:
 	Vector3<GLfloat> getRotation() const { return m_rotation; };
 	Vector3<GLfloat> getVelocity() const { return m_velocity; };
 	Vector3<GLfloat> getLookVector() { return Math::computeDirection({m_rotation.x, m_rotation.y, m_rotation.z}); };
-	Vector3<GLfloat> getEyePos() { return Vector3<GLfloat>(m_position.x, m_position.y + m_size.y + 0.15f, m_position.z); }
+	Vector3<GLfloat> getEyePos() { return Vector3<GLfloat>(m_position.x, m_position.y + m_size.y - 0.15f, m_position.z); }
 
 	void input();
 	virtual void update(WorldData p_world, GLfloat p_deltaTime);
