@@ -26,5 +26,4 @@ void WorldIsland::generate(Vector2<Sint32> p_worldSize)
 		for(Uint16 z = 0; z < m_worldData.m_worldSize.z * CHUNK_SIZE; z++)
 			for(Uint16 y = 0; y < round(m_heightMap[x][z]) + 1; y++)
 				setVoxel({x, y, z}, grass);
-
 }

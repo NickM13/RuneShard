@@ -8,6 +8,10 @@ Camera::Camera() {
 	m_velocity = {};
 	m_acceleration = {40, 40};
 	m_rotation = m_tRotation = {};
+	m_hud = new HUD();
+	m_hud->addComponent((new HUDResourceBar("HEALTHBAR"))
+		->setStatusType(HUDResourceBar::HEALTH))
+		->setPosition({-100, 0});
 }
 
 void Camera::followActor(Actor *p_actor) {
@@ -15,6 +19,7 @@ void Camera::followActor(Actor *p_actor) {
 	setPosition(m_followActor->getEyePos(), true);
 	m_velocity = {};
 	setRotation(m_followActor->getRotation(), true);
+	m_hud->init(m_followActor);
 }
 
 void Camera::setPosition(Vector3<GLfloat> p_position, bool p_hardset) {
@@ -74,6 +79,8 @@ void Camera::input() {
 	m_tBoomDistance -= GMouse::getScroll() / 4.f;
 	if(m_tBoomDistance < MIN_BOOM) m_tBoomDistance = MIN_BOOM;
 	if(m_tBoomDistance > MAX_BOOM) m_tBoomDistance = MAX_BOOM;
+
+	m_hud->input();
 }
 
 void Camera::update(WorldData& p_worldData, GLfloat p_deltaTime) {
@@ -106,6 +113,12 @@ void Camera::update(WorldData& p_worldData, GLfloat p_deltaTime) {
 
 		m_followActor->abilityUpdate();
 	}
+
+	m_hud->update(p_deltaTime);
+}
+
+void Camera::render2d() {
+	//m_hud->render();
 }
 
 void Camera::useRotation() {

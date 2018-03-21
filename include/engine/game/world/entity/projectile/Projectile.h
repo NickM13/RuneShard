@@ -21,7 +21,11 @@ public:
 
 	virtual void inputProjectile();
 	void input();
-	virtual void updateProjectile(WorldData &p_world, GLfloat p_updateTime);
+	virtual void updatePhysics(GLfloat p_updateTime);
+	virtual void updateActorCollision();
+	virtual void updateWorldCollision(WorldData &p_world);
+	virtual void updateProjectile();
+	virtual void updateMovement();
 	void update(WorldData &p_world, GLfloat p_updateTime);
 	virtual void renderProjectile();
 	void render();
@@ -35,7 +39,7 @@ public:
 	static void create(Projectile* p_ability) {
 		m_projectileList.push_back(p_ability);
 	}
-	static std::vector<Projectile*> getAbilityList() {
+	static std::vector<Projectile*> getProjectileList() {
 		return m_projectileList;
 	}
 	static void input() {

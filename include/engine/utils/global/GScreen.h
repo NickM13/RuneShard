@@ -2,7 +2,7 @@
 
 #include "engine\utils\variable\datatype\Macros.h"
 #include "engine\utils\variable\datatype\Vector2.h"
-#include "engine\utils\OpenGL.h"
+#include "engine\utils\LOpenGL.h"
 #include <vector>
 #include <string>
 #include <iostream>

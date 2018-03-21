@@ -31,6 +31,25 @@ void Ability::update() {
 
 
 
+AbilityBasic::AbilityBasic(Sint32 p_casterId) : Ability(p_casterId) {
+	m_casterId = p_casterId;
+	m_lastUse = 0;
+}
+void AbilityBasic::press() {
+	if(isAvailable()) {
+		pressAction();
+		m_lastUse = glfwGetTime();
+	}
+}
+void AbilityBasic::release() {
+	if(isAvailable()) {
+		releaseAction();
+		m_lastUse = glfwGetTime();
+	}
+}
+
+
+
 AbilityHold::AbilityHold(Sint32 p_casterId) : Ability(p_casterId) {
 	m_isActive = false;
 }

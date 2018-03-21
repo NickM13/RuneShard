@@ -22,6 +22,7 @@ public:
 	static Vector3<double> flipOverPoint(Vector3<double> p_start, Vector3<double> p_len, Vector3<double> p_point, bool p_flip[3]);
 	static void castRay3d(Vector3<double> p_start, Vector3<double> p_direction, Vector3<double> p_boxPosition, Vector3<double> p_boxDimension, double &p_near, double &p_far, Sint8 &p_side);
 	static void castBox3d(Vector3<double> p_start, Vector3<double> p_dimension, Vector3<double> p_direction, Vector3<double> p_boxPosition, Vector3<double> p_boxDimension, double &p_near, double &p_far, Sint8 &p_side);
+	static bool boxInBox(Vector3<double> p_start, Vector3<double> p_dimension, Vector3<double> p_boxPosition, Vector3<double> p_boxDimension, double &p_near, double &p_far, Sint8 &p_side);
 	static double smoothChange(double x1, double x2, double p_rateOfChange, double p_time);
 	static Vector2<double> smoothChangeVec2(Vector2<double> x1, Vector2<double> x2, double p_rateOfChange, double p_time);
 	static Vector3<double> smoothChangeVec3(Vector3<double> x1, Vector3<double> x2, double p_rateOfChange, double p_time);

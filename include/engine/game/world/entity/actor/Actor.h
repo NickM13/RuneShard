@@ -14,12 +14,24 @@ protected:
 	enum Race {
 		HUMAN = 0,
 		ORC = 1
-	};
+	} m_race;
 	enum Class {
 		ADVENTURER,
-		WARRIOR,
-		MAGE
-	};
+		WARRIOR,		KNIGHT,			MARAUDER,
+		ARCHER,			ARBALIST,		MARKSMEN,
+		CLERIC,			CRUSADER,		PRIEST,
+		MAGE,			SORCERER,		MYSTIC,
+		ROGUE,			DUELIST,		ASSASSIN,
+		ENGINEER,		GADGETEER,		TECHNICIAN,
+		MINSTREL,		BARD,			MEDIC,
+		SPELLSWORD,		BATTLEMAGE,		DREADKNAUT,
+		MONK,			ORACLE,			KIMASTER,
+		DRUID,			SHAPESHIFTER,	SHAMAN,
+		TEMPEST,
+		WARLOCK,
+		SUMMONER,
+		TAMER
+	} m_class;
 	Uint32 m_id;
 	std::string m_name;
 	bool m_isSprinting;
@@ -48,11 +60,11 @@ protected:
 		GLfloat m_intellect;
 	} m_stats;
 
-	void updatePhysics(WorldData p_world, GLfloat p_deltaTime);
-	virtual void updateCollision(WorldData p_world, GLfloat p_deltaTime);
+	void updateMovement(GLfloat p_deltaTime);
+	void updateCollision(WorldData p_world);
 	void renderModel();
 public:
-	Actor(Vector3<GLfloat> p_position, Vector3<GLfloat> p_size, Vector3<GLfloat> p_rotation);
+	Actor(Vector3<GLfloat> p_size);
 	Actor(std::string p_fileName) {};
 	~Actor() {};
 

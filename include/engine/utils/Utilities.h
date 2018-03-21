@@ -11,7 +11,7 @@
 #include "engine\utils\global\event\GKey.h"
 #include "engine\utils\global\event\GMouse.h"
 #include "engine\utils\global\GScreen.h"
-#include "engine\utils\OpenGL.h"
+#include "engine\utils\LOpenGL.h"
 #include <sstream>
 #include <stdlib.h>
 #include <iostream>

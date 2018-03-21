@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector4.h"
-#include "engine\utils\OpenGL.h"
+#include "engine\utils\LOpenGL.h"
 #include <stdlib.h>
 #include <math.h>
 

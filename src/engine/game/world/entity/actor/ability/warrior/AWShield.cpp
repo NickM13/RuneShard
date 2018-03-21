@@ -2,10 +2,10 @@
 #include "engine\game\world\entity\actor\Actor.h"
 
 void AWShield::pressAction() {
-	std::cout << "shield" << std::endl;
+
 }
 void AWShield::releaseAction() {
-	std::cout << "shield release" << std::endl;
+
 }
 void AWShield::updateAction() {
 }

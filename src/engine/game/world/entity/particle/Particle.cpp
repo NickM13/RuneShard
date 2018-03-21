@@ -26,35 +26,35 @@ Particle::Particle(Vector3<GLfloat> p_position, Vector3<GLfloat> p_velocity, GLf
 
 void Particle::update(WorldData &p_world, GLfloat p_updateTime) {
 	m_velocity = m_velocity - Vector3<GLfloat>{0, m_weight, 0} * p_updateTime;
-	Vector3<GLfloat> _velocity = m_velocity * p_updateTime * 10;
+	m_bVelocity = m_velocity * p_updateTime * 10;
 	GLdouble _near = 0, _far = 1;
 	Sint8 _face = 0;
-	while(_velocity.getLength() > 0) {
-		p_world.castRay(m_position, _velocity, _near, _far, _face);
+	while(m_bVelocity.getLength() > 0) {
+		p_world.castRay(m_position, m_bVelocity, _near, _far, _face);
 		if(_near < 1 && _face != 0) {
-			m_position.x += _velocity.x * _near;
-			m_position.y += _velocity.y * _near;
-			m_position.z += _velocity.z * _near;
-			_velocity = _velocity * (1.f - _near);
+			m_position.x += m_bVelocity.x * _near;
+			m_position.y += m_bVelocity.y * _near;
+			m_position.z += m_bVelocity.z * _near;
+			m_bVelocity = m_bVelocity * (1.f - _near);
 			if(_face & (FACE_NORTH | FACE_SOUTH)) {
 				m_velocity.x = -m_velocity.x * m_bounciness;
-				_velocity.x = -_velocity.x * m_bounciness;
+				m_bVelocity.x = -m_bVelocity.x * m_bounciness;
 			}
 			if(_face & (FACE_TOP | FACE_BOTTOM)) {
 				m_velocity.y = -m_velocity.y * m_bounciness;
-				_velocity.y = -_velocity.y * m_bounciness;
+				m_bVelocity.y = -m_bVelocity.y * m_bounciness;
 			}
 			if(_face & (FACE_EAST | FACE_WEST)) {
 				m_velocity.z = -m_velocity.y * m_bounciness;
-				_velocity.z = -_velocity.y * m_bounciness;
+				m_bVelocity.z = -m_bVelocity.y * m_bounciness;
 			}
 			_near = 0;
 		}
 		else {
-			m_position.x += _velocity.x;
-			m_position.y += _velocity.y;
-			m_position.z += _velocity.z;
-			_velocity = {};
+			m_position.x += m_bVelocity.x;
+			m_position.y += m_bVelocity.y;
+			m_position.z += m_bVelocity.z;
+			m_bVelocity = {};
 		}
 	}
 	m_health -= p_updateTime;

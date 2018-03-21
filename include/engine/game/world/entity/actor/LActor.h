@@ -11,7 +11,7 @@ private:
 public:
 	static void loadDatabase();
 	// Add actor to actor library
-	static void addActor(std::string p_actorName, Actor* p_actor);
+	static Actor* addActor(std::string p_actorName, Actor* p_actor);
 	static bool contains(std::string p_actorName);
 	// Returns new instance of actor
 	static Actor* getActor(std::string p_actorName);

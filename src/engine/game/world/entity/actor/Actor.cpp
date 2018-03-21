@@ -3,16 +3,15 @@
 #include "engine\sfx\Sound.h"
 #include <iostream>
 
-Actor::Actor(Vector3<GLfloat> p_position, Vector3<GLfloat> p_size, Vector3<GLfloat> p_rotation) {
+Actor::Actor(Vector3<GLfloat> p_size) {
 	m_size = p_size;
-	m_position = p_position;
-	m_rotation = p_rotation;
-	setMoveSpeed(100);
-	setJumpHeight(2.5);
-	m_maxAirJumps = 1;
+	setMoveSpeed(15);
+	setJumpHeight(4);
+	m_maxAirJumps = m_airJumps = 1;
 	m_isSprinting = false;
 	m_onGround = false;
 	m_noClip = false;
+	m_health = m_maxHealth = 500;
 }
 
 Actor* Actor::setModel(VoxelModel* p_voxelModel) {
@@ -102,12 +101,7 @@ void Actor::abilityRender() {
 
 }
 
-void Actor::updatePhysics(WorldData p_world, GLfloat p_deltaTime) {
-	m_velocity.y -= p_deltaTime * GGameState::m_gravity;
-}
-void Actor::updateCollision(WorldData p_world, GLfloat p_deltaTime) {
-	Vector3<GLfloat> _velocity = m_velocity;
-	updatePhysics(p_world, p_deltaTime);
+void Actor::updateMovement(GLfloat p_deltaTime) {
 	if(m_airJumpBurst > 0) {
 		m_velocity.x += Math::smoothChange(m_velocity.x, m_tVelocity.x, 30, p_deltaTime);
 		m_velocity.z += Math::smoothChange(m_velocity.z, m_tVelocity.z, 30, p_deltaTime);
@@ -121,33 +115,32 @@ void Actor::updateCollision(WorldData p_world, GLfloat p_deltaTime) {
 		m_velocity.x += Math::smoothChange(m_velocity.x, m_tVelocity.x, 0.25f, p_deltaTime);
 		m_velocity.z += Math::smoothChange(m_velocity.z, m_tVelocity.z, 0.25f, p_deltaTime);
 	}
-	if(abs(m_velocity.x) < 0.0001f)
-		m_velocity.x = 0;
-	if(abs(m_velocity.z) < 0.0001f)
-		m_velocity.z = 0;
-	_velocity = ((_velocity + m_velocity) / 2) * (p_deltaTime);
-
+	if(abs(m_velocity.x) < 0.0001f) m_velocity.x = 0;
+	if(abs(m_velocity.z) < 0.0001f) m_velocity.z = 0;
+	m_bVelocity = ((m_bVelocity + m_velocity) / 2) * (p_deltaTime);
+}
+void Actor::updateCollision(WorldData p_world) {
 	GLdouble _near = 0;
 	Sint8 _face = 0;
 	if(m_noClip) {
-		m_position = m_position + _velocity;
+		m_position = m_position + m_bVelocity;
 	}
 	else {
 		bool _onGround = false;
-		while(_velocity.getLength() > 0) {
-			p_world.castBox(m_position - Vector3<GLfloat>(m_size.x / 2, 0, m_size.z / 2), m_size, _velocity, _near, _face);
+		while(m_bVelocity.getLength() > 0) {
+			p_world.castBox(m_position - Vector3<GLfloat>(m_size.x / 2, 0, m_size.z / 2), m_size, m_bVelocity, _near, _face);
 			if(_near < 1) {
-				m_position.x += _velocity.x * _near;
-				m_position.y += _velocity.y * _near;
-				m_position.z += _velocity.z * _near;
-				_velocity = _velocity * (1.f - _near);
+				m_position.x += m_bVelocity.x * _near;
+				m_position.y += m_bVelocity.y * _near;
+				m_position.z += m_bVelocity.z * _near;
+				m_bVelocity = m_bVelocity * (1.f - _near);
 				if(_face & (FACE_NORTH | FACE_SOUTH)) {
 					if(m_velocity.x < 0)
 						m_position.x = roundf(m_position.x - m_size.x / 2) + m_size.x / 2;
 					else
 						m_position.x = roundf(m_position.x + m_size.x / 2) - m_size.x / 2;
 					m_velocity.x = 0;
-					_velocity.x = 0;
+					m_bVelocity.x = 0;
 				}
 				if(_face & (FACE_TOP | FACE_BOTTOM)) {
 					if(m_velocity.y < 0) {
@@ -158,7 +151,7 @@ void Actor::updateCollision(WorldData p_world, GLfloat p_deltaTime) {
 					else
 						m_position.y = roundf(m_position.y) + (1.f - fmodf(m_size.y, 1));
 					m_velocity.y = 0;
-					_velocity.y = 0;
+					m_bVelocity.y = 0;
 				}
 				if(_face & (FACE_EAST | FACE_WEST)) {
 					if(m_velocity.z < 0)
@@ -166,16 +159,16 @@ void Actor::updateCollision(WorldData p_world, GLfloat p_deltaTime) {
 					else
 						m_position.z = roundf(m_position.z + m_size.z / 2) - m_size.z / 2;
 					m_velocity.z = 0;
-					_velocity.z = 0;
+					m_bVelocity.z = 0;
 				}
 
 				_near = 0;
 			}
 			else {
-				m_position.x += _velocity.x;
-				m_position.y += _velocity.y;
-				m_position.z += _velocity.z;
-				_velocity = {};
+				m_position.x += m_bVelocity.x;
+				m_position.y += m_bVelocity.y;
+				m_position.z += m_bVelocity.z;
+				m_bVelocity = {};
 			}
 		}
 		m_onGround = _onGround;

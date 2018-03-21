@@ -12,6 +12,7 @@ void AWCharge::releaseAction() {
 void AWCharge::updateAction() {
 	Actor* caster = MActor::getActor(m_casterId);
 	caster->setMovement(Actor::Direction::FORWARD);
+	caster->damage(1);
 }
 AWCharge::AWCharge(Sint32 p_casterId) : AbilityHold(p_casterId) {
 	m_abilityName = "Warrior_Charge";

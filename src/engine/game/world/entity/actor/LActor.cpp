@@ -5,8 +5,9 @@ std::map<std::string, Actor*> LActor::m_actorMap;
 void LActor::loadDatabase() {
 
 }
-void LActor::addActor(std::string p_actorName, Actor* p_actor) {
+Actor* LActor::addActor(std::string p_actorName, Actor* p_actor) {
 	m_actorMap.insert({p_actorName, p_actor});
+	return p_actor;
 }
 bool LActor::contains(std::string p_actorName) {
 	return (m_actorMap.find(p_actorName) != m_actorMap.end());

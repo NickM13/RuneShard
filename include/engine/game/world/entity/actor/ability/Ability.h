@@ -1,6 +1,7 @@
 #pragma once
 #include "engine\utils\Utilities.h"
 #include "engine\utils\variable\manager\VoxelModelManager.h"
+#include "engine\game\world\entity\projectile\Projectile.h"
 
 class Ability {
 protected:
@@ -23,6 +24,16 @@ public:
 	virtual void press();
 	virtual void release();
 	virtual void update();
+};
+
+// Typically Left-click attacks
+class AbilityBasic : public Ability {
+protected:
+public:
+	AbilityBasic(Sint32 p_casterId);
+
+	virtual void press();
+	virtual void release();
 };
 
 class AbilityHold : public Ability {

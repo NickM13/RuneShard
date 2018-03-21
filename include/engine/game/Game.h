@@ -2,15 +2,19 @@
 #include "engine\network\NetworkAdapter.h"
 
 #include "engine\gfx\font\Font.h"
+#include "engine\gfx\LTexture.h"
+#include "engine\gfx\sprite\SpriteAnimation.h"
+
+#include "engine\sfx\Sound.h"
+
 #include "engine\utils\global\event\GKey.h"
 #include "engine\utils\global\event\GMouse.h"
 #include "engine\utils\global\GScreen.h"
-#include "engine\utils\OpenGL.h"
+#include "engine\utils\LOpenGL.h"
 #include "engine\utils\Singleton.h"
 #include "engine\utils\Utilities.h"
 #include "engine\utils\variable\datatype\Rectangle.h"
 #include "engine\utils\variable\manager\TextureManager.h"
-#include "engine\gfx\LTexture.h"
 
 #include "console\Console.h"
 
@@ -30,7 +34,9 @@ protected:
 	Vector2<Sint32> m_mouseBuffer;
 	World* m_world;
 	Container* m_gui;
-	Texture* m_vignette;
+	Texture *m_vignette;
+	SpriteAnimation *m_cursor;
+	Source* m_music;
 public:
 	enum GameState {
 		MENU = 0,

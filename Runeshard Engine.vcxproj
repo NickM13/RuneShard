@@ -219,12 +219,16 @@
     <ClCompile Include="src\engine\game\menu\ingame\PSOptions.cpp" />
     <ClCompile Include="src\engine\game\menu\PauseScreen.cpp" />
     <ClCompile Include="src\engine\game\world\camera\Camera.cpp" />
+    <ClCompile Include="src\engine\game\world\camera\hud\component\HUDComponent.cpp" />
+    <ClCompile Include="src\engine\game\world\camera\hud\component\resourcebar\HUDResourceBar.cpp" />
+    <ClCompile Include="src\engine\game\world\camera\hud\HUD.cpp" />
     <ClCompile Include="src\engine\game\world\data\Chunk.cpp" />
     <ClCompile Include="src\engine\game\world\data\WorldData.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\ability\Ability.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\ability\mage\AMFireball.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\ability\warrior\AWCharge.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\ability\warrior\AWShield.cpp" />
+    <ClCompile Include="src\engine\game\world\entity\actor\ability\warrior\AWSwordSwing.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\Actor.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\actors\Roger.cpp" />
     <ClCompile Include="src\engine\game\world\entity\actor\adventurer\Adventurer.cpp" />
@@ -260,6 +264,7 @@
     <ClCompile Include="src\engine\gfx\model\VoxelMatrix.cpp" />
     <ClCompile Include="src\engine\gfx\model\VoxelModel.cpp" />
     <ClCompile Include="src\engine\gfx\model\load\VoxFormat.cpp" />
+    <ClCompile Include="src\engine\gfx\sprite\SpriteAnimation.cpp" />
     <ClCompile Include="src\engine\network\Network.cpp" />
     <ClCompile Include="src\engine\network\NetworkAdapter.cpp" />
     <ClCompile Include="src\engine\sfx\Sound.cpp" />
@@ -289,6 +294,10 @@
     <ClInclude Include="include\engine\game\menu\PauseScreen.h" />
     <ClInclude Include="include\engine\game\menu\Screen.h" />
     <ClInclude Include="include\engine\game\world\camera\Camera.h" />
+    <ClInclude Include="include\engine\game\world\camera\hud\component\HUDComponent.h" />
+    <ClInclude Include="include\engine\game\world\camera\hud\component\resourcebar\HUDResourceBar.h" />
+    <ClInclude Include="include\engine\game\world\camera\hud\component\LHUDComponent.h" />
+    <ClInclude Include="include\engine\game\world\camera\hud\HUD.h" />
     <ClInclude Include="include\engine\game\world\data\Chunk.h" />
     <ClInclude Include="include\engine\game\world\data\WorldData.h" />
     <ClInclude Include="include\engine\game\world\entity\actor\ability\Ability.h" />
@@ -296,6 +305,7 @@
     <ClInclude Include="include\engine\game\world\entity\actor\ability\mage\AMFireball.h" />
     <ClInclude Include="include\engine\game\world\entity\actor\ability\warrior\AWCharge.h" />
     <ClInclude Include="include\engine\game\world\entity\actor\ability\warrior\AWShield.h" />
+    <ClInclude Include="include\engine\game\world\entity\actor\ability\warrior\AWSwordSwing.h" />
     <ClInclude Include="include\engine\game\world\entity\actor\Actor.h" />
     <ClInclude Include="include\engine\game\world\entity\actor\adventurer\Adventurer.h" />
     <ClInclude Include="include\engine\game\world\entity\actor\adventurer\mage\Mage.h" />
@@ -353,6 +363,7 @@
     <ClInclude Include="include\engine\gfx\model\load\VoxFormat.h" />
     <ClInclude Include="include\engine\gfx\model\VoxelMatrix.h" />
     <ClInclude Include="include\engine\gfx\model\VoxelModel.h" />
+    <ClInclude Include="include\engine\gfx\sprite\SpriteAnimation.h" />
     <ClInclude Include="include\engine\network\Network.h" />
     <ClInclude Include="include\engine\network\NetworkAdapter.h" />
     <ClInclude Include="include\engine\sfx\Sound.h" />
@@ -360,10 +371,11 @@
     <ClInclude Include="include\engine\utils\global\event\GMouse.h" />
     <ClInclude Include="include\engine\utils\global\GGameState.h" />
     <ClInclude Include="include\engine\utils\global\GScreen.h" />
-    <ClInclude Include="include\engine\utils\OpenGL.h" />
+    <ClInclude Include="include\engine\utils\LOpenGL.h" />
     <ClInclude Include="include\engine\utils\Perlin.h" />
     <ClInclude Include="include\engine\utils\Singleton.h" />
     <ClInclude Include="include\engine\utils\Utilities.h" />
+    <ClInclude Include="include\engine\utils\variable\datatype\Box.h" />
     <ClInclude Include="include\engine\utils\variable\datatype\Color.h" />
     <ClInclude Include="include\engine\utils\variable\datatype\Macros.h" />
     <ClInclude Include="include\engine\utils\variable\datatype\Rectangle.h" />

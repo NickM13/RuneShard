@@ -1,6 +1,6 @@
 #include "engine\game\world\entity\actor\adventurer\Adventurer.h"
 
-Adventurer::Adventurer(Vector3<GLfloat> p_position, Vector3<GLfloat> p_size, Vector3<GLfloat> p_rotation)
-	: Actor(p_position, p_size, p_rotation) {
+Adventurer::Adventurer(Vector3<GLfloat> p_size)
+	: Actor(p_size) {
 
 }

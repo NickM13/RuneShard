@@ -7,6 +7,7 @@
 #include "engine\utils\variable\datatype\Vector3.h"
 
 // Hold the data of the world that is checked for collisions
+// Entities NOT included!
 struct WorldData {
 	Vector3<Sint32> m_worldSize;
 	std::vector<Chunk*>** m_chunkData;

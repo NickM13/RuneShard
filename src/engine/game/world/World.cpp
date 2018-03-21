@@ -14,6 +14,7 @@ World::World() {
 
 void World::init(Vector2<Sint32> p_worldSize) {
 	if(m_initialized) clear();
+	LActor::addActor("Roger", new Warrior({0.9f, 1.8f, 0.9f}))->setModel(MVoxelModel::getVoxelModel("Roger.nvm"));
 	m_camera->followActor(addActor(LActor::getActor("Roger")->setPosition(Vector3<GLfloat>(p_worldSize.x * CHUNK_SIZE / 2, 7, p_worldSize.y * CHUNK_SIZE / 2)))->setName("Player"));
 	m_worldData.m_worldSize = Vector3<Sint32>(p_worldSize.x, 1, p_worldSize.y);
 	m_worldData.m_chunkData = new std::vector<Chunk*>*[m_worldData.m_worldSize.x];
@@ -76,7 +77,7 @@ void World::update(GLfloat p_deltaUpdate) {
 	MParticle::update(m_worldData, p_deltaUpdate);
 	m_camera->update(m_worldData, p_deltaUpdate);
 }
-void World::render() {
+void World::render3d() {
 	glPushMatrix();
 	{
 		renderSkyBox();
@@ -143,6 +144,13 @@ void World::renderSkyBox() {
 			glTexCoord2f(0.5f - _c.x, _t1 - _c.y); glVertex3f(1, -1, -1);
 		}
 		glEnd();
+	}
+	glPopMatrix();
+}
+void World::render2d() {
+	glPushMatrix();
+	{
+		m_camera->render2d();
 	}
 	glPopMatrix();
 }

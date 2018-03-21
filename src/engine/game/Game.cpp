@@ -2,7 +2,6 @@
 
 #include "engine\game\command\Command.h"
 #include "engine\gfx\font\Font.h"
-#include "engine\sfx\Sound.h"
 
 #include "engine\utils\global\GGameState.h"
 #include "engine\game\debug\DebugUI.h"
@@ -21,8 +20,17 @@ Game::Game() {
 	LTexture::init();
 	Font::loadFont("Console", "consolas.ttf", 10);
 	Font::loadFont("UI", "segoeui.ttf", 10);
+	m_cursor = new SpriteAnimation(MTexture::getTexture("gui\\Cursor.png"), 0.15f);
+	m_cursor->pushSpriteRepeated({0, 0}, {22, 0}, {22, 22}, 8);
 	m_vignette = MTexture::getTexture("gui\\Vignette.png");
-	Sound::getInstance().init();
+	Sound::init();
+	/*
+	Sound::loadSoundFile("Click", "Hover.wav");
+	m_music = new Source();
+	m_music->setBuffer(Sound::getSoundId("Click"));
+	m_music->setLooping(true);
+	m_music->playAtListener();
+	*/
 	m_world = new WorldIsland();
 	m_world->generate(Vector2<Sint32>(4, 4));
 	NetworkAdapter::init();
@@ -34,7 +42,8 @@ Game::Game() {
 		return false;
 	}, "exit", "Exits game"));
 	MChatCommand::addCommand("hello", new ChatCommand([&](std::vector<std::string> p_args) {
-		MConsole::addLine(MConsole::ConsoleLine::MISUSE, "ERROR: PROGRAM MEMORY LEAK SPRUNG, PREPARE FOR EXTREME PC LAG AND POTENTIAL CRASHING.  ALSO, A VIRUS HAS BEEN INSTALLED.");
+		MConsole::addLine(MConsole::ConsoleLine::NORMAL, "Hello there!");
+		MConsole::addLine(MConsole::ConsoleLine::MISUSE, "ERROR: PROGRAM MEMORY LEAK SPRUNG, PREPARE FOR EXTREME PC LAG AND POSSIBLE HARDWARE FAILURE.  ALSO, A VIRUS HAS BEEN INSTALLED.");
 		return true;
 	}, "hello", "Greet the console"));
 	MChatCommand::addCommand("outline", new ChatCommand([&](std::vector<std::string> p_args) {
@@ -135,12 +144,12 @@ Game::Game() {
 	MKeyCommand::addCommand({'`', 0}, new KeyCommand([&]() {
 		MConsole::setOpen(true);
 	}));
-	MKeyCommand::addCommand({GLFW_KEY_ESCAPE, 0}, new KeyCommand([&]() {
+	MKeyCommand::addCommand({GLFW_KEY_F4, GLFW_MOD_ALT}, new KeyCommand([&]() {
 		GScreen::m_exitting = 2;
 	}));
 }
 Game::~Game() {
-	Sound::getInstance().close();
+	Sound::close();
 }
 
 void Game::resize() {
@@ -198,6 +207,8 @@ void Game::input() {
 }
 void Game::update() {
 	m_deltaUpdate = min(10.f/60, GLfloat(glfwGetTime() - m_lastUpdate));
+	//if(GKey::keyPressed(GLFW_KEY_G))
+		//m_music->playAtListener();
 	GScreen::m_deltaTime = m_deltaUpdate;
 
 	switch(m_gameState)
@@ -222,33 +233,24 @@ void Game::render3d() {
 
 		break;
 	case GAME:
-		m_world->render();
+		m_world->render3d();
 		break;
 	}
 }
 void Game::renderMouse() {
 	glPushMatrix();
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glColor3f(1, 1, 1);
 		glTranslatef(GLfloat(GMouse::getMousePosGui().x), GLfloat(GMouse::getMousePosGui().y), 0);
-		glBegin(GL_QUADS);
-		{
-			glVertex2f(0, 0);
-			glVertex2f(8, 0);
-			glVertex2f(8, 8);
-			glVertex2f(0, 8);
-		}
-		glEnd();
+		m_cursor->render();
 	}
 	glPopMatrix();
 }
 void Game::render2d() {
 	MConsole::render();
+	if(m_gameState == GAME) m_world->render2d();
 	Font::setFont("UI");
 	m_gui->render();
-	switch(m_gameState)
-	{
+	switch(m_gameState) {
 	case MENU:
 
 		break;

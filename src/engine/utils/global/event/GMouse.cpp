@@ -1,5 +1,5 @@
 #include "engine\utils\global\event\GMouse.h"
-#include "engine\utils\OpenGL.h"
+#include "engine\utils\LOpenGL.h"
 
 Vector2<Sint32> GMouse::m_mousePos = {};
 Vector2<Sint32> GMouse::m_mousePosGui = {};

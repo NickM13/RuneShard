@@ -4,7 +4,7 @@
 #include "engine\utils\variable\datatype\Vector3.h"
 #include "engine\utils\variable\datatype\Vector4.h"
 
-#include "engine\utils\OpenGL.h"
+#include "engine\utils\LOpenGL.h"
 
 #include "engine\utils\variable\manager\ColorManager.h"
 #include "engine\utils\variable\manager\VoxelManager.h"

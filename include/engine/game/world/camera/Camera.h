@@ -1,6 +1,7 @@
 #pragma once
 #include "engine\utils\Utilities.h"
 #include "..\entity\actor\Actor.h"
+#include "hud\HUD.h"
 
 class Camera {
 private:
@@ -13,6 +14,8 @@ private:
 	GLfloat m_tBoomDistance;
 	const GLfloat MAX_BOOM = 20, MIN_BOOM = 0;
 	const Vector3<GLfloat> _camSize = Vector3<GLfloat>(0.1f, 0.1f, 0.1f);
+
+	HUD* m_hud;
 public:
 	Camera();
 	void followActor(Actor *p_actor);
@@ -26,8 +29,9 @@ public:
 	Vector3<GLfloat> getPosition() const { return m_position; }
 	Vector3<GLfloat> getRotation() const { return m_rotation; }
 
-	virtual void input();
-	virtual void update(WorldData& p_worldData, GLfloat p_deltaTime);
+	void input();
+	void update(WorldData& p_worldData, GLfloat p_deltaTime);
+	void render2d();
 	void useRotation();
 	void useView();
 };

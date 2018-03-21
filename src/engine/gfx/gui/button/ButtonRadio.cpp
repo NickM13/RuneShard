@@ -6,9 +6,6 @@ CButtonRadio::CButtonRadio(std::string p_compName, std::string p_title, Vector2<
 	m_buttonSize = p_buttonSize;
 	m_buttonStep = p_buttonStep;
 	m_selectedButton = p_selectedButton;
-
-	m_soundClick.setSound(MBuffer::getInstance().getUnit("gui\\Click.wav"));
-	m_soundHover.setSound(MBuffer::getInstance().getUnit("gui\\Hover.wav"));
 }
 CButtonRadio::~CButtonRadio() {
 	for(CButtonToggle* button : m_buttonList)
@@ -40,7 +37,6 @@ void CButtonRadio::input(Sint8& p_interactFlags, Vector2<Sint32> p_mousePos)
 				{
 					*m_selectedButton = i;
 					callPressFunction();
-					m_soundClick.play2d();
 					return;
 				}
 			}

@@ -1,6 +1,5 @@
 #include "engine\gfx\LTexture.h"
 
-#include "engine\utils\OpenGL.h"
 #include "engine\utils\Utilities.h"
 
 #include <IL\il.h>

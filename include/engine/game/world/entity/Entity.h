@@ -1,6 +1,6 @@
 #pragma once
 #include "engine\utils\Math.h"
-#include "engine\utils\OpenGL.h"
+#include "engine\utils\LOpenGL.h"
 #include "engine\utils\variable\datatype\Macros.h"
 #include "engine\utils\variable\datatype\Vector3.h"
 #include "engine\utils\variable\manager\VoxelModelManager.h"
@@ -17,7 +17,7 @@ protected:
 	Vector3<GLfloat> m_size;
 	Vector3<GLfloat> m_rotation;
 	Vector3<GLfloat> m_acceleration;
-	Vector3<GLfloat> m_velocity, m_tVelocity;
+	Vector3<GLfloat> m_velocity, m_tVelocity, m_bVelocity;
 	GLfloat m_weight;
 	GLfloat m_bounciness;
 	GLfloat m_health, m_maxHealth;
@@ -26,8 +26,9 @@ protected:
 	bool m_collided = false;
 	bool m_exists = true;
 
-	virtual void updatePhysics(WorldData p_world, GLfloat p_deltaTime);
-	virtual void updateCollision(WorldData p_world, GLfloat p_deltaTime);
+	virtual void updatePhysics(GLfloat p_deltaTime);
+	virtual void updateMovement(GLfloat p_deltaTime);
+	virtual void updateCollision(WorldData p_world);
 
 	virtual void renderModel();
 	virtual void renderOutline();

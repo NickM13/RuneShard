@@ -27,10 +27,21 @@ void Entity::turn(Vector3<GLfloat> p_rotation) {
 void Entity::input() {
 
 }
-void Entity::updatePhysics(WorldData p_world, GLfloat p_deltaTime) {
-
+void Entity::updatePhysics(GLfloat p_deltaTime) {
+	m_bVelocity = m_velocity;
+	if(!m_noClip) {
+		m_velocity.y -= p_deltaTime * GGameState::m_gravity;
+	}
+	updateMovement(p_deltaTime);
 }
-void Entity::updateCollision(WorldData p_world, GLfloat p_deltaTime) {
+void Entity::updateMovement(GLfloat p_deltaTime) {
+	m_velocity.x += Math::smoothChange(m_velocity.x, m_tVelocity.x, 10, p_deltaTime);
+	m_velocity.z += Math::smoothChange(m_velocity.z, m_tVelocity.z, 10, p_deltaTime);
+	if(abs(m_velocity.x) < 0.0001f) m_velocity.x = 0;
+	if(abs(m_velocity.z) < 0.0001f) m_velocity.z = 0;
+	m_bVelocity = ((m_bVelocity + m_velocity) / 2) * (p_deltaTime);
+}
+void Entity::updateCollision(WorldData p_world) {
 
 }
 void Entity::update(WorldData p_world, GLfloat p_deltaTime) {
@@ -41,7 +52,8 @@ void Entity::update(WorldData p_world, GLfloat p_deltaTime) {
 		m_rotation.x = -90;
 	else if(m_rotation.x > 90)
 		m_rotation.x = 90;
-	updateCollision(p_world, p_deltaTime);
+	updatePhysics(p_deltaTime);
+	updateCollision(p_world);
 }
 void Entity::render() {
 	glPushMatrix();
